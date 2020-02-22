@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:smooks="https://www.smooks.org/xsd/smooks-1.2.xsd"
+            xmlns:smooks-edifact="https://www.smooks.org/xsd/smooks/edifact-1.0.xsd"
+            targetNamespace="https://www.smooks.org/xsd/smooks/edifact-1.0.xsd"
+            elementFormDefault="qualified">
+
+    <xsd:import namespace="https://www.smooks.org/xsd/smooks-1.2.xsd"/>
+
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">Smooks DFDL Reader Configuration</xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="parser" type="smooks-edifact:parser" substitutionGroup="smooks:abstract-reader">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">
+                DFDL Reader Configuration
+                The DFDL reader reads a flat file and converts it to SAX events that Smooks can process.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+<!--    <xsd:element name="unparser" substitutionGroup="smooks:abstract-resource-config" type="smooks-dfdl:writerVisitor">-->
+<!--        <xsd:annotation>-->
+<!--            <xsd:documentation xml:lang="en">-->
+<!--                A visitor that unparses the fragment selected by the "unparseOnElement" attribute.-->
+<!--            </xsd:documentation>-->
+<!--        </xsd:annotation>-->
+<!--    </xsd:element>-->
+
+    <xsd:complexType name="parser">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">DFDL Parser</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="smooks:abstract-reader">
+                <xsd:attribute name="schemaURI" type="xsd:string" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="en">
+                            The URI of the DFDL schema.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="validateDFDLSchemas" type="xsd:boolean" default="false">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="en">
+                            Enable/disable DFDL validation of resulting infoset with the DFDL schema. Default is
+                            'false'.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="indent" type="xsd:boolean" default="false">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="en">
+                            Add indentation character data to the generated event stream. This simply makes
+                            the generated event stream easier to read in its serialized form. Useful for
+                            testing etc...
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+<!--    <xsd:complexType name="writerVisitor">-->
+<!--        <xsd:complexContent>-->
+<!--            <xsd:extension base="smooks:element-visitor">-->
+<!--                <xsd:attribute name="unparseOnElement" type="xsd:string">-->
+<!--                    <xsd:annotation>-->
+<!--                        <xsd:documentation xml:lang="en">-->
+<!--                            The selector of the fragment to unparse.-->
+<!--                        </xsd:documentation>-->
+<!--                    </xsd:annotation>-->
+<!--                </xsd:attribute>-->
+<!--                <xsd:attribute name="schemaURI" type="xsd:string" use="required">-->
+<!--                    <xsd:annotation>-->
+<!--                        <xsd:documentation xml:lang="en">-->
+<!--                            The URI of the DFDL schema.-->
+<!--                        </xsd:documentation>-->
+<!--                    </xsd:annotation>-->
+<!--                </xsd:attribute>-->
+<!--            </xsd:extension>-->
+<!--        </xsd:complexContent>-->
+<!--    </xsd:complexType>-->
+</xsd:schema>

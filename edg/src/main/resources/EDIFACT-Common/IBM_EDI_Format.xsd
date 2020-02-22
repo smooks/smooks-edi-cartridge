@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--***********************************************************************
+    * IBM hereby grant permission, to those obtaining a copy of these materials,
+    * to use, copy and modify the materials solely for use with DFDL processors.
+    * THESE MATERIALS ARE PROVIDED AS IS WITH NO WARRANTIES OF ANY KIND.
+    *
+    * The United Nations Rules for Electronic Data Interchange for Administration,
+    * Commerce and Transport (UN/EDIFACT) can be obtained from the United Nations
+    * Economic Commission for Europe (UNECE) website:
+    * http://www.unece.org/tradewelcome/areas-of-work/un-centre-for-trade-facilitation-and-e-business-uncefact/outputs/standards/unedifact/directories/download.html
+    *
+    * For any further reproduction of UN/CEFACT material please contact info.ece@unece.org.
+    *
+    * © Copyright (1993-2014) United Nations, all rights reserved
+    *
+    * © Copyright International Business Machines Corporation, 2014
+	*
+	***********************************************************************
+	* Version 1.1.2.0 	IBM_EDI_Format.xsd
+	*
+	* This DFDL schema provides a set of DFDL property values and other DFDL
+	* constructs to assist in the creation of DFDL schemas that model EDI messages,
+	* for use with DFDL processors.
+	*
+	* Example use:
+	*   <xsd:import namespace="http://www.ibm.com/dfdl/EDI/Format" schemaLocation="IBM_EDI_Format.xsd"/>
+	*********************************************************************** -->
+
+<xsd:schema targetNamespace="http://www.ibm.com/dfdl/EDI/Format"
+            xmlns:ibmEdiFmt="http://www.ibm.com/dfdl/EDI/Format"
+            xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/"
+            xmlns:ibmDfdlExtn="http://www.ibm.com/dfdl/extensions"
+            xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions"
+            xmlns:fn="http://www.w3.org/2005/xpath-functions"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:annotation>
+        <xsd:appinfo source="http://www.ogf.org/dfdl/">
+
+            <!-- Notes:
+                    Default segment separator is "'".
+                    Default field separator is "+".
+                    Default composite separator is ":".
+                    Default repeat separator is "*".  (Change to "+" if syntax version 3 and not using '*').
+                Default decimal separator is ".".  (Change to "," if needed.)
+                Default grouping separator is ",".  (Change to "." if needed.)
+                    Default escape character and escape escape character is "?".
+                    UNA segment if present overrides above defaults.
+                    Grouping separators are never used.
+             -->
+
+            <!-- Variables used to store delimiter values from the UNA. -->
+            <dfdl:defineVariable defaultValue="'%WSP*; %NL;%WSP*;" name="SegmentTerm" type="xsd:string"/>
+            <dfdl:defineVariable defaultValue="+" name="FieldSep" type="xsd:string"/>
+            <dfdl:defineVariable defaultValue=":" name="CompositeSep" type="xsd:string"/>
+            <dfdl:defineVariable defaultValue="?" name="EscapeChar" type="xsd:string"/>
+            <dfdl:defineVariable defaultValue="*" name="RepeatSep" type="xsd:string"/>
+            <dfdl:defineVariable defaultValue="." name="DecimalSep" type="xsd:string"/>
+            <dfdl:defineVariable defaultValue="," name="GroupingSep" type="xsd:string"/>
+
+            <dfdl:defineFormat name="EDIFormat">
+                <dfdl:format encoding="iso-8859-1"
+                             ignoreCase="yes"
+                             byteOrder="bigEndian"
+                             representation="text"
+                             textStringJustification="left"
+                             truncateSpecifiedLengthString="no"
+                             decimalSigned="yes"
+                             textNumberCheckPolicy="lax"
+                             textNumberJustification="right"
+                             textZonedSignStyle="asciiStandard"
+                             textBooleanJustification="left"
+                             sequenceKind="ordered"
+                             choiceLengthKind="implicit"
+                             separator="" separatorPolicy="suppressed" separatorPosition="infix"
+                             initiator=""
+                             terminator=""
+                             documentFinalTerminatorCanBeMissing="no"
+                             lengthUnits="characters"
+                             lengthKind="delimited"
+                             textPadKind="none"
+                             textTrimKind="none"
+                             textStringPadCharacter="%SP;"
+                             textNumberPadCharacter="%SP;"
+                             textBooleanPadCharacter="%SP;"
+                             textStandardBase="10"
+                             textStandardDecimalSeparator="{$ibmEdiFmt:DecimalSep}"
+                             textStandardGroupingSeparator="{$ibmEdiFmt:GroupingSep}"
+                             textStandardExponentRep="E"
+                             alignment="1" alignmentUnits="bytes" leadingSkip="0" trailingSkip="0" fillByte="%#r00;"
+                             initiatedContent="no"
+                             textNumberRep="standard"
+                             textStandardZeroRep=""
+                             textNumberRoundingMode="roundUp"
+                             nilValueDelimiterPolicy="none"
+                             emptyValueDelimiterPolicy="none"
+                             escapeSchemeRef="ibmEdiFmt:EDIEscapeScheme"
+                             textStandardInfinityRep="Inf"
+                             textStandardNaNRep="NaN"
+                             textNumberRounding="pattern"
+                             calendarPatternKind="implicit"
+                             calendarPattern="yyyy-MM-dd'T'HH:mm:ss"
+                             calendarCheckPolicy="lax"
+                             calendarTimeZone="UTC"
+                             calendarObserveDST="yes"
+                             calendarFirstDayOfWeek="Monday"
+                             calendarDaysInFirstWeek="4"
+                             calendarCenturyStart="53"
+                             calendarLanguage="en-US"
+                             textCalendarJustification="left"
+                             textBooleanTrueRep="true"
+                             textBooleanFalseRep="false"
+                             textCalendarPadCharacter="%SP;"
+                             occursCountKind="implicit"
+                             outputNewLine="%CR;%LF;"
+                             binaryFloatRep="ieee"
+                             textBidi="no"
+                             nilKind="literalValue"
+                             useNilForDefault="no"
+                             floating="no"
+                             binaryNumberRep="binary">
+                </dfdl:format>
+            </dfdl:defineFormat>
+
+            <dfdl:defineEscapeScheme name="EDIEscapeScheme">
+                <dfdl:escapeScheme escapeKind="escapeCharacter" escapeCharacter="{$ibmEdiFmt:EscapeChar}" escapeEscapeCharacter="{$ibmEdiFmt:EscapeChar}" extraEscapedCharacters="+ : '"/>
+            </dfdl:defineEscapeScheme>
+
+            <dfdl:defineFormat name="EDISegmentFormat">
+                <dfdl:format terminator="{$ibmEdiFmt:SegmentTerm}" emptyValueDelimiterPolicy="both"/>
+            </dfdl:defineFormat>
+
+            <dfdl:defineFormat name="EDISegmentSequenceFormat">
+                <dfdl:format separator="{$ibmEdiFmt:FieldSep}" separatorPosition="prefix" separatorPolicy="suppressedAtEndLax" terminator=""/>
+            </dfdl:defineFormat>
+
+            <dfdl:defineFormat name="EDICompositeSequenceFormat">
+                <dfdl:format separator="{$ibmEdiFmt:CompositeSep}" separatorPosition="infix" separatorPolicy="suppressedAtEndLax" terminator=""/>
+            </dfdl:defineFormat>
+
+            <dfdl:defineFormat name="EDISegmentPartRepeatSequenceFormat">
+                <dfdl:format separator="{$ibmEdiFmt:RepeatSep}" separatorPosition="infix" separatorPolicy="suppressedAtEndLax" terminator=""/>
+            </dfdl:defineFormat>
+
+        </xsd:appinfo>
+    </xsd:annotation>
+</xsd:schema>

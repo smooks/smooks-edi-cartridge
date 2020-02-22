@@ -1,0 +1,3691 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--***********************************************************************
+    * IBM hereby grant permission, to those obtaining a copy of these materials,
+    * to use, copy and modify the materials solely for use with DFDL processors.
+    * THESE MATERIALS ARE PROVIDED AS IS WITH NO WARRANTIES OF ANY KIND.
+    *
+    * The United Nations Rules for Electronic Data Interchange for Administration,
+    * Commerce and Transport (UN/EDIFACT) can be obtained from the United Nations
+    * Economic Commission for Europe (UNECE) website:
+    * http://www.unece.org/tradewelcome/areas-of-work/un-centre-for-trade-facilitation-and-e-business-uncefact/outputs/standards/unedifact/directories/download.html
+    *
+    * For any further reproduction of UN/CEFACT material please contact info.ece@unece.org.
+    *
+    * © Copyright (1993-2014) United Nations, all rights reserved
+    *
+    * © Copyright International Business Machines Corporation, 2014
+	*
+	***********************************************************************
+    * Version 1.1.2.0 	EDIFACT-Service-Segments-4.1.xsd
+    *
+    * This DFDL schema provides a set of common EDI service elements, segments
+    * and messages of EDIFACT syntax version 4.1
+    * from agency UN used with the message definitions for the various
+    * message source packages of EDI specifications, for use with DFDL processors.
+    *
+    * Example use:
+    *      <xsd:import namespace="http://www.ibm.com/dfdl/edi/un/service/4.1"
+    *                  schemaLocation="EDIFACT-Service-Segments-4.1.xsd"/>
+    *********************************************************************** -->
+
+<xsd:schema xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/"
+            xmlns:ibmDfdlExtn="http://www.ibm.com/dfdl/extensions"
+            xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions"
+            xmlns:ibmEdiFmt="http://www.ibm.com/dfdl/EDI/Format"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:fn="http://www.w3.org/2005/xpath-functions"
+            targetNamespace="http://www.ibm.com/dfdl/edi/un/service/4.1"
+            xmlns:srv="http://www.ibm.com/dfdl/edi/un/service/4.1"
+>
+    <xsd:import namespace="http://www.ibm.com/dfdl/EDI/Format" schemaLocation="IBM_EDI_Format.xsd"/>
+    <xsd:annotation>
+        <xsd:appinfo source="http://www.ogf.org/dfdl/">
+            <dfdl:format ref="ibmEdiFmt:EDIFormat"/>
+        </xsd:appinfo>
+    </xsd:annotation>
+
+    <xsd:complexType name="UNA">
+        <xsd:annotation>
+            <xsd:documentation>
+                The UNA segment is optional. If present, it specifies the special characters that are to be used to interpret the remainder of the message. There are six characters following UNA in this order:
+
+                - component data element separator (usually :)
+                - data element separator (usually +)
+                - decimal notification (usually . or ,)
+                - release character (usually ?)
+                - repeat separator (usually * but if space use data element separator (v3 syntax))
+                - segment terminator (usually ')
+
+                The special characters in the sample UNA segment above are also the default values.
+
+                Component data element separator and data element separator are the "first level" and "second level" separators of data elements within a message segment.
+                Referring to them as + and : for brevity, the + separates top-level or composite data elements, and : separates second-level data elements nested within composite data elements.
+                Trailing empty (or null) data elements and their leading separators are omitted to reduce message size.
+
+                Decimal notification is used to separate the integer from the decimal part of non-integer numbers.
+
+                Repeat separator separates repeats of the same data element within a segment.
+                Trailing empty (or null) repeats and their leading separators are omitted to reduce message size.
+                This was only added in syntax version 4, until then this was reserved with a space so if space is
+                found use the data element separator.
+
+                Release character (analogous to the \ in regular expressions) is used as a prefix to remove special meaning from the separator, segment termination, and release characters when they are used as plain text.
+
+                Segment terminator indicates the end of a message segment.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="CompositeSeparator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" dfdl:escapeSchemeRef="" dfdl:textTrimKind="none"> <!-- removed default=":" no empty is possible for explicit length string -->
+                <xsd:annotation>
+                    <xsd:appinfo source="http://www.ogf.org/dfdl/">
+                        <dfdl:setVariable ref="ibmEdiFmt:CompositeSep" value="{if (. eq ' ') then '%SP;' else .}"/>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="FieldSeparator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" dfdl:escapeSchemeRef="" dfdl:textTrimKind="none"> <!-- removed default="+" no empty is possible -->
+                <xsd:annotation>
+                    <xsd:appinfo source="http://www.ogf.org/dfdl/">
+                        <dfdl:setVariable ref="ibmEdiFmt:FieldSep" value="{if (. eq ' ') then '%SP;' else .}"/>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="DecimalSeparator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" default="." dfdl:escapeSchemeRef="" dfdl:textTrimKind="none">
+                <xsd:annotation>
+                    <xsd:appinfo source="http://www.ogf.org/dfdl/">
+                        <dfdl:setVariable ref="ibmEdiFmt:DecimalSep" value="{.}"/>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="EscapeCharacter" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" default="?" dfdl:escapeSchemeRef="" dfdl:textTrimKind="none">
+                <xsd:annotation>
+                    <xsd:appinfo source="http://www.ogf.org/dfdl/">
+                        <dfdl:setVariable ref="ibmEdiFmt:EscapeChar" value="{.}"/>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="RepeatSeparator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" default="*" dfdl:escapeSchemeRef="" dfdl:textTrimKind="none">
+                <xsd:annotation>
+                    <xsd:appinfo source="http://www.ogf.org/dfdl/">
+                        <!-- If v3 syntax then assume field separator -->
+                        <dfdl:setVariable ref="ibmEdiFmt:RepeatSep" value="{if (. eq ' ') then ../FieldSeparator else .}"/>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="SegmentTerminator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" default="'" dfdl:escapeSchemeRef="" dfdl:textTrimKind="none">
+                <xsd:annotation>
+                    <xsd:appinfo source="http://www.ogf.org/dfdl/">
+                        <!-- This allows newlines on input and tolerates missing segment terminator, but does not output new lines -->
+                        <dfdl:setVariable ref="ibmEdiFmt:SegmentTerm" value="{fn:concat(., '%WSP*;', ' %NL;%WSP*;')}"/>
+                        <!-- Use this function if you also want newlines to appear on output -->
+                        <!-- {fn:concat(., '%NL;', ' ', ., ' %NL;%WSP*;')} -->
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+    <xsd:element ibmSchExtn:docRoot="true" name="AUTACK" type="srv:AUTACK">
+    </xsd:element>
+    <xsd:complexType name="AUTACK">
+        <xsd:sequence>
+            <xsd:element  maxOccurs="99" name="SegGrp-1">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:sequence dfdl:initiatedContent="yes">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USH"  name="USH" type="srv:USH-SecurityHeader">
+                            </xsd:element>
+
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"  minOccurs="0" maxOccurs="3" name="USA" type="srv:USA-SecurityAlgorithm">
+                            </xsd:element>
+                        </xsd:sequence>
+                        <xsd:element  minOccurs="0" maxOccurs="2" name="SegGrp-2">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:sequence dfdl:initiatedContent="yes">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USC"  name="USC" type="srv:USC-Certificate">
+                                        </xsd:element>
+
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"  minOccurs="0" maxOccurs="3" name="USA" type="srv:USA-SecurityAlgorithm">
+                                        </xsd:element>
+
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USR"  minOccurs="0" name="USR" type="srv:USR-SecurityResult">
+                                        </xsd:element>
+                                    </xsd:sequence>
+
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:sequence dfdl:initiatedContent="yes">
+                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USB"  name="USB" type="srv:USB-SecuredDataIdentification">
+                </xsd:element>
+            </xsd:sequence>
+            <xsd:element  maxOccurs="9999" name="SegGrp-3">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:sequence dfdl:initiatedContent="yes">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USX"  name="USX" type="srv:USX-SecurityReferences">
+                            </xsd:element>
+
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USY"  maxOccurs="9" name="USY" type="srv:USY-SecurityOnReferences">
+                            </xsd:element>
+                        </xsd:sequence>
+
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element  maxOccurs="99" name="SegGrp-4">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:sequence dfdl:initiatedContent="yes">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UST"  name="UST" type="srv:UST-SecurityTrailer">
+                            </xsd:element>
+
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USR"  minOccurs="0" name="USR" type="srv:USR-SecurityResult">
+                            </xsd:element>
+                        </xsd:sequence>
+
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element ibmSchExtn:docRoot="true" name="CONTRL" type="srv:CONTRL">
+    </xsd:element>
+    <xsd:complexType name="CONTRL">
+        <xsd:sequence>
+            <xsd:sequence dfdl:initiatedContent="yes">
+                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCI"  name="UCI" type="srv:UCI-InterchangeResponse">
+                </xsd:element>
+            </xsd:sequence>
+            <xsd:element  minOccurs="0" maxOccurs="999999" name="SegGrp-1">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:sequence dfdl:initiatedContent="yes">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCM"  name="UCM" type="srv:UCM-MessagePackageResponse">
+                            </xsd:element>
+                        </xsd:sequence>
+                        <xsd:element  minOccurs="0" maxOccurs="999" name="SegGrp-2">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:sequence dfdl:initiatedContent="yes">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCS"  name="UCS" type="srv:UCS-SegmentErrorIndication">
+                                        </xsd:element>
+
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCD"  minOccurs="0" maxOccurs="99" name="UCD" type="srv:UCD-DataElementErrorIndication">
+                                        </xsd:element>
+                                    </xsd:sequence>
+
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element  minOccurs="0" maxOccurs="999999" name="SegGrp-3">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:sequence dfdl:initiatedContent="yes">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCF"  name="UCF" type="srv:UCF-GroupResponse">
+                            </xsd:element>
+                        </xsd:sequence>
+                        <xsd:element  minOccurs="0" maxOccurs="999999" name="SegGrp-4">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:sequence dfdl:initiatedContent="yes">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCM"  name="UCM" type="srv:UCM-MessagePackageResponse">
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                    <xsd:element  minOccurs="0" maxOccurs="999" name="SegGrp-5">
+                                        <xsd:complexType>
+                                            <xsd:sequence>
+                                                <xsd:sequence dfdl:initiatedContent="yes">
+                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCS"  name="UCS" type="srv:UCS-SegmentErrorIndication">
+                                                    </xsd:element>
+
+                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCD"  minOccurs="0" maxOccurs="99" name="UCD" type="srv:UCD-DataElementErrorIndication">
+                                                    </xsd:element>
+                                                </xsd:sequence>
+
+                                            </xsd:sequence>
+                                        </xsd:complexType>
+                                    </xsd:element>
+
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element ibmSchExtn:docRoot="true" name="KEYMAN" type="srv:KEYMAN">
+    </xsd:element>
+    <xsd:complexType name="KEYMAN">
+        <xsd:sequence>
+            <xsd:element  minOccurs="0" maxOccurs="999" name="SegGrp-1">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:sequence dfdl:initiatedContent="yes">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USE"  name="USE" type="srv:USE-SecurityMessageRelation">
+                            </xsd:element>
+
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USX"  minOccurs="0" name="USX" type="srv:USX-SecurityReferences">
+                            </xsd:element>
+                        </xsd:sequence>
+                        <xsd:element  maxOccurs="9" name="SegGrp-2">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:sequence dfdl:initiatedContent="yes">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USF"  name="USF" type="srv:USF-KeyManagementFunction">
+                                        </xsd:element>
+
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"  minOccurs="0" name="USA" type="srv:USA-SecurityAlgorithm">
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                    <xsd:element  minOccurs="0" name="SegGrp-3">
+                                        <xsd:complexType>
+                                            <xsd:sequence>
+                                                <xsd:sequence dfdl:initiatedContent="yes">
+                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USC"  name="USC" type="srv:USC-Certificate">
+                                                    </xsd:element>
+
+                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"  minOccurs="0" maxOccurs="3" name="USA" type="srv:USA-SecurityAlgorithm">
+                                                    </xsd:element>
+
+                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USR"  minOccurs="0" name="USR" type="srv:USR-SecurityResult">
+                                                    </xsd:element>
+                                                </xsd:sequence>
+
+                                            </xsd:sequence>
+                                        </xsd:complexType>
+                                    </xsd:element>
+
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element  minOccurs="0" maxOccurs="99" name="SegGrp-4">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:sequence dfdl:initiatedContent="yes">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USL"  name="USL" type="srv:USL-SecurityListStatus">
+                            </xsd:element>
+                        </xsd:sequence>
+                        <xsd:element  maxOccurs="9999" name="SegGrp-5">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:sequence dfdl:initiatedContent="yes">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USC"  name="USC" type="srv:USC-Certificate">
+                                        </xsd:element>
+
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"  minOccurs="0" maxOccurs="3" name="USA" type="srv:USA-SecurityAlgorithm">
+                                        </xsd:element>
+
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USR"  minOccurs="0" name="USR" type="srv:USR-SecurityResult">
+                                        </xsd:element>
+                                    </xsd:sequence>
+
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UCD-DataElementErrorIndication">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
+            <xsd:element  name="S011" type="srv:S011-DataElementIdentification"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UCF-GroupResponse">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0048" type="srv:E0048-GroupReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="S006" type="srv:S006-ApplicationSenderIdentification"/>
+            <xsd:element  minOccurs="0" name="S007" type="srv:S007-ApplicationRecipientIdentification"/>
+            <xsd:element  name="E0083" type="srv:E0083-ActionCoded"/>
+            <xsd:element  minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
+            <xsd:element  minOccurs="0" name="E0135" type="srv:E0135-ServiceSegmentTagCoded"/>
+            <xsd:element  minOccurs="0" name="S011" type="srv:S011-DataElementIdentification"/>
+            <xsd:element  minOccurs="0" name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="E0138" type="srv:E0138-SecuritySegmentPosition"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UCI-InterchangeResponse">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0020" type="srv:E0020-InterchangeControlReference"/>
+            <xsd:element  name="S002" type="srv:S002-InterchangeSender"/>
+            <xsd:element  name="S003" type="srv:S003-InterchangeRecipient"/>
+            <xsd:element  name="E0083" type="srv:E0083-ActionCoded"/>
+            <xsd:element  minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
+            <xsd:element  minOccurs="0" name="E0135" type="srv:E0135-ServiceSegmentTagCoded"/>
+            <xsd:element  minOccurs="0" name="S011" type="srv:S011-DataElementIdentification"/>
+            <xsd:element  minOccurs="0" name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="E0138" type="srv:E0138-SecuritySegmentPosition"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UCM-MessagePackageResponse">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  minOccurs="0" name="E0062" type="srv:E0062-MessageReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="S009" type="srv:S009-MessageIdentifier"/>
+            <xsd:element  name="E0083" type="srv:E0083-ActionCoded"/>
+            <xsd:element  minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
+            <xsd:element  minOccurs="0" name="E0135" type="srv:E0135-ServiceSegmentTagCoded"/>
+            <xsd:element  minOccurs="0" name="S011" type="srv:S011-DataElementIdentification"/>
+            <xsd:element  minOccurs="0" name="E0800" type="srv:E0800-PackageReferenceNumber"/>
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+                <xsd:element  minOccurs="0" maxOccurs="99" name="S020" type="srv:S020-ReferenceIdentification"/>
+            </xsd:sequence>
+            <xsd:element  minOccurs="0" name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="E0138" type="srv:E0138-SecuritySegmentPosition"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UCS-SegmentErrorIndication">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0096" type="srv:E0096-SegmentPositionInMessageBody"/>
+            <xsd:element  minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UGH-AntiCollisionSegmentGroupHeader">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0087" type="srv:E0087-AntiCollisionSegmentGroupIdentification"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UGT-AntiCollisionSegmentGroupTrailer">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0087" type="srv:E0087-AntiCollisionSegmentGroupIdentification"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UIB-InteractiveInterchangeHeader">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="S001" type="srv:S001-SyntaxIdentifier"/>
+            <xsd:element  minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
+            <xsd:element  minOccurs="0" name="S303" type="srv:S303-TransactionReference"/>
+            <xsd:element  minOccurs="0" name="S018" type="srv:S018-ScenarioIdentification"/>
+            <xsd:element  minOccurs="0" name="S305" type="srv:S305-DialogueIdentification"/>
+            <xsd:element  minOccurs="0" name="S002" type="srv:S002-InterchangeSender"/>
+            <xsd:element  minOccurs="0" name="S003" type="srv:S003-InterchangeRecipient"/>
+            <xsd:element  minOccurs="0" name="S300" type="srv:S300-DateAndOrTimeOfInitiation"/>
+            <xsd:element  minOccurs="0" name="E0325" type="srv:E0325-DuplicateIndicator"/>
+            <xsd:element  minOccurs="0" name="E0035" type="srv:E0035-TestIndicator"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UIH-InteractiveMessageHeader">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:annotation><xsd:appinfo source="http://www.ogf.org/dfdl/">
+                <dfdl:discriminator test="{fn:true()}"/>
+            </xsd:appinfo></xsd:annotation>
+            <xsd:element  name="S306" type="srv:S306-InteractiveMessageIdentifier"/>
+            <xsd:element  minOccurs="0" name="E0340" type="srv:E0340-InteractiveMessageReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
+            <xsd:element  minOccurs="0" name="S301" type="srv:S301-StatusOfTransferInteractive"/>
+            <xsd:element  minOccurs="0" name="S300" type="srv:S300-DateAndOrTimeOfInitiation"/>
+            <xsd:element  minOccurs="0" name="E0035" type="srv:E0035-TestIndicator"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UIR-InteractiveStatus">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0331" type="srv:E0331-ReportFunctionCoded"/>
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+                <xsd:element  minOccurs="0" maxOccurs="9" name="S307" type="srv:S307-StatusInformation"/>
+            </xsd:sequence>
+            <xsd:element  minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
+            <xsd:element  minOccurs="0" name="S300" type="srv:S300-DateAndOrTimeOfInitiation"/>
+            <xsd:element  minOccurs="0" name="E0340" type="srv:E0340-InteractiveMessageReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="E0800" type="srv:E0800-PackageReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
+            <xsd:element  minOccurs="0" name="E0096" type="srv:E0096-SegmentPositionInMessageBody"/>
+            <xsd:element  minOccurs="0" name="S011" type="srv:S011-DataElementIdentification"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UIT-InteractiveMessageTrailer">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  minOccurs="0" name="E0340" type="srv:E0340-InteractiveMessageReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="E0074" type="srv:E0074-NumberOfSegmentsInAMessage"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UIZ-InteractiveInterchangeTrailer">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
+            <xsd:element  minOccurs="0" name="E0036" type="srv:E0036-InterchangeControlCount"/>
+            <xsd:element  minOccurs="0" name="E0325" type="srv:E0325-DuplicateIndicator"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UNB-InterchangeHeader">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="S001" type="srv:S001-SyntaxIdentifier"/>
+            <xsd:element  name="S002" type="srv:S002-InterchangeSender"/>
+            <xsd:element  name="S003" type="srv:S003-InterchangeRecipient"/>
+            <xsd:element  name="S004" type="srv:S004-DateAndTimeOfPreparation"/>
+            <xsd:element  name="E0020" type="srv:E0020-InterchangeControlReference"/>
+            <xsd:element  minOccurs="0" name="S005" type="srv:S005-RecipientReferencePasswordDetails"/>
+            <xsd:element  minOccurs="0" name="E0026" type="srv:E0026-ApplicationReference"/>
+            <xsd:element  minOccurs="0" name="E0029" type="srv:E0029-ProcessingPriorityCode"/>
+            <xsd:element  minOccurs="0" name="E0031" type="srv:E0031-AcknowledgementRequest"/>
+            <xsd:element  minOccurs="0" name="E0032" type="srv:E0032-InterchangeAgreementIdentifier"/>
+            <xsd:element  minOccurs="0" name="E0035" type="srv:E0035-TestIndicator"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UNE-GroupTrailer">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0060" type="srv:E0060-GroupControlCount"/>
+            <xsd:element  name="E0048" type="srv:E0048-GroupReferenceNumber"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UNG-GroupHeader">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:annotation><xsd:appinfo source="http://www.ogf.org/dfdl/">
+                <dfdl:discriminator test="{fn:true()}"/>
+            </xsd:appinfo></xsd:annotation>
+            <xsd:element  minOccurs="0" name="E0038" type="srv:E0038-MessageGroupIdentification"/>
+            <xsd:element  minOccurs="0" name="S006" type="srv:S006-ApplicationSenderIdentification"/>
+            <xsd:element  minOccurs="0" name="S007" type="srv:S007-ApplicationRecipientIdentification"/>
+            <xsd:element  minOccurs="0" name="S004" type="srv:S004-DateAndTimeOfPreparation"/>
+            <xsd:element  name="E0048" type="srv:E0048-GroupReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element  minOccurs="0" name="S008" type="srv:S008-MessageVersion"/>
+            <xsd:element  minOccurs="0" name="E0058" type="srv:E0058-ApplicationPassword"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UNH-MessageHeader">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:annotation><xsd:appinfo source="http://www.ogf.org/dfdl/">
+                <dfdl:discriminator test="{fn:true()}"/>
+            </xsd:appinfo></xsd:annotation>
+            <xsd:element  name="E0062" type="srv:E0062-MessageReferenceNumber"/>
+            <xsd:element  name="S009" type="srv:S009-MessageIdentifier"/>
+            <xsd:element  minOccurs="0" name="E0068" type="srv:E0068-CommonAccessReference"/>
+            <xsd:element  minOccurs="0" name="S010" type="srv:S010-StatusOfTheTransfer"/>
+            <xsd:element  minOccurs="0" name="S016" type="srv:S016-MessageSubsetIdentification"/>
+            <xsd:element  minOccurs="0" name="S017" type="srv:S017-MessageImplementationGuidelineIdentification"/>
+            <xsd:element  minOccurs="0" name="S018" type="srv:S018-ScenarioIdentification"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UNO-ObjectHeader">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0800" type="srv:E0800-PackageReferenceNumber"/>
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+                <xsd:element  maxOccurs="99" name="S020" type="srv:S020-ReferenceIdentification"/>
+            </xsd:sequence>
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+                <xsd:element  maxOccurs="99" name="S021" type="srv:S021-ObjectTypeIdentification"/>
+            </xsd:sequence>
+            <xsd:element  name="S022" type="srv:S022-StatusOfTheObject"/>
+            <xsd:element  minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
+            <xsd:element  minOccurs="0" name="S301" type="srv:S301-StatusOfTransferInteractive"/>
+            <xsd:element  minOccurs="0" name="S300" type="srv:S300-DateAndOrTimeOfInitiation"/>
+            <xsd:element  minOccurs="0" name="E0035" type="srv:E0035-TestIndicator"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UNP-ObjectTrailer">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0810" type="srv:E0810-LengthOfObjectInOctetsOfBits"/>
+            <xsd:element  name="E0800" type="srv:E0800-PackageReferenceNumber"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UNS-SectionControl">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0081" type="srv:E0081-SectionIdentification"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UNT-MessageTrailer">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0074" type="srv:E0074-NumberOfSegmentsInAMessage"/>
+            <xsd:element  name="E0062" type="srv:E0062-MessageReferenceNumber"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UNZ-InterchangeTrailer">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0036" type="srv:E0036-InterchangeControlCount"/>
+            <xsd:element  name="E0020" type="srv:E0020-InterchangeControlReference"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="USA-SecurityAlgorithm">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="S502" type="srv:S502-SecurityAlgorithm"/>
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+                <xsd:element  minOccurs="0" maxOccurs="9" name="S503" type="srv:S503-AlgorithmParameter"/>
+            </xsd:sequence>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="USB-SecuredDataIdentification">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0503" type="srv:E0503-ResponseTypeCoded"/>
+            <xsd:element  minOccurs="0" name="S501" type="srv:S501-SecurityDateAndTime"/>
+            <xsd:element  name="S002" type="srv:S002-InterchangeSender"/>
+            <xsd:element  name="S003" type="srv:S003-InterchangeRecipient"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="USC-Certificate">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  minOccurs="0" name="E0536" type="srv:E0536-CertificateReference"/>
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+                <xsd:element  minOccurs="0" maxOccurs="2" name="S500" type="srv:S500-SecurityIdentificationDetails"/>
+            </xsd:sequence>
+            <xsd:element  minOccurs="0" name="E0545" type="srv:E0545-CertificateSyntaxAndVersionCoded"/>
+            <xsd:element  minOccurs="0" name="E0505" type="srv:E0505-FilterFunctionCoded"/>
+            <xsd:element  minOccurs="0" name="E0507" type="srv:E0507-OriginalCharacterSetEncodingCoded"/>
+            <xsd:element  minOccurs="0" name="E0543" type="srv:E0543-CertificateOriginalCharacterSetRepertoireCoded"/>
+            <xsd:element  minOccurs="0" name="E0546" type="srv:E0546-UserAuthorisationLevel"/>
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+                <xsd:element  minOccurs="0" maxOccurs="5" name="S505" type="srv:S505-ServiceCharacterForSignature"/>
+            </xsd:sequence>
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+                <xsd:element  minOccurs="0" maxOccurs="4" name="S501" type="srv:S501-SecurityDateAndTime"/>
+            </xsd:sequence>
+            <xsd:element  minOccurs="0" name="E0567" type="srv:E0567-SecurityStatusCoded"/>
+            <xsd:element  minOccurs="0" name="E0569" type="srv:E0569-RevocationReasonCoded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="USD-DataEncryptionHeader">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0556" type="srv:E0556-LengthOfDataInOctetsOfBits"/>
+            <xsd:element  minOccurs="0" name="E0518" type="srv:E0518-EncryptionReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="E0582" type="srv:E0582-NumberOfPaddingBytes"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="USE-SecurityMessageRelation">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0565" type="srv:E0565-MessageRelationCoded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="USF-KeyManagementFunction">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  minOccurs="0" name="E0579" type="srv:E0579-KeyManagementFunctionQualifier"/>
+            <xsd:element  minOccurs="0" name="S504" type="srv:S504-ListParameter"/>
+            <xsd:element  minOccurs="0" name="E0567" type="srv:E0567-SecurityStatusCoded"/>
+            <xsd:element  minOccurs="0" name="E0572" type="srv:E0572-CertificateSequenceNumber"/>
+            <xsd:element  minOccurs="0" name="E0505" type="srv:E0505-FilterFunctionCoded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="USH-SecurityHeader">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0501" type="srv:E0501-SecurityServiceCoded"/>
+            <xsd:element  name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="E0541" type="srv:E0541-ScopeOfSecurityApplicationCoded"/>
+            <xsd:element  minOccurs="0" name="E0503" type="srv:E0503-ResponseTypeCoded"/>
+            <xsd:element  minOccurs="0" name="E0505" type="srv:E0505-FilterFunctionCoded"/>
+            <xsd:element  minOccurs="0" name="E0507" type="srv:E0507-OriginalCharacterSetEncodingCoded"/>
+            <xsd:element  minOccurs="0" name="E0509" type="srv:E0509-RoleOfSecurityProviderCoded"/>
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+                <xsd:element  minOccurs="0" maxOccurs="2" name="S500" type="srv:S500-SecurityIdentificationDetails"/>
+            </xsd:sequence>
+            <xsd:element  minOccurs="0" name="E0520" type="srv:E0520-SecuritySequenceNumber"/>
+            <xsd:element  minOccurs="0" name="S501" type="srv:S501-SecurityDateAndTime"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="USL-SecurityListStatus">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0567" type="srv:E0567-SecurityStatusCoded"/>
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+                <xsd:element  minOccurs="0" maxOccurs="9" name="S504" type="srv:S504-ListParameter"/>
+            </xsd:sequence>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="USR-SecurityResult">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+                <xsd:element  maxOccurs="2" name="S508" type="srv:S508-ValidationResult"/>
+            </xsd:sequence>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UST-SecurityTrailer">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
+            <xsd:element  name="E0588" type="srv:E0588-NumberOfSecuritySegments"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="USU-DataEncryptionTrailer">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0556" type="srv:E0556-LengthOfDataInOctetsOfBits"/>
+            <xsd:element  minOccurs="0" name="E0518" type="srv:E0518-EncryptionReferenceNumber"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="USX-SecurityReferences">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0020" type="srv:E0020-InterchangeControlReference"/>
+            <xsd:element  minOccurs="0" name="S002" type="srv:S002-InterchangeSender"/>
+            <xsd:element  minOccurs="0" name="S003" type="srv:S003-InterchangeRecipient"/>
+            <xsd:element  minOccurs="0" name="E0048" type="srv:E0048-GroupReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="S006" type="srv:S006-ApplicationSenderIdentification"/>
+            <xsd:element  minOccurs="0" name="S007" type="srv:S007-ApplicationRecipientIdentification"/>
+            <xsd:element  minOccurs="0" name="E0062" type="srv:E0062-MessageReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="S009" type="srv:S009-MessageIdentifier"/>
+            <xsd:element  minOccurs="0" name="E0800" type="srv:E0800-PackageReferenceNumber"/>
+            <xsd:element  minOccurs="0" name="S501" type="srv:S501-SecurityDateAndTime"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="USY-SecurityOnReferences">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+            <xsd:element  name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+                <xsd:element  minOccurs="0" maxOccurs="2" name="S508" type="srv:S508-ValidationResult"/>
+            </xsd:sequence>
+            <xsd:element  minOccurs="0" name="E0571" type="srv:E0571-SecurityErrorCoded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="E0001-SyntaxIdentifier">
+        <xsd:restriction base="srv:alpha4">
+            <xsd:enumeration value="UNOA">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOB">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOC">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOD">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOE">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOF">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOG">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOH">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOI">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOJ">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOK">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOL">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOW">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOX">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNOY">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0002-SyntaxVersionNumber">
+        <xsd:restriction base="srv:alpha1">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0004-InterchangeSenderIdentification">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0007-IdentificationCodeQualifier">
+        <xsd:restriction base="srv:alpha0-4">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+            <xsd:enumeration value="9">
+            </xsd:enumeration>
+            <xsd:enumeration value="12">
+            </xsd:enumeration>
+            <xsd:enumeration value="14">
+            </xsd:enumeration>
+            <xsd:enumeration value="18">
+            </xsd:enumeration>
+            <xsd:enumeration value="22">
+            </xsd:enumeration>
+            <xsd:enumeration value="30">
+            </xsd:enumeration>
+            <xsd:enumeration value="31">
+            </xsd:enumeration>
+            <xsd:enumeration value="33">
+            </xsd:enumeration>
+            <xsd:enumeration value="34">
+            </xsd:enumeration>
+            <xsd:enumeration value="51">
+            </xsd:enumeration>
+            <xsd:enumeration value="52">
+            </xsd:enumeration>
+            <xsd:enumeration value="53">
+            </xsd:enumeration>
+            <xsd:enumeration value="54">
+            </xsd:enumeration>
+            <xsd:enumeration value="55">
+            </xsd:enumeration>
+            <xsd:enumeration value="57">
+            </xsd:enumeration>
+            <xsd:enumeration value="58">
+            </xsd:enumeration>
+            <xsd:enumeration value="59">
+            </xsd:enumeration>
+            <xsd:enumeration value="61">
+            </xsd:enumeration>
+            <xsd:enumeration value="63">
+            </xsd:enumeration>
+            <xsd:enumeration value="65">
+            </xsd:enumeration>
+            <xsd:enumeration value="80">
+            </xsd:enumeration>
+            <xsd:enumeration value="82">
+            </xsd:enumeration>
+            <xsd:enumeration value="84">
+            </xsd:enumeration>
+            <xsd:enumeration value="85">
+            </xsd:enumeration>
+            <xsd:enumeration value="86">
+            </xsd:enumeration>
+            <xsd:enumeration value="87">
+            </xsd:enumeration>
+            <xsd:enumeration value="89">
+            </xsd:enumeration>
+            <xsd:enumeration value="90">
+            </xsd:enumeration>
+            <xsd:enumeration value="91">
+            </xsd:enumeration>
+            <xsd:enumeration value="92">
+            </xsd:enumeration>
+            <xsd:enumeration value="103">
+            </xsd:enumeration>
+            <xsd:enumeration value="128">
+            </xsd:enumeration>
+            <xsd:enumeration value="129">
+            </xsd:enumeration>
+            <xsd:enumeration value="144">
+            </xsd:enumeration>
+            <xsd:enumeration value="145">
+            </xsd:enumeration>
+            <xsd:enumeration value="146">
+            </xsd:enumeration>
+            <xsd:enumeration value="147">
+            </xsd:enumeration>
+            <xsd:enumeration value="148">
+            </xsd:enumeration>
+            <xsd:enumeration value="500">
+            </xsd:enumeration>
+            <xsd:enumeration value="501">
+            </xsd:enumeration>
+            <xsd:enumeration value="502">
+            </xsd:enumeration>
+            <xsd:enumeration value="Z01">
+            </xsd:enumeration>
+            <xsd:enumeration value="ZZZ">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0008-InterchangeSenderInternalIdentification">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0010-InterchangeRecipientIdentification">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0014-InterchangeRecipientInternalIdentification">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0017-Date">
+        <xsd:restriction base="srv:numeric6-8_custom1">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0019-Time">
+        <xsd:restriction base="srv:numeric4">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0020-InterchangeControlReference">
+        <xsd:restriction base="srv:alpha0-14">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0022-RecipientReferencePassword">
+        <xsd:restriction base="srv:alpha0-14">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0025-RecipientReferencePasswordQualifier">
+        <xsd:restriction base="srv:alpha2">
+            <xsd:enumeration value="AA">
+            </xsd:enumeration>
+            <xsd:enumeration value="BB">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0026-ApplicationReference">
+        <xsd:restriction base="srv:alpha0-14">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0029-ProcessingPriorityCode">
+        <xsd:restriction base="srv:alpha1">
+            <xsd:enumeration value="A">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0031-AcknowledgementRequest">
+        <xsd:restriction base="srv:numeric1">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0032-InterchangeAgreementIdentifier">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0035-TestIndicator">
+        <xsd:restriction base="srv:numeric1">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0036-InterchangeControlCount">
+        <xsd:restriction base="srv:numeric1-6">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0038-MessageGroupIdentification">
+        <xsd:restriction base="srv:alpha0-6">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0040-ApplicationSenderIdentification">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0042-InterchangeSenderInternalSubIdentification">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0044-ApplicationRecipientIdentification">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0046-InterchangeRecipientInternalSubIdentification">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0048-GroupReferenceNumber">
+        <xsd:restriction base="srv:alpha0-14">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0051-ControllingAgencyCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="AA">
+            </xsd:enumeration>
+            <xsd:enumeration value="AB">
+            </xsd:enumeration>
+            <xsd:enumeration value="AC">
+            </xsd:enumeration>
+            <xsd:enumeration value="AD">
+            </xsd:enumeration>
+            <xsd:enumeration value="AE">
+            </xsd:enumeration>
+            <xsd:enumeration value="AF">
+            </xsd:enumeration>
+            <xsd:enumeration value="AG">
+            </xsd:enumeration>
+            <xsd:enumeration value="AH">
+            </xsd:enumeration>
+            <xsd:enumeration value="AI">
+            </xsd:enumeration>
+            <xsd:enumeration value="CC">
+            </xsd:enumeration>
+            <xsd:enumeration value="CE">
+            </xsd:enumeration>
+            <xsd:enumeration value="EC">
+            </xsd:enumeration>
+            <xsd:enumeration value="ED">
+            </xsd:enumeration>
+            <xsd:enumeration value="EE">
+            </xsd:enumeration>
+            <xsd:enumeration value="EN">
+            </xsd:enumeration>
+            <xsd:enumeration value="ER">
+            </xsd:enumeration>
+            <xsd:enumeration value="EU">
+            </xsd:enumeration>
+            <xsd:enumeration value="EW">
+            </xsd:enumeration>
+            <xsd:enumeration value="EX">
+            </xsd:enumeration>
+            <xsd:enumeration value="IA">
+            </xsd:enumeration>
+            <xsd:enumeration value="KE">
+            </xsd:enumeration>
+            <xsd:enumeration value="LI">
+            </xsd:enumeration>
+            <xsd:enumeration value="OD">
+            </xsd:enumeration>
+            <xsd:enumeration value="RI">
+            </xsd:enumeration>
+            <xsd:enumeration value="RT">
+            </xsd:enumeration>
+            <xsd:enumeration value="UN">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0052-MessageVersionNumber">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="88">
+            </xsd:enumeration>
+            <xsd:enumeration value="89">
+            </xsd:enumeration>
+            <xsd:enumeration value="90">
+            </xsd:enumeration>
+            <xsd:enumeration value="D">
+            </xsd:enumeration>
+            <xsd:enumeration value="S">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0054-MessageReleaseNumber">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="902">
+            </xsd:enumeration>
+            <xsd:enumeration value="911">
+            </xsd:enumeration>
+            <xsd:enumeration value="912">
+            </xsd:enumeration>
+            <xsd:enumeration value="921">
+            </xsd:enumeration>
+            <xsd:enumeration value="932">
+            </xsd:enumeration>
+            <xsd:enumeration value="00A">
+            </xsd:enumeration>
+            <xsd:enumeration value="00B">
+            </xsd:enumeration>
+            <xsd:enumeration value="01A">
+            </xsd:enumeration>
+            <xsd:enumeration value="01B">
+            </xsd:enumeration>
+            <xsd:enumeration value="01C">
+            </xsd:enumeration>
+            <xsd:enumeration value="02A">
+            </xsd:enumeration>
+            <xsd:enumeration value="02B">
+            </xsd:enumeration>
+            <xsd:enumeration value="03A">
+            </xsd:enumeration>
+            <xsd:enumeration value="03B">
+            </xsd:enumeration>
+            <xsd:enumeration value="04A">
+            </xsd:enumeration>
+            <xsd:enumeration value="04B">
+            </xsd:enumeration>
+            <xsd:enumeration value="05A">
+            </xsd:enumeration>
+            <xsd:enumeration value="05B">
+            </xsd:enumeration>
+            <xsd:enumeration value="06A">
+            </xsd:enumeration>
+            <xsd:enumeration value="06B">
+            </xsd:enumeration>
+            <xsd:enumeration value="07A">
+            </xsd:enumeration>
+            <xsd:enumeration value="07B">
+            </xsd:enumeration>
+            <xsd:enumeration value="08A">
+            </xsd:enumeration>
+            <xsd:enumeration value="08B">
+            </xsd:enumeration>
+            <xsd:enumeration value="09A">
+            </xsd:enumeration>
+            <xsd:enumeration value="09B">
+            </xsd:enumeration>
+            <xsd:enumeration value="10A">
+            </xsd:enumeration>
+            <xsd:enumeration value="10B">
+            </xsd:enumeration>
+            <xsd:enumeration value="11A">
+            </xsd:enumeration>
+            <xsd:enumeration value="11B">
+            </xsd:enumeration>
+            <xsd:enumeration value="12A">
+            </xsd:enumeration>
+            <xsd:enumeration value="12B">
+            </xsd:enumeration>
+            <xsd:enumeration value="93A">
+            </xsd:enumeration>
+            <xsd:enumeration value="94A">
+            </xsd:enumeration>
+            <xsd:enumeration value="94B">
+            </xsd:enumeration>
+            <xsd:enumeration value="95A">
+            </xsd:enumeration>
+            <xsd:enumeration value="95B">
+            </xsd:enumeration>
+            <xsd:enumeration value="96A">
+            </xsd:enumeration>
+            <xsd:enumeration value="96B">
+            </xsd:enumeration>
+            <xsd:enumeration value="97A">
+            </xsd:enumeration>
+            <xsd:enumeration value="97B">
+            </xsd:enumeration>
+            <xsd:enumeration value="98A">
+            </xsd:enumeration>
+            <xsd:enumeration value="98B">
+            </xsd:enumeration>
+            <xsd:enumeration value="99A">
+            </xsd:enumeration>
+            <xsd:enumeration value="99B">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0057-AssociationAssignedCode">
+        <xsd:restriction base="srv:alpha0-6">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0058-ApplicationPassword">
+        <xsd:restriction base="srv:alpha0-14">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0060-GroupControlCount">
+        <xsd:restriction base="srv:numeric1-6">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0062-MessageReferenceNumber">
+        <xsd:restriction base="srv:alpha0-14">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0065-MessageType">
+        <xsd:restriction base="srv:alpha0-6">
+            <xsd:enumeration value="APERAK">
+            </xsd:enumeration>
+            <xsd:enumeration value="AUTACK">
+            </xsd:enumeration>
+            <xsd:enumeration value="AUTHOR">
+            </xsd:enumeration>
+            <xsd:enumeration value="AVLREQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="AVLRSP">
+            </xsd:enumeration>
+            <xsd:enumeration value="BALANC">
+            </xsd:enumeration>
+            <xsd:enumeration value="BANSTA">
+            </xsd:enumeration>
+            <xsd:enumeration value="BAPLIE">
+            </xsd:enumeration>
+            <xsd:enumeration value="BERMAN">
+            </xsd:enumeration>
+            <xsd:enumeration value="BMISRM">
+            </xsd:enumeration>
+            <xsd:enumeration value="BOPBNK">
+            </xsd:enumeration>
+            <xsd:enumeration value="BOPCUS">
+            </xsd:enumeration>
+            <xsd:enumeration value="BOPDIR">
+            </xsd:enumeration>
+            <xsd:enumeration value="BOPINF">
+            </xsd:enumeration>
+            <xsd:enumeration value="BUSCRD">
+            </xsd:enumeration>
+            <xsd:enumeration value="CALINF">
+            </xsd:enumeration>
+            <xsd:enumeration value="CASINT">
+            </xsd:enumeration>
+            <xsd:enumeration value="CASRES">
+            </xsd:enumeration>
+            <xsd:enumeration value="CHACCO">
+            </xsd:enumeration>
+            <xsd:enumeration value="CLASET">
+            </xsd:enumeration>
+            <xsd:enumeration value="CNTCND">
+            </xsd:enumeration>
+            <xsd:enumeration value="COACSU">
+            </xsd:enumeration>
+            <xsd:enumeration value="COARRI">
+            </xsd:enumeration>
+            <xsd:enumeration value="CODECO">
+            </xsd:enumeration>
+            <xsd:enumeration value="CODENO">
+            </xsd:enumeration>
+            <xsd:enumeration value="COEDOR">
+            </xsd:enumeration>
+            <xsd:enumeration value="COHAOR">
+            </xsd:enumeration>
+            <xsd:enumeration value="COLREQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="COMDIS">
+            </xsd:enumeration>
+            <xsd:enumeration value="CONAPW">
+            </xsd:enumeration>
+            <xsd:enumeration value="CONDPV">
+            </xsd:enumeration>
+            <xsd:enumeration value="CONDRA">
+            </xsd:enumeration>
+            <xsd:enumeration value="CONDRO">
+            </xsd:enumeration>
+            <xsd:enumeration value="CONEST">
+            </xsd:enumeration>
+            <xsd:enumeration value="CONITT">
+            </xsd:enumeration>
+            <xsd:enumeration value="CONPVA">
+            </xsd:enumeration>
+            <xsd:enumeration value="CONQVA">
+            </xsd:enumeration>
+            <xsd:enumeration value="CONRPW">
+            </xsd:enumeration>
+            <xsd:enumeration value="CONTEN">
+            </xsd:enumeration>
+            <xsd:enumeration value="CONTRL">
+            </xsd:enumeration>
+            <xsd:enumeration value="CONWQD">
+            </xsd:enumeration>
+            <xsd:enumeration value="COPARN">
+            </xsd:enumeration>
+            <xsd:enumeration value="COPAYM">
+            </xsd:enumeration>
+            <xsd:enumeration value="COPINO">
+            </xsd:enumeration>
+            <xsd:enumeration value="COPRAR">
+            </xsd:enumeration>
+            <xsd:enumeration value="COREOR">
+            </xsd:enumeration>
+            <xsd:enumeration value="COSTCO">
+            </xsd:enumeration>
+            <xsd:enumeration value="COSTOR">
+            </xsd:enumeration>
+            <xsd:enumeration value="CREADV">
+            </xsd:enumeration>
+            <xsd:enumeration value="CREEXT">
+            </xsd:enumeration>
+            <xsd:enumeration value="CREMUL">
+            </xsd:enumeration>
+            <xsd:enumeration value="CUSCAR">
+            </xsd:enumeration>
+            <xsd:enumeration value="CUSDEC">
+            </xsd:enumeration>
+            <xsd:enumeration value="CUSEXP">
+            </xsd:enumeration>
+            <xsd:enumeration value="CUSPED">
+            </xsd:enumeration>
+            <xsd:enumeration value="CUSREP">
+            </xsd:enumeration>
+            <xsd:enumeration value="CUSRES">
+            </xsd:enumeration>
+            <xsd:enumeration value="DEBADV">
+            </xsd:enumeration>
+            <xsd:enumeration value="DEBMUL">
+            </xsd:enumeration>
+            <xsd:enumeration value="DEBREC">
+            </xsd:enumeration>
+            <xsd:enumeration value="DELFOR">
+            </xsd:enumeration>
+            <xsd:enumeration value="DELJIT">
+            </xsd:enumeration>
+            <xsd:enumeration value="DESADV">
+            </xsd:enumeration>
+            <xsd:enumeration value="DESTIM">
+            </xsd:enumeration>
+            <xsd:enumeration value="DGRECA">
+            </xsd:enumeration>
+            <xsd:enumeration value="DIRDEB">
+            </xsd:enumeration>
+            <xsd:enumeration value="DIRDEF">
+            </xsd:enumeration>
+            <xsd:enumeration value="DMRDEF">
+            </xsd:enumeration>
+            <xsd:enumeration value="DMSTAT">
+            </xsd:enumeration>
+            <xsd:enumeration value="DOCADV">
+            </xsd:enumeration>
+            <xsd:enumeration value="DOCAMA">
+            </xsd:enumeration>
+            <xsd:enumeration value="DOCAMI">
+            </xsd:enumeration>
+            <xsd:enumeration value="DOCAMR">
+            </xsd:enumeration>
+            <xsd:enumeration value="DOCAPP">
+            </xsd:enumeration>
+            <xsd:enumeration value="DOCARE">
+            </xsd:enumeration>
+            <xsd:enumeration value="DOCINF">
+            </xsd:enumeration>
+            <xsd:enumeration value="ENTREC">
+            </xsd:enumeration>
+            <xsd:enumeration value="FINCAN">
+            </xsd:enumeration>
+            <xsd:enumeration value="FINPAY">
+            </xsd:enumeration>
+            <xsd:enumeration value="FINSTA">
+            </xsd:enumeration>
+            <xsd:enumeration value="GENRAL">
+            </xsd:enumeration>
+            <xsd:enumeration value="GESMES">
+            </xsd:enumeration>
+            <xsd:enumeration value="GOVCBR">
+            </xsd:enumeration>
+            <xsd:enumeration value="HANMOV">
+            </xsd:enumeration>
+            <xsd:enumeration value="ICASRP">
+            </xsd:enumeration>
+            <xsd:enumeration value="ICSOLI">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFCSUM">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTCCA">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTDGN">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTFCC">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTICL">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTMAN">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTMBC">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTMBF">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTMBP">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTMCA">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTMCS">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTMIN">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTRIN">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTSAI">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTSTA">
+            </xsd:enumeration>
+            <xsd:enumeration value="IFTSTQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="IHCEBI">
+            </xsd:enumeration>
+            <xsd:enumeration value="IHCLME">
+            </xsd:enumeration>
+            <xsd:enumeration value="IMPDEF">
+            </xsd:enumeration>
+            <xsd:enumeration value="INFCON">
+            </xsd:enumeration>
+            <xsd:enumeration value="INFENT">
+            </xsd:enumeration>
+            <xsd:enumeration value="INSDES">
+            </xsd:enumeration>
+            <xsd:enumeration value="INSPRE">
+            </xsd:enumeration>
+            <xsd:enumeration value="INSREQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="INSRPT">
+            </xsd:enumeration>
+            <xsd:enumeration value="INVOIC">
+            </xsd:enumeration>
+            <xsd:enumeration value="INVRPT">
+            </xsd:enumeration>
+            <xsd:enumeration value="IPPOAD">
+            </xsd:enumeration>
+            <xsd:enumeration value="IPPOMO">
+            </xsd:enumeration>
+            <xsd:enumeration value="ISENDS">
+            </xsd:enumeration>
+            <xsd:enumeration value="ITRRPT">
+            </xsd:enumeration>
+            <xsd:enumeration value="JAPRES">
+            </xsd:enumeration>
+            <xsd:enumeration value="JINFDE">
+            </xsd:enumeration>
+            <xsd:enumeration value="JOBAPP">
+            </xsd:enumeration>
+            <xsd:enumeration value="JOBCON">
+            </xsd:enumeration>
+            <xsd:enumeration value="JOBMOD">
+            </xsd:enumeration>
+            <xsd:enumeration value="JOBOFF">
+            </xsd:enumeration>
+            <xsd:enumeration value="JUPREQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="KEYMAN">
+            </xsd:enumeration>
+            <xsd:enumeration value="LEDGER">
+            </xsd:enumeration>
+            <xsd:enumeration value="LREACT">
+            </xsd:enumeration>
+            <xsd:enumeration value="LRECLM">
+            </xsd:enumeration>
+            <xsd:enumeration value="MEDPID">
+            </xsd:enumeration>
+            <xsd:enumeration value="MEDPRE">
+            </xsd:enumeration>
+            <xsd:enumeration value="MEDREQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="MEDRPT">
+            </xsd:enumeration>
+            <xsd:enumeration value="MEDRUC">
+            </xsd:enumeration>
+            <xsd:enumeration value="MEQPOS">
+            </xsd:enumeration>
+            <xsd:enumeration value="MOVINS">
+            </xsd:enumeration>
+            <xsd:enumeration value="MSCONS">
+            </xsd:enumeration>
+            <xsd:enumeration value="ORDCHG">
+            </xsd:enumeration>
+            <xsd:enumeration value="ORDERS">
+            </xsd:enumeration>
+            <xsd:enumeration value="ORDRSP">
+            </xsd:enumeration>
+            <xsd:enumeration value="OSTENQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="OSTRPT">
+            </xsd:enumeration>
+            <xsd:enumeration value="PARTIN">
+            </xsd:enumeration>
+            <xsd:enumeration value="PASREQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="PASRSP">
+            </xsd:enumeration>
+            <xsd:enumeration value="PAXLST">
+            </xsd:enumeration>
+            <xsd:enumeration value="PAYDUC">
+            </xsd:enumeration>
+            <xsd:enumeration value="PAYEXT">
+            </xsd:enumeration>
+            <xsd:enumeration value="PAYMUL">
+            </xsd:enumeration>
+            <xsd:enumeration value="PAYORD">
+            </xsd:enumeration>
+            <xsd:enumeration value="PRICAT">
+            </xsd:enumeration>
+            <xsd:enumeration value="PRIHIS">
+            </xsd:enumeration>
+            <xsd:enumeration value="PROCST">
+            </xsd:enumeration>
+            <xsd:enumeration value="PRODAT">
+            </xsd:enumeration>
+            <xsd:enumeration value="PRODEX">
+            </xsd:enumeration>
+            <xsd:enumeration value="PROINQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="PROSRV">
+            </xsd:enumeration>
+            <xsd:enumeration value="PROTAP">
+            </xsd:enumeration>
+            <xsd:enumeration value="PRPAID">
+            </xsd:enumeration>
+            <xsd:enumeration value="QALITY">
+            </xsd:enumeration>
+            <xsd:enumeration value="QUOTES">
+            </xsd:enumeration>
+            <xsd:enumeration value="RDRMES">
+            </xsd:enumeration>
+            <xsd:enumeration value="REBORD">
+            </xsd:enumeration>
+            <xsd:enumeration value="RECADV">
+            </xsd:enumeration>
+            <xsd:enumeration value="RECALC">
+            </xsd:enumeration>
+            <xsd:enumeration value="RECECO">
+            </xsd:enumeration>
+            <xsd:enumeration value="RECLAM">
+            </xsd:enumeration>
+            <xsd:enumeration value="RECORD">
+            </xsd:enumeration>
+            <xsd:enumeration value="REGENT">
+            </xsd:enumeration>
+            <xsd:enumeration value="RELIST">
+            </xsd:enumeration>
+            <xsd:enumeration value="REMADV">
+            </xsd:enumeration>
+            <xsd:enumeration value="REPREM">
+            </xsd:enumeration>
+            <xsd:enumeration value="REQDOC">
+            </xsd:enumeration>
+            <xsd:enumeration value="REQOTE">
+            </xsd:enumeration>
+            <xsd:enumeration value="RESETT">
+            </xsd:enumeration>
+            <xsd:enumeration value="RESMSG">
+            </xsd:enumeration>
+            <xsd:enumeration value="RESREQ">
+            </xsd:enumeration>f
+            <xsd:enumeration value="RESRSP">
+            </xsd:enumeration>
+            <xsd:enumeration value="RETACC">
+            </xsd:enumeration>
+            <xsd:enumeration value="RETANN">
+            </xsd:enumeration>
+            <xsd:enumeration value="RETINS">
+            </xsd:enumeration>
+            <xsd:enumeration value="RPCALL">
+            </xsd:enumeration>
+            <xsd:enumeration value="SAFHAZ">
+            </xsd:enumeration>
+            <xsd:enumeration value="SANCRT">
+            </xsd:enumeration>
+            <xsd:enumeration value="SKDREQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="SKDUPD">
+            </xsd:enumeration>
+            <xsd:enumeration value="SLSFCT">
+            </xsd:enumeration>
+            <xsd:enumeration value="SLSRPT">
+            </xsd:enumeration>
+            <xsd:enumeration value="SOCADE">
+            </xsd:enumeration>
+            <xsd:enumeration value="SSIMOD">
+            </xsd:enumeration>
+            <xsd:enumeration value="SSRECH">
+            </xsd:enumeration>
+            <xsd:enumeration value="SSREGW">
+            </xsd:enumeration>
+            <xsd:enumeration value="STATAC">
+            </xsd:enumeration>
+            <xsd:enumeration value="STLRPT">
+            </xsd:enumeration>
+            <xsd:enumeration value="SUPCOT">
+            </xsd:enumeration>
+            <xsd:enumeration value="SUPMAN">
+            </xsd:enumeration>
+            <xsd:enumeration value="SUPRES">
+            </xsd:enumeration>
+            <xsd:enumeration value="TANSTA">
+            </xsd:enumeration>
+            <xsd:enumeration value="TAXCON">
+            </xsd:enumeration>
+            <xsd:enumeration value="TIQREQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="TIQRSP">
+            </xsd:enumeration>
+            <xsd:enumeration value="TPFREP">
+            </xsd:enumeration>
+            <xsd:enumeration value="TSDUPD">
+            </xsd:enumeration>
+            <xsd:enumeration value="TUPREQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="TUPRSP">
+            </xsd:enumeration>
+            <xsd:enumeration value="UTILMD">
+            </xsd:enumeration>
+            <xsd:enumeration value="UTILTS">
+            </xsd:enumeration>
+            <xsd:enumeration value="VATDEC">
+            </xsd:enumeration>
+            <xsd:enumeration value="VESDEP">
+            </xsd:enumeration>
+            <xsd:enumeration value="WASDIS">
+            </xsd:enumeration>
+            <xsd:enumeration value="WKGRDC">
+            </xsd:enumeration>
+            <xsd:enumeration value="WKGRRE">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0068-CommonAccessReference">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0070-SequenceOfTransfers">
+        <xsd:restriction base="srv:numeric1-2">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0073-FirstAndLastTransfer">
+        <xsd:restriction base="srv:alpha1">
+            <xsd:enumeration value="C">
+            </xsd:enumeration>
+            <xsd:enumeration value="F">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0074-NumberOfSegmentsInAMessage">
+        <xsd:restriction base="srv:numeric1-10">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0076-SyntaxReleaseNumber">
+        <xsd:restriction base="srv:alpha2">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0080-ServiceCodeListDirectoryVersionNumber">
+        <xsd:restriction base="srv:alpha0-6">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0081-SectionIdentification">
+        <xsd:restriction base="srv:alpha1">
+            <xsd:enumeration value="D">
+            </xsd:enumeration>
+            <xsd:enumeration value="S">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0083-ActionCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0085-SyntaxErrorCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="12">
+            </xsd:enumeration>
+            <xsd:enumeration value="13">
+            </xsd:enumeration>
+            <xsd:enumeration value="14">
+            </xsd:enumeration>
+            <xsd:enumeration value="15">
+            </xsd:enumeration>
+            <xsd:enumeration value="16">
+            </xsd:enumeration>
+            <xsd:enumeration value="17">
+            </xsd:enumeration>
+            <xsd:enumeration value="18">
+            </xsd:enumeration>
+            <xsd:enumeration value="20">
+            </xsd:enumeration>
+            <xsd:enumeration value="21">
+            </xsd:enumeration>
+            <xsd:enumeration value="22">
+            </xsd:enumeration>
+            <xsd:enumeration value="23">
+            </xsd:enumeration>
+            <xsd:enumeration value="24">
+            </xsd:enumeration>
+            <xsd:enumeration value="25">
+            </xsd:enumeration>
+            <xsd:enumeration value="26">
+            </xsd:enumeration>
+            <xsd:enumeration value="28">
+            </xsd:enumeration>
+            <xsd:enumeration value="29">
+            </xsd:enumeration>
+            <xsd:enumeration value="30">
+            </xsd:enumeration>
+            <xsd:enumeration value="32">
+            </xsd:enumeration>
+            <xsd:enumeration value="33">
+            </xsd:enumeration>
+            <xsd:enumeration value="35">
+            </xsd:enumeration>
+            <xsd:enumeration value="36">
+            </xsd:enumeration>
+            <xsd:enumeration value="37">
+            </xsd:enumeration>
+            <xsd:enumeration value="39">
+            </xsd:enumeration>
+            <xsd:enumeration value="40">
+            </xsd:enumeration>
+            <xsd:enumeration value="45">
+            </xsd:enumeration>
+            <xsd:enumeration value="46">
+            </xsd:enumeration>
+            <xsd:enumeration value="47">
+            </xsd:enumeration>
+            <xsd:enumeration value="48">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0087-AntiCollisionSegmentGroupIdentification">
+        <xsd:restriction base="srv:alpha0-4">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0096-SegmentPositionInMessageBody">
+        <xsd:restriction base="srv:numeric1-6">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0098-ErroneousDataElementPositionInSegment">
+        <xsd:restriction base="srv:numeric1-3">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0104-ErroneousComponentDataElementPosition">
+        <xsd:restriction base="srv:numeric1-3">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0110-CodeListDirectoryVersionNumber">
+        <xsd:restriction base="srv:alpha0-6">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0113-MessageTypeSubFunctionIdentification">
+        <xsd:restriction base="srv:alpha0-6">
+            <xsd:enumeration value="AA">
+            </xsd:enumeration>
+            <xsd:enumeration value="AB">
+            </xsd:enumeration>
+            <xsd:enumeration value="AC">
+            </xsd:enumeration>
+            <xsd:enumeration value="AD">
+            </xsd:enumeration>
+            <xsd:enumeration value="AE">
+            </xsd:enumeration>
+            <xsd:enumeration value="AF">
+            </xsd:enumeration>
+            <xsd:enumeration value="AG">
+            </xsd:enumeration>
+            <xsd:enumeration value="AH">
+            </xsd:enumeration>
+            <xsd:enumeration value="AI">
+            </xsd:enumeration>
+            <xsd:enumeration value="AJ">
+            </xsd:enumeration>
+            <xsd:enumeration value="AK">
+            </xsd:enumeration>
+            <xsd:enumeration value="AL">
+            </xsd:enumeration>
+            <xsd:enumeration value="AM">
+            </xsd:enumeration>
+            <xsd:enumeration value="AN">
+            </xsd:enumeration>
+            <xsd:enumeration value="AO">
+            </xsd:enumeration>
+            <xsd:enumeration value="AP">
+            </xsd:enumeration>
+            <xsd:enumeration value="AQ">
+            </xsd:enumeration>
+            <xsd:enumeration value="AR">
+            </xsd:enumeration>
+            <xsd:enumeration value="AS">
+            </xsd:enumeration>
+            <xsd:enumeration value="SECACK">
+            </xsd:enumeration>
+            <xsd:enumeration value="SECAUT">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0115-MessageSubsetIdentification">
+        <xsd:restriction base="srv:alpha0-14">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0116-MessageSubsetVersionNumber">
+        <xsd:restriction base="srv:alpha0-3">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0118-MessageSubsetReleaseNumber">
+        <xsd:restriction base="srv:alpha0-3">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0121-MessageImplementationGuidelineIdentification">
+        <xsd:restriction base="srv:alpha0-14">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0122-MessageImplementationGuidelineVersionNumber">
+        <xsd:restriction base="srv:alpha0-3">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0124-MessageImplementationGuidelineReleaseNumber">
+        <xsd:restriction base="srv:alpha0-3">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0127-ScenarioIdentification">
+        <xsd:restriction base="srv:alpha0-14">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0128-ScenarioVersionNumber">
+        <xsd:restriction base="srv:alpha0-3">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0130-ScenarioReleaseNumber">
+        <xsd:restriction base="srv:alpha0-3">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0133-CharacterEncodingCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+            <xsd:enumeration value="ZZZ">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0135-ServiceSegmentTagCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="UCD">
+            </xsd:enumeration>
+            <xsd:enumeration value="UCF">
+            </xsd:enumeration>
+            <xsd:enumeration value="UCI">
+            </xsd:enumeration>
+            <xsd:enumeration value="UCM">
+            </xsd:enumeration>
+            <xsd:enumeration value="UCS">
+            </xsd:enumeration>
+            <xsd:enumeration value="UGH">
+            </xsd:enumeration>
+            <xsd:enumeration value="UGT">
+            </xsd:enumeration>
+            <xsd:enumeration value="UIB">
+            </xsd:enumeration>
+            <xsd:enumeration value="UIH">
+            </xsd:enumeration>
+            <xsd:enumeration value="UIR">
+            </xsd:enumeration>
+            <xsd:enumeration value="UIT">
+            </xsd:enumeration>
+            <xsd:enumeration value="UIZ">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNB">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNE">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNG">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNH">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNO">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNP">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNS">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNT">
+            </xsd:enumeration>
+            <xsd:enumeration value="UNZ">
+            </xsd:enumeration>
+            <xsd:enumeration value="USA">
+            </xsd:enumeration>
+            <xsd:enumeration value="USB">
+            </xsd:enumeration>
+            <xsd:enumeration value="USC">
+            </xsd:enumeration>
+            <xsd:enumeration value="USD">
+            </xsd:enumeration>
+            <xsd:enumeration value="USE">
+            </xsd:enumeration>
+            <xsd:enumeration value="USF">
+            </xsd:enumeration>
+            <xsd:enumeration value="USH">
+            </xsd:enumeration>
+            <xsd:enumeration value="USL">
+            </xsd:enumeration>
+            <xsd:enumeration value="USR">
+            </xsd:enumeration>
+            <xsd:enumeration value="UST">
+            </xsd:enumeration>
+            <xsd:enumeration value="USU">
+            </xsd:enumeration>
+            <xsd:enumeration value="USX">
+            </xsd:enumeration>
+            <xsd:enumeration value="USY">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0136-ErroneousDataElementOccurrence">
+        <xsd:restriction base="srv:numeric1-6">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0138-SecuritySegmentPosition">
+        <xsd:restriction base="srv:numeric1-6">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0300-InitiatorControlReference">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0303-InitiatorReferenceIdentification">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0304-ResponderControlReference">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0306-TransactionControlReference">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0311-DialogueIdentification">
+        <xsd:restriction base="srv:alpha0-14">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0314-EventTime">
+        <xsd:restriction base="srv:alpha0-15">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0320-SenderSequenceNumber">
+        <xsd:restriction base="srv:numeric1-6">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0323-TransferPositionCoded">
+        <xsd:restriction base="srv:alpha1">
+            <xsd:enumeration value="F">
+            </xsd:enumeration>
+            <xsd:enumeration value="I">
+            </xsd:enumeration>
+            <xsd:enumeration value="L">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0325-DuplicateIndicator">
+        <xsd:restriction base="srv:alpha1">
+            <xsd:enumeration value="D">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0331-ReportFunctionCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+            <xsd:enumeration value="9">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0332-Status">
+        <xsd:restriction base="srv:alpha0-70">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0333-StatusCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+            <xsd:enumeration value="9">
+            </xsd:enumeration>
+            <xsd:enumeration value="10">
+            </xsd:enumeration>
+            <xsd:enumeration value="11">
+            </xsd:enumeration>
+            <xsd:enumeration value="12">
+            </xsd:enumeration>
+            <xsd:enumeration value="13">
+            </xsd:enumeration>
+            <xsd:enumeration value="14">
+            </xsd:enumeration>
+            <xsd:enumeration value="15">
+            </xsd:enumeration>
+            <xsd:enumeration value="16">
+            </xsd:enumeration>
+            <xsd:enumeration value="17">
+            </xsd:enumeration>
+            <xsd:enumeration value="18">
+            </xsd:enumeration>
+            <xsd:enumeration value="19">
+            </xsd:enumeration>
+            <xsd:enumeration value="20">
+            </xsd:enumeration>
+            <xsd:enumeration value="21">
+            </xsd:enumeration>
+            <xsd:enumeration value="22">
+            </xsd:enumeration>
+            <xsd:enumeration value="23">
+            </xsd:enumeration>
+            <xsd:enumeration value="24">
+            </xsd:enumeration>
+            <xsd:enumeration value="25">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0335-LanguageCoded">
+        <xsd:restriction base="srv:alpha0-3">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0336-TimeOffset">
+        <xsd:restriction base="srv:numeric4">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0338-EventDate">
+        <xsd:restriction base="srv:numeric1-8">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0340-InteractiveMessageReferenceNumber">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0342-DialogueVersionNumber">
+        <xsd:restriction base="srv:alpha0-3">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0344-DialogueReleaseNumber">
+        <xsd:restriction base="srv:alpha0-3">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0501-SecurityServiceCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+            <xsd:enumeration value="9">
+            </xsd:enumeration>
+            <xsd:enumeration value="10">
+            </xsd:enumeration>
+            <xsd:enumeration value="11">
+            </xsd:enumeration>
+            <xsd:enumeration value="12">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0503-ResponseTypeCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0505-FilterFunctionCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="ZZZ">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0507-OriginalCharacterSetEncodingCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+            <xsd:enumeration value="ZZZ">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0509-RoleOfSecurityProviderCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="ZZZ">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0511-SecurityPartyIdentification">
+        <xsd:restriction base="srv:alpha0-1024">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0513-SecurityPartyCodeListQualifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="ZZZ">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0515-SecurityPartyCodeListResponsibleAgencyCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0517-DateAndTimeQualifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0518-EncryptionReferenceNumber">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0520-SecuritySequenceNumber">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0523-UseOfAlgorithmCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+            <xsd:enumeration value="9">
+            </xsd:enumeration>
+            <xsd:enumeration value="10">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0525-CryptographicModeOfOperationCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="16">
+            </xsd:enumeration>
+            <xsd:enumeration value="17">
+            </xsd:enumeration>
+            <xsd:enumeration value="23">
+            </xsd:enumeration>
+            <xsd:enumeration value="24">
+            </xsd:enumeration>
+            <xsd:enumeration value="25">
+            </xsd:enumeration>
+            <xsd:enumeration value="26">
+            </xsd:enumeration>
+            <xsd:enumeration value="27">
+            </xsd:enumeration>
+            <xsd:enumeration value="28">
+            </xsd:enumeration>
+            <xsd:enumeration value="29">
+            </xsd:enumeration>
+            <xsd:enumeration value="30">
+            </xsd:enumeration>
+            <xsd:enumeration value="31">
+            </xsd:enumeration>
+            <xsd:enumeration value="32">
+            </xsd:enumeration>
+            <xsd:enumeration value="33">
+            </xsd:enumeration>
+            <xsd:enumeration value="34">
+            </xsd:enumeration>
+            <xsd:enumeration value="35">
+            </xsd:enumeration>
+            <xsd:enumeration value="36">
+            </xsd:enumeration>
+            <xsd:enumeration value="ZZZ">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0527-AlgorithmCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+            <xsd:enumeration value="9">
+            </xsd:enumeration>
+            <xsd:enumeration value="10">
+            </xsd:enumeration>
+            <xsd:enumeration value="11">
+            </xsd:enumeration>
+            <xsd:enumeration value="12">
+            </xsd:enumeration>
+            <xsd:enumeration value="13">
+            </xsd:enumeration>
+            <xsd:enumeration value="14">
+            </xsd:enumeration>
+            <xsd:enumeration value="15">
+            </xsd:enumeration>
+            <xsd:enumeration value="16">
+            </xsd:enumeration>
+            <xsd:enumeration value="17">
+            </xsd:enumeration>
+            <xsd:enumeration value="18">
+            </xsd:enumeration>
+            <xsd:enumeration value="20">
+            </xsd:enumeration>
+            <xsd:enumeration value="21">
+            </xsd:enumeration>
+            <xsd:enumeration value="22">
+            </xsd:enumeration>
+            <xsd:enumeration value="23">
+            </xsd:enumeration>
+            <xsd:enumeration value="24">
+            </xsd:enumeration>
+            <xsd:enumeration value="25">
+            </xsd:enumeration>
+            <xsd:enumeration value="26">
+            </xsd:enumeration>
+            <xsd:enumeration value="27">
+            </xsd:enumeration>
+            <xsd:enumeration value="28">
+            </xsd:enumeration>
+            <xsd:enumeration value="29">
+            </xsd:enumeration>
+            <xsd:enumeration value="30">
+            </xsd:enumeration>
+            <xsd:enumeration value="31">
+            </xsd:enumeration>
+            <xsd:enumeration value="32">
+            </xsd:enumeration>
+            <xsd:enumeration value="33">
+            </xsd:enumeration>
+            <xsd:enumeration value="34">
+            </xsd:enumeration>
+            <xsd:enumeration value="35">
+            </xsd:enumeration>
+            <xsd:enumeration value="36">
+            </xsd:enumeration>
+            <xsd:enumeration value="37">
+            </xsd:enumeration>
+            <xsd:enumeration value="38">
+            </xsd:enumeration>
+            <xsd:enumeration value="39">
+            </xsd:enumeration>
+            <xsd:enumeration value="40">
+            </xsd:enumeration>
+            <xsd:enumeration value="41">
+            </xsd:enumeration>
+            <xsd:enumeration value="42">
+            </xsd:enumeration>
+            <xsd:enumeration value="43">
+            </xsd:enumeration>
+            <xsd:enumeration value="44">
+            </xsd:enumeration>
+            <xsd:enumeration value="45">
+            </xsd:enumeration>
+            <xsd:enumeration value="46">
+            </xsd:enumeration>
+            <xsd:enumeration value="47">
+            </xsd:enumeration>
+            <xsd:enumeration value="48">
+            </xsd:enumeration>
+            <xsd:enumeration value="49">
+            </xsd:enumeration>
+            <xsd:enumeration value="50">
+            </xsd:enumeration>
+            <xsd:enumeration value="51">
+            </xsd:enumeration>
+            <xsd:enumeration value="52">
+            </xsd:enumeration>
+            <xsd:enumeration value="ZZZ">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0529-AlgorithmCodeListIdentifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0531-AlgorithmParameterQualifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+            <xsd:enumeration value="9">
+            </xsd:enumeration>
+            <xsd:enumeration value="10">
+            </xsd:enumeration>
+            <xsd:enumeration value="11">
+            </xsd:enumeration>
+            <xsd:enumeration value="12">
+            </xsd:enumeration>
+            <xsd:enumeration value="13">
+            </xsd:enumeration>
+            <xsd:enumeration value="14">
+            </xsd:enumeration>
+            <xsd:enumeration value="15">
+            </xsd:enumeration>
+            <xsd:enumeration value="16">
+            </xsd:enumeration>
+            <xsd:enumeration value="17">
+            </xsd:enumeration>
+            <xsd:enumeration value="18">
+            </xsd:enumeration>
+            <xsd:enumeration value="19">
+            </xsd:enumeration>
+            <xsd:enumeration value="20">
+            </xsd:enumeration>
+            <xsd:enumeration value="21">
+            </xsd:enumeration>
+            <xsd:enumeration value="22">
+            </xsd:enumeration>
+            <xsd:enumeration value="23">
+            </xsd:enumeration>
+            <xsd:enumeration value="24">
+            </xsd:enumeration>
+            <xsd:enumeration value="25">
+            </xsd:enumeration>
+            <xsd:enumeration value="26">
+            </xsd:enumeration>
+            <xsd:enumeration value="27">
+            </xsd:enumeration>
+            <xsd:enumeration value="28">
+            </xsd:enumeration>
+            <xsd:enumeration value="29">
+            </xsd:enumeration>
+            <xsd:enumeration value="30">
+            </xsd:enumeration>
+            <xsd:enumeration value="31">
+            </xsd:enumeration>
+            <xsd:enumeration value="33">
+            </xsd:enumeration>
+            <xsd:enumeration value="34">
+            </xsd:enumeration>
+            <xsd:enumeration value="35">
+            </xsd:enumeration>
+            <xsd:enumeration value="36">
+            </xsd:enumeration>
+            <xsd:enumeration value="37">
+            </xsd:enumeration>
+            <xsd:enumeration value="38">
+            </xsd:enumeration>
+            <xsd:enumeration value="39">
+            </xsd:enumeration>
+            <xsd:enumeration value="40">
+            </xsd:enumeration>
+            <xsd:enumeration value="41">
+            </xsd:enumeration>
+            <xsd:enumeration value="ZZZ">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0533-ModeOfOperationCodeListIdentifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0534-SecurityReferenceNumber">
+        <xsd:restriction base="srv:alpha0-14">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0536-CertificateReference">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0538-KeyName">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0541-ScopeOfSecurityApplicationCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="ZZZ">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0543-CertificateOriginalCharacterSetRepertoireCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+            <xsd:enumeration value="9">
+            </xsd:enumeration>
+            <xsd:enumeration value="10">
+            </xsd:enumeration>
+            <xsd:enumeration value="11">
+            </xsd:enumeration>
+            <xsd:enumeration value="12">
+            </xsd:enumeration>
+            <xsd:enumeration value="13">
+            </xsd:enumeration>
+            <xsd:enumeration value="14">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0545-CertificateSyntaxAndVersionCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0546-UserAuthorisationLevel">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0548-ServiceCharacterForSignature">
+        <xsd:restriction base="srv:alpha0-4">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0551-ServiceCharacterForSignatureQualifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0554-AlgorithmParameterValue">
+        <xsd:restriction base="srv:alpha0-512">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0556-LengthOfDataInOctetsOfBits">
+        <xsd:restriction base="srv:numeric1-18">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0558-ListParameter">
+        <xsd:restriction base="srv:alpha0-70">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0560-ValidationValue">
+        <xsd:restriction base="srv:alpha0-1024">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0563-ValidationValueQualifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0565-MessageRelationCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0567-SecurityStatusCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0569-RevocationReasonCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="ZZZ">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0571-SecurityErrorCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0572-CertificateSequenceNumber">
+        <xsd:restriction base="srv:numeric1-4">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0575-ListParameterQualifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="ZZZ">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0577-SecurityPartyQualifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0579-KeyManagementFunctionQualifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="101">
+            </xsd:enumeration>
+            <xsd:enumeration value="102">
+            </xsd:enumeration>
+            <xsd:enumeration value="110">
+            </xsd:enumeration>
+            <xsd:enumeration value="111">
+            </xsd:enumeration>
+            <xsd:enumeration value="112">
+            </xsd:enumeration>
+            <xsd:enumeration value="121">
+            </xsd:enumeration>
+            <xsd:enumeration value="123">
+            </xsd:enumeration>
+            <xsd:enumeration value="124">
+            </xsd:enumeration>
+            <xsd:enumeration value="125">
+            </xsd:enumeration>
+            <xsd:enumeration value="126">
+            </xsd:enumeration>
+            <xsd:enumeration value="130">
+            </xsd:enumeration>
+            <xsd:enumeration value="131">
+            </xsd:enumeration>
+            <xsd:enumeration value="140">
+            </xsd:enumeration>
+            <xsd:enumeration value="150">
+            </xsd:enumeration>
+            <xsd:enumeration value="151">
+            </xsd:enumeration>
+            <xsd:enumeration value="152">
+            </xsd:enumeration>
+            <xsd:enumeration value="221">
+            </xsd:enumeration>
+            <xsd:enumeration value="222">
+            </xsd:enumeration>
+            <xsd:enumeration value="224">
+            </xsd:enumeration>
+            <xsd:enumeration value="225">
+            </xsd:enumeration>
+            <xsd:enumeration value="231">
+            </xsd:enumeration>
+            <xsd:enumeration value="251">
+            </xsd:enumeration>
+            <xsd:enumeration value="252">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0582-NumberOfPaddingBytes">
+        <xsd:restriction base="srv:numeric1-2">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0586-SecurityPartyName">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0588-NumberOfSecuritySegments">
+        <xsd:restriction base="srv:numeric1-10">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0591-PaddingMechanismCoded">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="4">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+            <xsd:enumeration value="9">
+            </xsd:enumeration>
+            <xsd:enumeration value="10">
+            </xsd:enumeration>
+            <xsd:enumeration value="11">
+            </xsd:enumeration>
+            <xsd:enumeration value="12">
+            </xsd:enumeration>
+            <xsd:enumeration value="13">
+            </xsd:enumeration>
+            <xsd:enumeration value="14">
+            </xsd:enumeration>
+            <xsd:enumeration value="15">
+            </xsd:enumeration>
+            <xsd:enumeration value="16">
+            </xsd:enumeration>
+            <xsd:enumeration value="17">
+            </xsd:enumeration>
+            <xsd:enumeration value="18">
+            </xsd:enumeration>
+            <xsd:enumeration value="19">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0601-PaddingMechanismCodeListIdentifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0800-PackageReferenceNumber">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0802-ReferenceIdentificationNumber">
+        <xsd:restriction base="srv:alpha0-35">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0805-ObjectTypeQualifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+            <xsd:enumeration value="3">
+            </xsd:enumeration>
+            <xsd:enumeration value="5">
+            </xsd:enumeration>
+            <xsd:enumeration value="6">
+            </xsd:enumeration>
+            <xsd:enumeration value="7">
+            </xsd:enumeration>
+            <xsd:enumeration value="8">
+            </xsd:enumeration>
+            <xsd:enumeration value="9">
+            </xsd:enumeration>
+            <xsd:enumeration value="10">
+            </xsd:enumeration>
+            <xsd:enumeration value="11">
+            </xsd:enumeration>
+            <xsd:enumeration value="12">
+            </xsd:enumeration>
+            <xsd:enumeration value="13">
+            </xsd:enumeration>
+            <xsd:enumeration value="14">
+            </xsd:enumeration>
+            <xsd:enumeration value="15">
+            </xsd:enumeration>
+            <xsd:enumeration value="16">
+            </xsd:enumeration>
+            <xsd:enumeration value="17">
+            </xsd:enumeration>
+            <xsd:enumeration value="18">
+            </xsd:enumeration>
+            <xsd:enumeration value="19">
+            </xsd:enumeration>
+            <xsd:enumeration value="20">
+            </xsd:enumeration>
+            <xsd:enumeration value="21">
+            </xsd:enumeration>
+            <xsd:enumeration value="22">
+            </xsd:enumeration>
+            <xsd:enumeration value="23">
+            </xsd:enumeration>
+            <xsd:enumeration value="24">
+            </xsd:enumeration>
+            <xsd:enumeration value="25">
+            </xsd:enumeration>
+            <xsd:enumeration value="26">
+            </xsd:enumeration>
+            <xsd:enumeration value="27">
+            </xsd:enumeration>
+            <xsd:enumeration value="28">
+            </xsd:enumeration>
+            <xsd:enumeration value="29">
+            </xsd:enumeration>
+            <xsd:enumeration value="30">
+            </xsd:enumeration>
+            <xsd:enumeration value="31">
+            </xsd:enumeration>
+            <xsd:enumeration value="32">
+            </xsd:enumeration>
+            <xsd:enumeration value="33">
+            </xsd:enumeration>
+            <xsd:enumeration value="34">
+            </xsd:enumeration>
+            <xsd:enumeration value="35">
+            </xsd:enumeration>
+            <xsd:enumeration value="36">
+            </xsd:enumeration>
+            <xsd:enumeration value="37">
+            </xsd:enumeration>
+            <xsd:enumeration value="38">
+            </xsd:enumeration>
+            <xsd:enumeration value="39">
+            </xsd:enumeration>
+            <xsd:enumeration value="40">
+            </xsd:enumeration>
+            <xsd:enumeration value="41">
+            </xsd:enumeration>
+            <xsd:enumeration value="42">
+            </xsd:enumeration>
+            <xsd:enumeration value="43">
+            </xsd:enumeration>
+            <xsd:enumeration value="44">
+            </xsd:enumeration>
+            <xsd:enumeration value="45">
+            </xsd:enumeration>
+            <xsd:enumeration value="46">
+            </xsd:enumeration>
+            <xsd:enumeration value="48">
+            </xsd:enumeration>
+            <xsd:enumeration value="49">
+            </xsd:enumeration>
+            <xsd:enumeration value="50">
+            </xsd:enumeration>
+            <xsd:enumeration value="51">
+            </xsd:enumeration>
+            <xsd:enumeration value="52">
+            </xsd:enumeration>
+            <xsd:enumeration value="53">
+            </xsd:enumeration>
+            <xsd:enumeration value="54">
+            </xsd:enumeration>
+            <xsd:enumeration value="55">
+            </xsd:enumeration>
+            <xsd:enumeration value="56">
+            </xsd:enumeration>
+            <xsd:enumeration value="57">
+            </xsd:enumeration>
+            <xsd:enumeration value="58">
+            </xsd:enumeration>
+            <xsd:enumeration value="60">
+            </xsd:enumeration>
+            <xsd:enumeration value="61">
+            </xsd:enumeration>
+            <xsd:enumeration value="62">
+            </xsd:enumeration>
+            <xsd:enumeration value="63">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0808-ObjectTypeAttribute">
+        <xsd:restriction base="srv:alpha0-256">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0809-ObjectTypeAttributeIdentification">
+        <xsd:restriction base="srv:alpha0-256">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0810-LengthOfObjectInOctetsOfBits">
+        <xsd:restriction base="srv:numeric1-18">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0813-ReferenceQualifier">
+        <xsd:restriction base="srv:alpha0-3">
+            <xsd:enumeration value="1">
+            </xsd:enumeration>
+            <xsd:enumeration value="2">
+            </xsd:enumeration>
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="E0814-NumberOfSegmentsBeforeObject">
+        <xsd:restriction base="srv:numeric1-3">
+
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="S001-SyntaxIdentifier">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0001" type="srv:E0001-SyntaxIdentifier"/>
+            <xsd:element  name="E0002" type="srv:E0002-SyntaxVersionNumber"/>
+            <xsd:element  minOccurs="0" name="E0080" type="srv:E0080-ServiceCodeListDirectoryVersionNumber"/>
+            <xsd:element  minOccurs="0" name="E0133" type="srv:E0133-CharacterEncodingCoded"/>
+            <xsd:element  minOccurs="0" name="E0076" type="srv:E0076-SyntaxReleaseNumber"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S002-InterchangeSender">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0004" type="srv:E0004-InterchangeSenderIdentification"/>
+            <xsd:element  minOccurs="0" name="E0007" type="srv:E0007-IdentificationCodeQualifier"/>
+            <xsd:element  minOccurs="0" name="E0008" type="srv:E0008-InterchangeSenderInternalIdentification"/>
+            <xsd:element  minOccurs="0" name="E0042" type="srv:E0042-InterchangeSenderInternalSubIdentification"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S003-InterchangeRecipient">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0010" type="srv:E0010-InterchangeRecipientIdentification"/>
+            <xsd:element  minOccurs="0" name="E0007" type="srv:E0007-IdentificationCodeQualifier"/>
+            <xsd:element  minOccurs="0" name="E0014" type="srv:E0014-InterchangeRecipientInternalIdentification"/>
+            <xsd:element  minOccurs="0" name="E0046" type="srv:E0046-InterchangeRecipientInternalSubIdentification"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S004-DateAndTimeOfPreparation">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0017" type="srv:E0017-Date"/>
+            <xsd:element  name="E0019" type="srv:E0019-Time"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S005-RecipientReferencePasswordDetails">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0022" type="srv:E0022-RecipientReferencePassword"/>
+            <xsd:element  minOccurs="0" name="E0025" type="srv:E0025-RecipientReferencePasswordQualifier"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S006-ApplicationSenderIdentification">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0040" type="srv:E0040-ApplicationSenderIdentification"/>
+            <xsd:element  minOccurs="0" name="E0007" type="srv:E0007-IdentificationCodeQualifier"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S007-ApplicationRecipientIdentification">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0044" type="srv:E0044-ApplicationRecipientIdentification"/>
+            <xsd:element  minOccurs="0" name="E0007" type="srv:E0007-IdentificationCodeQualifier"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S008-MessageVersion">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0052" type="srv:E0052-MessageVersionNumber"/>
+            <xsd:element  name="E0054" type="srv:E0054-MessageReleaseNumber"/>
+            <xsd:element  minOccurs="0" name="E0057" type="srv:E0057-AssociationAssignedCode"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S009-MessageIdentifier">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0065" type="srv:E0065-MessageType"/>
+            <xsd:element  name="E0052" type="srv:E0052-MessageVersionNumber"/>
+            <xsd:element  name="E0054" type="srv:E0054-MessageReleaseNumber"/>
+            <xsd:element  name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element  minOccurs="0" name="E0057" type="srv:E0057-AssociationAssignedCode"/>
+            <xsd:element  minOccurs="0" name="E0110" type="srv:E0110-CodeListDirectoryVersionNumber"/>
+            <xsd:element  minOccurs="0" name="E0113" type="srv:E0113-MessageTypeSubFunctionIdentification"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S010-StatusOfTheTransfer">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0070" type="srv:E0070-SequenceOfTransfers"/>
+            <xsd:element  minOccurs="0" name="E0073" type="srv:E0073-FirstAndLastTransfer"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S011-DataElementIdentification">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0098" type="srv:E0098-ErroneousDataElementPositionInSegment"/>
+            <xsd:element  minOccurs="0" name="E0104" type="srv:E0104-ErroneousComponentDataElementPosition"/>
+            <xsd:element  minOccurs="0" name="E0136" type="srv:E0136-ErroneousDataElementOccurrence"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S016-MessageSubsetIdentification">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0115" type="srv:E0115-MessageSubsetIdentification"/>
+            <xsd:element  minOccurs="0" name="E0116" type="srv:E0116-MessageSubsetVersionNumber"/>
+            <xsd:element  minOccurs="0" name="E0118" type="srv:E0118-MessageSubsetReleaseNumber"/>
+            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S017-MessageImplementationGuidelineIdentification">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0121" type="srv:E0121-MessageImplementationGuidelineIdentification"/>
+            <xsd:element  minOccurs="0" name="E0122" type="srv:E0122-MessageImplementationGuidelineVersionNumber"/>
+            <xsd:element  minOccurs="0" name="E0124" type="srv:E0124-MessageImplementationGuidelineReleaseNumber"/>
+            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S018-ScenarioIdentification">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0127" type="srv:E0127-ScenarioIdentification"/>
+            <xsd:element  minOccurs="0" name="E0128" type="srv:E0128-ScenarioVersionNumber"/>
+            <xsd:element  minOccurs="0" name="E0130" type="srv:E0130-ScenarioReleaseNumber"/>
+            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S020-ReferenceIdentification">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0813" type="srv:E0813-ReferenceQualifier"/>
+            <xsd:element  name="E0802" type="srv:E0802-ReferenceIdentificationNumber"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S021-ObjectTypeIdentification">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0805" type="srv:E0805-ObjectTypeQualifier"/>
+            <xsd:element  minOccurs="0" name="E0809" type="srv:E0809-ObjectTypeAttributeIdentification"/>
+            <xsd:element  minOccurs="0" name="E0808" type="srv:E0808-ObjectTypeAttribute"/>
+            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S022-StatusOfTheObject">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0810" type="srv:E0810-LengthOfObjectInOctetsOfBits"/>
+            <xsd:element  minOccurs="0" name="E0814" type="srv:E0814-NumberOfSegmentsBeforeObject"/>
+            <xsd:element  minOccurs="0" name="E0070" type="srv:E0070-SequenceOfTransfers"/>
+            <xsd:element  minOccurs="0" name="E0073" type="srv:E0073-FirstAndLastTransfer"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S300-DateAndOrTimeOfInitiation">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  minOccurs="0" name="E0338" type="srv:E0338-EventDate"/>
+            <xsd:element  minOccurs="0" name="E0314" type="srv:E0314-EventTime"/>
+            <xsd:element  minOccurs="0" name="E0336" type="srv:E0336-TimeOffset"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S301-StatusOfTransferInteractive">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  minOccurs="0" name="E0320" type="srv:E0320-SenderSequenceNumber"/>
+            <xsd:element  minOccurs="0" name="E0323" type="srv:E0323-TransferPositionCoded"/>
+            <xsd:element  minOccurs="0" name="E0325" type="srv:E0325-DuplicateIndicator"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S302-DialogueReference">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0300" type="srv:E0300-InitiatorControlReference"/>
+            <xsd:element  minOccurs="0" name="E0303" type="srv:E0303-InitiatorReferenceIdentification"/>
+            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element  minOccurs="0" name="E0304" type="srv:E0304-ResponderControlReference"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S303-TransactionReference">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0306" type="srv:E0306-TransactionControlReference"/>
+            <xsd:element  minOccurs="0" name="E0303" type="srv:E0303-InitiatorReferenceIdentification"/>
+            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S305-DialogueIdentification">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0311" type="srv:E0311-DialogueIdentification"/>
+            <xsd:element  minOccurs="0" name="E0342" type="srv:E0342-DialogueVersionNumber"/>
+            <xsd:element  minOccurs="0" name="E0344" type="srv:E0344-DialogueReleaseNumber"/>
+            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S306-InteractiveMessageIdentifier">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0065" type="srv:E0065-MessageType"/>
+            <xsd:element  name="E0052" type="srv:E0052-MessageVersionNumber"/>
+            <xsd:element  name="E0054" type="srv:E0054-MessageReleaseNumber"/>
+            <xsd:element  minOccurs="0" name="E0113" type="srv:E0113-MessageTypeSubFunctionIdentification"/>
+            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element  minOccurs="0" name="E0057" type="srv:E0057-AssociationAssignedCode"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S307-StatusInformation">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  minOccurs="0" name="E0333" type="srv:E0333-StatusCoded"/>
+            <xsd:element  minOccurs="0" name="E0332" type="srv:E0332-Status"/>
+            <xsd:element  minOccurs="0" name="E0335" type="srv:E0335-LanguageCoded"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S500-SecurityIdentificationDetails">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0577" type="srv:E0577-SecurityPartyQualifier"/>
+            <xsd:element  minOccurs="0" name="E0538" type="srv:E0538-KeyName"/>
+            <xsd:element  minOccurs="0" name="E0511" type="srv:E0511-SecurityPartyIdentification"/>
+            <xsd:element  minOccurs="0" name="E0513" type="srv:E0513-SecurityPartyCodeListQualifier"/>
+            <xsd:element  minOccurs="0" name="E0515" type="srv:E0515-SecurityPartyCodeListResponsibleAgencyCoded"/>
+            <xsd:element  minOccurs="0" maxOccurs="3" dfdl:nilKind="literalValue" dfdl:useNilForDefault="no" nillable="true" dfdl:nilValue="%ES;" name="E0586" type="srv:E0586-SecurityPartyName"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S501-SecurityDateAndTime">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0517" type="srv:E0517-DateAndTimeQualifier"/>
+            <xsd:element  minOccurs="0" name="E0338" type="srv:E0338-EventDate"/>
+            <xsd:element  minOccurs="0" name="E0314" type="srv:E0314-EventTime"/>
+            <xsd:element  minOccurs="0" name="E0336" type="srv:E0336-TimeOffset"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S502-SecurityAlgorithm">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0523" type="srv:E0523-UseOfAlgorithmCoded"/>
+            <xsd:element  minOccurs="0" name="E0525" type="srv:E0525-CryptographicModeOfOperationCoded"/>
+            <xsd:element  minOccurs="0" name="E0533" type="srv:E0533-ModeOfOperationCodeListIdentifier"/>
+            <xsd:element  minOccurs="0" name="E0527" type="srv:E0527-AlgorithmCoded"/>
+            <xsd:element  minOccurs="0" name="E0529" type="srv:E0529-AlgorithmCodeListIdentifier"/>
+            <xsd:element  minOccurs="0" name="E0591" type="srv:E0591-PaddingMechanismCoded"/>
+            <xsd:element  minOccurs="0" name="E0601" type="srv:E0601-PaddingMechanismCodeListIdentifier"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S503-AlgorithmParameter">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0531" type="srv:E0531-AlgorithmParameterQualifier"/>
+            <xsd:element  name="E0554" type="srv:E0554-AlgorithmParameterValue"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S504-ListParameter">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0575" type="srv:E0575-ListParameterQualifier"/>
+            <xsd:element  name="E0558" type="srv:E0558-ListParameter"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S505-ServiceCharacterForSignature">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0551" type="srv:E0551-ServiceCharacterForSignatureQualifier"/>
+            <xsd:element  name="E0548" type="srv:E0548-ServiceCharacterForSignature"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="S508-ValidationResult">
+        <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+            <xsd:element  name="E0563" type="srv:E0563-ValidationValueQualifier"/>
+            <xsd:element  minOccurs="0" name="E0560" type="srv:E0560-ValidationValue"/>
+
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="alpha0-1024">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0"/>
+            <xsd:maxLength value="1024"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alpha0-14">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0"/>
+            <xsd:maxLength value="14"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alpha0-15">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0"/>
+            <xsd:maxLength value="15"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alpha0-256">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0"/>
+            <xsd:maxLength value="256"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alpha0-3">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0"/>
+            <xsd:maxLength value="3"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alpha0-35">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0"/>
+            <xsd:maxLength value="35"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alpha0-4">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0"/>
+            <xsd:maxLength value="4"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alpha0-512">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0"/>
+            <xsd:maxLength value="512"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alpha0-6">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0"/>
+            <xsd:maxLength value="6"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alpha0-70">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="0"/>
+            <xsd:maxLength value="70"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alpha1" dfdl:textPadKind="padChar">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alpha2" dfdl:textPadKind="padChar">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="2"/>
+            <xsd:maxLength value="2"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alpha4" dfdl:textPadKind="padChar">
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="4"/>
+            <xsd:maxLength value="4"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType dfdl:textNumberPattern="0" name="numeric1">
+        <xsd:restriction base="xsd:decimal">
+            <xsd:totalDigits value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType dfdl:textNumberPattern="#.#" name="numeric1-10">
+        <xsd:restriction base="xsd:decimal">
+            <xsd:totalDigits value="10"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType dfdl:textNumberPattern="#.#" name="numeric1-18">
+        <xsd:restriction base="xsd:decimal">
+            <xsd:totalDigits value="18"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType dfdl:textNumberPattern="#.#" name="numeric1-2">
+        <xsd:restriction base="xsd:decimal">
+            <xsd:totalDigits value="2"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType dfdl:textNumberPattern="#.#" name="numeric1-3">
+        <xsd:restriction base="xsd:decimal">
+            <xsd:totalDigits value="3"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType dfdl:textNumberPattern="#.#" name="numeric1-4">
+        <xsd:restriction base="xsd:decimal">
+            <xsd:totalDigits value="4"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType dfdl:textNumberPattern="#.#" name="numeric1-6">
+        <xsd:restriction base="xsd:decimal">
+            <xsd:totalDigits value="6"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType dfdl:textNumberPattern="#.#" name="numeric1-8">
+        <xsd:restriction base="xsd:decimal">
+            <xsd:totalDigits value="8"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType dfdl:textNumberPattern="0000" name="numeric4">
+        <xsd:restriction base="xsd:decimal">
+            <xsd:totalDigits value="4"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType dfdl:textNumberPattern="##000000" name="numeric6-8_custom1">
+        <xsd:restriction base="xsd:decimal">
+            <xsd:totalDigits value="8"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+
+</xsd:schema>

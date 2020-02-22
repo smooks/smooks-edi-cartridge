@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
+                      xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-1.0.xsd">
+
+    <edifact:parser schemaURI="classpath:/EDIFACT-SupplyChain-D03B/EDIFACT-SupplyChain-Messages-D.03B.xsd" indent="true"/>
+
+<!--    <dfdl:unparser schemaURI="classpath:/csv.dfdl.xsd" unparseOnElement="file"/>-->
+
+</smooks-resource-list>

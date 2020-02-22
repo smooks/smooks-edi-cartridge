@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
+                      default-selector-namespace="https://www.smooks.org/xsd/smooks/edifact-1.0.xsd">
+
+    <resource-config selector="parser">
+        <resource>org.milyn.cdr.extension.NewResourceConfig</resource>
+    </resource-config>
+
+    <resource-config selector="parser">
+        <resource>org.milyn.cdr.extension.SetOnResourceConfig</resource>
+        <param name="setOn">resourceType</param>
+        <param name="value">edifact-parser</param>
+    </resource-config>
+
+    <resource-config selector="parser">
+        <resource>org.milyn.cdr.extension.SetOnResourceConfig</resource>
+        <param name="setOn">selector</param>
+        <param name="value">org.xml.sax.driver</param>
+    </resource-config>
+
+    <resource-config selector="parser">
+        <resource>org.milyn.cdr.extension.MapToResourceConfigFromAttribute</resource>
+        <param name="attribute">schemaURI</param>
+    </resource-config>
+
+    <resource-config selector="parser">
+        <resource>org.milyn.cdr.extension.MapToResourceConfigFromAttribute</resource>
+        <param name="attribute">validateDFDLSchemas</param>
+    </resource-config>
+
+    <resource-config selector="parser">
+        <resource>org.milyn.cdr.extension.MapToResourceConfigFromAttribute</resource>
+        <param name="attribute">indent</param>
+    </resource-config>
+
+<!--    <resource-config selector="unparser">-->
+<!--        <resource>org.milyn.cdr.extension.NewResourceConfig</resource>-->
+<!--    </resource-config>-->
+
+<!--    <resource-config selector="unparser">-->
+<!--        <resource>org.milyn.cdr.extension.SetOnResourceConfig</resource>-->
+<!--        <param name="setOn">resourceType</param>-->
+<!--        <param name="value">dfdl-unparser</param>-->
+<!--    </resource-config>-->
+
+<!--    <resource-config selector="unparser">-->
+<!--        <resource>org.milyn.cdr.extension.MapToResourceConfigFromAttribute</resource>-->
+<!--        <param name="attribute">unparseOnElement</param>-->
+<!--        <param name="mapTo">selector</param>-->
+<!--    </resource-config>-->
+
+<!--    <resource-config selector="unparser">-->
+<!--        <resource>org.milyn.cdr.extension.MapToResourceConfigFromAttribute</resource>-->
+<!--        <param name="attribute">schemaURI</param>-->
+<!--    </resource-config>-->
+
+
+</smooks-resource-list>
