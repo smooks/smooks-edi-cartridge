@@ -28,9 +28,9 @@ import java.util.zip.ZipOutputStream;
 
 import org.junit.jupiter.api.Test;
 import org.milyn.edifact.ect.formats.unedifact.UnEdifactSpecificationReader;
-import org.milyn.edisax.EDIConfigurationException;
-import org.milyn.edisax.model.EDIConfigDigester;
-import org.milyn.edisax.model.internal.Edimap;
+import org.milyn.edifact.edisax.EDIConfigurationException;
+import org.milyn.edifact.edisax.model.EDIConfigDigester;
+import org.milyn.edifact.edisax.model.internal.Edimap;
 import org.xml.sax.SAXException;
 
 /**

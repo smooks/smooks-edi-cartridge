@@ -17,13 +17,13 @@ package org.milyn.edifact.ect.formats.unedifact;
 
 import org.milyn.edifact.ect.EdiParseException;
 import org.milyn.edifact.ect.common.XmlTagEncoder;
-import org.milyn.edisax.interchange.ControlBlockHandlerFactory;
-import org.milyn.edisax.model.internal.Delimiters;
-import org.milyn.edisax.model.internal.Description;
-import org.milyn.edisax.model.internal.Edimap;
-import org.milyn.edisax.model.internal.Import;
-import org.milyn.edisax.model.internal.Segment;
-import org.milyn.edisax.model.internal.SegmentGroup;
+import org.milyn.edifact.edisax.interchange.ControlBlockHandlerFactory;
+import org.milyn.edifact.edisax.model.internal.Delimiters;
+import org.milyn.edifact.edisax.model.internal.Description;
+import org.milyn.edifact.edisax.model.internal.Edimap;
+import org.milyn.edifact.edisax.model.internal.Import;
+import org.milyn.edifact.edisax.model.internal.Segment;
+import org.milyn.edifact.edisax.model.internal.SegmentGroup;
 
 import java.io.*;
 import java.util.*;

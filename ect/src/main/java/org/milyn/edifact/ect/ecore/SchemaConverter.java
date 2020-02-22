@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.util.XSDResourceFactoryImpl;
 import org.milyn.archive.Archive;
-import org.milyn.edisax.model.internal.Edimap;
+import org.milyn.edifact.edisax.model.internal.Edimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

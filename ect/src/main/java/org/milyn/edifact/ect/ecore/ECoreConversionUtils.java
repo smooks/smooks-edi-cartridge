@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.*;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
-import org.milyn.edisax.model.internal.*;
+import org.milyn.edifact.edisax.model.internal.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

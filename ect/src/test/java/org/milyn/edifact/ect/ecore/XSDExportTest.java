@@ -41,8 +41,7 @@ public class XSDExportTest {
         UnEdifactSpecificationReader ediSpecificationReader = new UnEdifactSpecificationReader(
                 zipInputStream, false, false);
         ECoreGenerator ecoreGen = new ECoreGenerator();
-        Set<EPackage> packages = ecoreGen
-                .generatePackages(ediSpecificationReader.getEdiDirectory());
+        Set<EPackage> packages = ecoreGen.generatePackages(ediSpecificationReader.getEdiDirectory());
         // To make tests execution faster let us just select a small subset of packages
         Set<EPackage> smallerSet = new HashSet<EPackage>();
         for (EPackage pkg : packages) {

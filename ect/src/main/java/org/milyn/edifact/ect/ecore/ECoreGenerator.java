@@ -2,11 +2,11 @@ package org.milyn.edifact.ect.ecore;
 
 import org.eclipse.emf.ecore.*;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
-import org.milyn.edisax.interchange.EdiDirectory;
-import org.milyn.edisax.model.internal.Edimap;
-import org.milyn.edisax.model.internal.Field;
-import org.milyn.edisax.model.internal.Segment;
-import org.milyn.edisax.model.internal.SegmentGroup;
+import org.milyn.edifact.edisax.interchange.EdiDirectory;
+import org.milyn.edifact.edisax.model.internal.Edimap;
+import org.milyn.edifact.edisax.model.internal.Field;
+import org.milyn.edifact.edisax.model.internal.Segment;
+import org.milyn.edifact.edisax.model.internal.SegmentGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

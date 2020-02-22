@@ -22,9 +22,9 @@ import org.milyn.assertion.AssertArgument;
 import org.milyn.edifact.ect.ecore.ECoreGenerator;
 import org.milyn.edifact.ect.ecore.SchemaConverter;
 import org.milyn.edifact.ect.formats.unedifact.UnEdifactSpecificationReader;
-import org.milyn.edisax.interchange.EdiDirectory;
-import org.milyn.edisax.model.internal.*;
-import org.milyn.edisax.util.EDIUtils;
+import org.milyn.edifact.edisax.interchange.EdiDirectory;
+import org.milyn.edifact.edisax.model.internal.*;
+import org.milyn.edifact.edisax.util.EDIUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

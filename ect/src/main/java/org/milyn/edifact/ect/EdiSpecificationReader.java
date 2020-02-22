@@ -15,8 +15,8 @@
 */
 package org.milyn.edifact.ect;
 
-import org.milyn.edisax.interchange.EdiDirectory;
-import org.milyn.edisax.model.internal.Edimap;
+import org.milyn.edifact.edisax.interchange.EdiDirectory;
+import org.milyn.edifact.edisax.model.internal.Edimap;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -74,7 +74,7 @@ public interface EdiSpecificationReader {
     Properties getInterchangeProperties();
 
     /**
-     * Get the {@link org.milyn.edisax.interchange.EdiDirectory} instance for specification.
+     * Get the {@link org.milyn.edifact.edisax.interchange.EdiDirectory} instance for specification.
      * <p/>
      * Implementations should cache this instance.
      *

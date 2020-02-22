@@ -39,8 +39,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.junit.jupiter.api.Test;
-import org.milyn.edisax.model.EDIConfigDigester;
-import org.milyn.edisax.model.internal.Edimap;
+import org.milyn.edifact.edisax.model.EDIConfigDigester;
+import org.milyn.edifact.edisax.model.internal.Edimap;
 
 /**
  * Test case for conversion of build-in segment definitions
@@ -53,7 +53,7 @@ public class ConvertBuildinSegmentsTest {
 
     @Test
     public void testConversion() throws Exception {
-        InputStream is = ConvertBuildinSegmentsTest.class.getResourceAsStream("/org/milyn/edisax/unedifact/handlers/r41/v41-segments.xml");
+        InputStream is = ConvertBuildinSegmentsTest.class.getResourceAsStream("/org/milyn/edifact/edisax/unedifact/handlers/r41/v41-segments.xml");
         assertNotNull(is, "Can't find a v41-segments.xml");
         Edimap edimap = EDIConfigDigester.digestConfig(is);
         EPackage pkg = ECoreGenerator.INSTANCE.generateSinglePackage(edimap);

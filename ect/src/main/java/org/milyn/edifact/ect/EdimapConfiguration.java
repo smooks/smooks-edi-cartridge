@@ -15,7 +15,7 @@
 */
 package org.milyn.edifact.ect;
 
-import org.milyn.edisax.model.internal.Edimap;
+import org.milyn.edifact.edisax.model.internal.Edimap;
 
 /**
  * EdimapConfiguration

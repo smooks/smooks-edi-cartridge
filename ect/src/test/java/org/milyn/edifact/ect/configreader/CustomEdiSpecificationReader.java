@@ -15,13 +15,13 @@
 */
 package org.milyn.edifact.ect.configreader;
 
-import org.milyn.edisax.interchange.EdiDirectory;
+import org.milyn.edifact.edisax.interchange.EdiDirectory;
 import org.milyn.edifact.ect.EdiSpecificationReader;
 import org.milyn.edifact.ect.EdiParseException;
-import org.milyn.edisax.model.internal.Edimap;
-import org.milyn.edisax.model.internal.Description;
-import org.milyn.edisax.model.internal.Delimiters;
-import org.milyn.edisax.model.internal.SegmentGroup;
+import org.milyn.edifact.edisax.model.internal.Edimap;
+import org.milyn.edifact.edisax.model.internal.Description;
+import org.milyn.edifact.edisax.model.internal.Delimiters;
+import org.milyn.edifact.edisax.model.internal.SegmentGroup;
 
 import java.io.InputStream;
 import java.io.IOException;
