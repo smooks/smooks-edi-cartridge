@@ -31,6 +31,7 @@ import java.util.regex.Matcher;
 
 /**
  * UnCefactDefinitionReader
+ *
  * @author bardl
  */
 public class UnEdifactDefinitionReader {
@@ -116,8 +117,9 @@ public class UnEdifactDefinitionReader {
      * Group2 = id
      * Group3 = name
      * Group4 = mandatory
+     * Group5 = cardinality
      */
-    private static final Pattern SEGMENT_ELEMENT = Pattern.compile(" *\\** *(\\d{3})*[SX\\|\\+\\-\\*\\# ]*(\\d{4}|C\\d{3}) *(.*) *( C| M).*");
+    private static final Pattern SEGMENT_ELEMENT = Pattern.compile(" *\\** *(\\d{3})*[SX\\|\\+\\-\\*\\# ]*(\\d{4}|C\\d{3}) *(.*) *( C| M) *(\\d)?.*");
 
     /**
      * Extracts information from first SegmentElement when Composite or Data element description exists on several
@@ -140,7 +142,7 @@ public class UnEdifactDefinitionReader {
      * Group2 = id
      * Group3 = name
      */
-    private static final Pattern SECOND_SEGMENT_ELEMENT = Pattern.compile("^(.*) *( C| M).*");
+    private static final Pattern SECOND_SEGMENT_ELEMENT = Pattern.compile("^(.*) *( C| M) *(\\d)?.*");
 
     private static List<Segment> readSegments(Reader reader, Map<String, Field> composites, Map<String, Component> datas, boolean useShortName) throws IOException, EdiParseException {
         List<Segment> segments = new ArrayList<Segment>();
@@ -193,7 +195,7 @@ public class UnEdifactDefinitionReader {
         while (line != null && !line.matches(ELEMENT_SEPARATOR)) {
             matcher = SEGMENT_ELEMENT.matcher(line);
             if (matcher.matches()) {
-                addFieldToSegment(fields, componens, segment, matcher.group(2), matcher.group(4).trim().equalsIgnoreCase("M"));
+                addFieldToSegment(fields, componens, segment, matcher.group(2), matcher.group(4).trim().equalsIgnoreCase("M"), (matcher.groupCount() > 4 && matcher.group(5) != null) ? Integer.parseInt(matcher.group(5)) : 1);
                 if (matcher.group(2).startsWith("C")) {
                     while (line != null && !line.equals("")) {
                         line = reader.readLine();
@@ -205,11 +207,11 @@ public class UnEdifactDefinitionReader {
                     String id = matcher.group(2);
                     line = reader.readLine();
                     if (line == null) {
-                            continue;
+                        continue;
                     }
                     matcher = SECOND_SEGMENT_ELEMENT.matcher(line);
                     if (matcher.matches()) {
-                        addFieldToSegment(fields, componens, segment, id, matcher.group(2).trim().equalsIgnoreCase("M"));
+                        addFieldToSegment(fields, componens, segment, id, matcher.group(2).trim().equalsIgnoreCase("M"), (matcher.groupCount() > 2 && matcher.group(3) != null) ? Integer.parseInt(matcher.group(3)) : 1);
                     }
 //                    } else {
 //                        throw new EdiParseException("Unable to match current line in segment description file. Erranous line [" + line + "].");
@@ -221,12 +223,15 @@ public class UnEdifactDefinitionReader {
         return segment;
     }
 
-    private static void addFieldToSegment(Map<String, Field> fields, Map<String, Component> componens, Segment segment, String id, boolean isMandatory) {
+    private static void addFieldToSegment(Map<String, Field> fields, Map<String, Component> components, Segment segment, String id, boolean isMandatory, int cardinality) {
+        final Field newField;
         if (id.toUpperCase().startsWith("C")) {
-            segment.getFields().add(copyField(fields.get(id), isMandatory));
+            newField = copyField(fields.get(id), isMandatory);
         } else {
-            segment.getFields().add(convertToField(componens.get(id), isMandatory));
+            newField = convertToField(components.get(id), isMandatory);
         }
+        newField.setCardinality(cardinality);
+        segment.getFields().add(newField);
     }
 
     private static Field convertToField(Component component, boolean isMandatory) {
@@ -366,13 +371,13 @@ public class UnEdifactDefinitionReader {
             id = headerMatcher.group(1);
             name = headerMatcher.group(2);
         } else {
-	    Matcher headerMatcherOld = ELEMENT_HEADER_OLD.matcher(line);
-	    if (headerMatcherOld.matches()) {
-		id = headerMatcherOld.group(1);
-		name = headerMatcherOld.group(2);
-	    } else {
-		throw new EdiParseException("Unable to extract id and name for Data element from line [" + line + "].");
-	    }
+            Matcher headerMatcherOld = ELEMENT_HEADER_OLD.matcher(line);
+            if (headerMatcherOld.matches()) {
+                id = headerMatcherOld.group(1);
+                name = headerMatcherOld.group(2);
+            } else {
+                throw new EdiParseException("Unable to extract id and name for Data element from line [" + line + "].");
+            }
         }
 
         String description = getValue(reader, "Desc:");
@@ -430,8 +435,7 @@ public class UnEdifactDefinitionReader {
     private static String getValue(BufferedReader reader, String prefix) throws IOException {
         StringBuilder result = new StringBuilder();
         String line;
-        while ((line = readUntilValue(reader)) != null)
-        {
+        while ((line = readUntilValue(reader)) != null) {
             line = line.replace("|", "").trim();
             if (line.startsWith(prefix)) {
                 result.append(line.replace(prefix, ""));
@@ -458,7 +462,7 @@ public class UnEdifactDefinitionReader {
     private static void moveToNextPart(BufferedReader reader) throws IOException {
         String currentLine = "";
 
-        while ( currentLine != null && !currentLine.matches(ELEMENT_SEPARATOR)) {
+        while (currentLine != null && !currentLine.matches(ELEMENT_SEPARATOR)) {
             currentLine = reader.readLine();
         }
     }

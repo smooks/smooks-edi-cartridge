@@ -18,13 +18,15 @@ package org.milyn.edifact.edisax.model.internal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Field extends ValueNode implements ContainerNode {
 
     private List<Component> component;
     private Boolean required;
     private Boolean truncatable;
-    
+    private Integer cardinality;
+
     public Field() {    	
     }
 
@@ -68,4 +70,11 @@ public class Field extends ValueNode implements ContainerNode {
         this.truncatable = value;
     }
 
+    public Integer getCardinality() {
+        return cardinality;
+    }
+
+    public void setCardinality(Integer cardinality) {
+        this.cardinality = cardinality;
+    }
 }
