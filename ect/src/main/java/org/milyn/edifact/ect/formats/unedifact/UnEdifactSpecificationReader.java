@@ -77,7 +77,7 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
 
         definitionFiles = new HashMap<String, byte[]>();
         messageFiles = new HashMap<String, byte[]>();
-        readDefinitionEntries(specificationInStream, new ZipDirectoryEntry("eded.", definitionFiles), new ZipDirectoryEntry("edcd.", definitionFiles), new ZipDirectoryEntry("edsd.", definitionFiles), new ZipDirectoryEntry("edmd.", "*", messageFiles));
+        readDefinitionEntries(specificationInStream, new ZipDirectoryEntry("eded.", definitionFiles), new ZipDirectoryEntry("edcd.", definitionFiles), new ZipDirectoryEntry("edsd.", definitionFiles), new ZipDirectoryEntry("uncl.", definitionFiles), new ZipDirectoryEntry("edmd.", "*", messageFiles));
         
         if (versions.size() != 1) {
             if (versions.size() == 0) {
@@ -216,12 +216,17 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
         Reader dataISR = null;
         Reader compositeISR = null;
         Reader segmentISR = null;
+        Reader codeISR = null;
+
         try {
             dataISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("eded.")));
             compositeISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("edcd.")));
             segmentISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("edsd.")));
+            if (definitionFiles.get("uncl.") != null) {
+                codeISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("uncl.")));
+            }
 
-            edifactModel = UnEdifactDefinitionReader.parse(dataISR, compositeISR, segmentISR, useShortName);
+            edifactModel = UnEdifactDefinitionReader.parse(dataISR, compositeISR, segmentISR, codeISR, useShortName);
             edifactModel.setDescription((Description) EDIUtils.MODEL_SET_DEFINITIONS_DESCRIPTION.clone());
             edifactModel.getSegments().setXmltag("DefinitionMap");
             edifactModel.setDelimiters(UNEdifactInterchangeParser.defaultUNEdifactDelimiters);
@@ -234,6 +239,9 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
             }
             if (segmentISR != null) {
                 segmentISR.close();
+            }
+            if (codeISR != null) {
+                codeISR.close();
             }
         }
         return edifactModel;

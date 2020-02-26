@@ -17,16 +17,14 @@ package org.milyn.edifact.ect.formats.unedifact;
 
 import org.milyn.edifact.ect.EdiParseException;
 import org.milyn.edifact.ect.common.XmlTagEncoder;
-import org.milyn.edifact.edisax.model.internal.Component;
-import org.milyn.edifact.edisax.model.internal.Edimap;
-import org.milyn.edifact.edisax.model.internal.Field;
-import org.milyn.edifact.edisax.model.internal.Segment;
-import org.milyn.edifact.edisax.model.internal.SegmentGroup;
+import org.milyn.edifact.edisax.model.internal.*;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -52,7 +50,7 @@ public class UnEdifactDefinitionReader {
     private static final String DOTS = "\\.\\.";
 
     /**
-     * Extracts information from Data element occuring on one single row in Composite definition.
+     * Extracts information from data element occuring on one single row in Composite definition.
      * Example - "010    3042  Street and number or post office box"
      * Group1 = line number
      * Group2 = id
@@ -65,7 +63,7 @@ public class UnEdifactDefinitionReader {
     private static final Pattern WHOLE_DATA_ELEMENT = Pattern.compile(" *(\\d{3})*[SX\\|\\+\\-\\*\\# ]*(\\d{4}) *(.*) *.*(C|M) *(an|n|a)(\\.*)(\\d*)");
 
     /**
-     * Extracts information from Data element occuring on one single row in Composite definition.
+     * Extracts information from data element occurring on one single row in Composite definition.
      * Example - "010    9173  Event description code                    C      an..35"
      * Group1 = line number
      * Group2 = id
@@ -74,7 +72,7 @@ public class UnEdifactDefinitionReader {
     private static final Pattern FIRST_DATA_ELEMENT_PART = Pattern.compile(" *(\\d{3})*[SX\\|\\+\\-\\*\\# ]*(\\d{4}) *(.*) *");
 
     /**
-     * Extracts information from Data element occuring on one single row in Composite definition.
+     * Extracts information from data element occuring on one single row in Composite definition.
      * Example - "identifier                                M      an..35"
      * Group3 = name
      * Group4 = mandatory
@@ -85,7 +83,7 @@ public class UnEdifactDefinitionReader {
     private static final Pattern SECOND_DATA_ELEMENT_PART = Pattern.compile(" *(.*) *.*(C|M) *(an|n|a)(\\.*)(\\d*)");
 
     /**
-     * Extracts information from Data header.
+     * Extracts information from data header.
      * Example: "3237  Sample location description code                        [B]"
      * Group1 = id
      * Group2 = name
@@ -95,7 +93,7 @@ public class UnEdifactDefinitionReader {
     private static final Pattern ELEMENT_HEADER_OLD = Pattern.compile("[SX\\|\\+\\-\\*\\# ]*(\\w{4}) *(.*)");
 
     /**
-     * Extracts information from Composite header.
+     * Extracts information from composite header.
      * Example: "C001 TRANSPORT MEANS"
      * Group1 = id
      * Group2 = name
@@ -103,7 +101,7 @@ public class UnEdifactDefinitionReader {
     private static final Pattern COMPOSITE_HEADER = Pattern.compile("[SX\\|\\+\\-\\*\\# ]*(\\w{4}) *(.*)");
 
     /**
-     * Extracts information from Segment header.
+     * Extracts information from segment header.
      * Example: "AGR  AGREEMENT IDENTIFICATION"
      * Group1 = id
      * Group2 = name
@@ -111,7 +109,7 @@ public class UnEdifactDefinitionReader {
     private static final Pattern SEGMENT_HEADER = Pattern.compile("[SX\\|\\+\\-\\*\\# ]*(\\w{3}) *(.*)");
 
     /**
-     * Extracts information from SegmentElement. Could be either a Composite or a Data.
+     * Extracts information from segment element. Could be either a Composite or a Data.
      * Example: "010    C779 ARRAY STRUCTURE IDENTIFICATION             M    1"
      * Group1 = line number
      * Group2 = id
@@ -122,7 +120,7 @@ public class UnEdifactDefinitionReader {
     private static final Pattern SEGMENT_ELEMENT = Pattern.compile(" *\\** *(\\d{3})*[SX\\|\\+\\-\\*\\# ]*(\\d{4}|C\\d{3}) *(.*) *( C| M) *(\\d)?.*");
 
     /**
-     * Extracts information from first SegmentElement when Composite or Data element description exists on several
+     * Extracts information from first segment element when Composite or Data element description exists on several
      * lines. Could be either a Composite or a Data.
      * Example: "010    C779 ARRAY STRUCTURE IDENTIFICATION
      *                       AND SOME MORE DESCRIPTION           M    1 an..15"
@@ -134,7 +132,7 @@ public class UnEdifactDefinitionReader {
     private static final Pattern FIRST_SEGMENT_ELEMENT = Pattern.compile(" *(\\d{3})*[SX\\|\\+\\-\\*\\# ]*(\\d{4}|C\\d{3}) *(.*)");
 
     /**
-     * Extracts information from second SegmentElement when Composite or Data element description exists on several
+     * Extracts information from second segment element when Composite or Data element description exists on several
      * lines. Could be either a Composite or a Data.
      * Example: "010    C779 ARRAY STRUCTURE IDENTIFICATION
      *                       AND SOME MORE DESCRIPTION           M    1 an..15"
@@ -143,6 +141,14 @@ public class UnEdifactDefinitionReader {
      * Group3 = name
      */
     private static final Pattern SECOND_SEGMENT_ELEMENT = Pattern.compile("^(.*) *( C| M) *(\\d)?.*");
+
+    /**
+     * Extracts information from a code.
+     * Example: "+    533   Original accounting voucher"
+     * Group1 = change indicator
+     * Group2 = code
+     */
+    private static final Pattern CODE = Pattern.compile("^(\\+|\\*|#|\\|X)? +(\\w+)  +.+");
 
     private static List<Segment> readSegments(Reader reader, Map<String, Field> composites, Map<String, Component> datas, boolean useShortName) throws IOException, EdiParseException {
         List<Segment> segments = new ArrayList<Segment>();
@@ -246,6 +252,8 @@ public class UnEdifactDefinitionReader {
         field.setTruncatable(true);
         field.setDataType(component.getDataType());
         field.setDataTypeParameters(component.getTypeParameters());
+        field.setCodeList(component.getCodeList());
+
         return field;
     }
 
@@ -281,6 +289,54 @@ public class UnEdifactDefinitionReader {
         }
 
         return fields;
+    }
+
+    private static Map<String, CodeList> readCodes(Reader reader) throws IOException, EdiParseException {
+        Map<String, CodeList> codeLists = new HashMap<>();
+
+        BufferedReader _reader = new BufferedReader(reader);
+        moveToNextPart(_reader);
+
+        CodeList codeList = new CodeList();
+        String id = populateCodeList(_reader, codeList);
+        while (id != null) {
+            codeLists.put(id, codeList);
+            moveToNextPart(_reader);
+            codeList = new CodeList();
+            id = populateCodeList(_reader, codeList);
+        }
+
+        return codeLists;
+    }
+
+    private static String populateCodeList(BufferedReader reader, CodeList codeList) throws IOException, EdiParseException {
+        String line = readUntilValue(reader);
+
+        if (line == null) {
+            return null;
+        }
+
+        String id;
+        Matcher headerMatcher = ELEMENT_HEADER.matcher(line);
+        if (headerMatcher.matches()) {
+            id = headerMatcher.group(1);
+        } else {
+            throw new EdiParseException("Unable to extract id and name for code from line [" + line + "].");
+        }
+
+        String description = getValue(reader, "Desc:");
+        codeList.setDocumentation(description);
+
+        line = readUntilValue(reader);
+        while (line != null && !line.matches(ELEMENT_SEPARATOR)) {
+            Matcher codeMatcher = CODE.matcher(line);
+            if (codeMatcher.matches()){
+                codeList.getCodes().add(codeMatcher.group(2));
+            }
+            line = reader.readLine();
+        }
+
+        return id;
     }
 
     private static String populateField(BufferedReader reader, Map<String, Component> components, Field field, boolean useShortName) throws IOException, EdiParseException {
@@ -338,25 +394,25 @@ public class UnEdifactDefinitionReader {
         toComponent.setName(fromComponent.getName());
     }
 
-    private static Map<String, Component> readComponents(Reader reader, boolean useShortName) throws IOException, EdiParseException {
+    private static Map<String, Component> readComponents(Reader reader, Map<String, CodeList> codeLists, boolean useShortName) throws IOException, EdiParseException {
         Map<String, Component> datas = new HashMap<String, Component>();
 
         BufferedReader _reader = new BufferedReader(reader);
         moveToNextPart(_reader);
 
         Component component = new Component();
-        String id = populateComponent(_reader, component, useShortName);
+        String id = populateComponent(_reader, component, codeLists, useShortName);
         while (id != null) {
             datas.put(id, component);
             moveToNextPart(_reader);
             component = new Component();
-            id = populateComponent(_reader, component, useShortName);
+            id = populateComponent(_reader, component, codeLists, useShortName);
         }
 
         return datas;
     }
 
-    private static String populateComponent(BufferedReader reader, Component component, boolean useShortName) throws IOException, EdiParseException {
+    private static String populateComponent(BufferedReader reader, Component component, Map<String, CodeList> codeLists, boolean useShortName) throws IOException, EdiParseException {
 
         //Read id and name.
         String line = readUntilValue(reader);
@@ -396,6 +452,7 @@ public class UnEdifactDefinitionReader {
         component.setMinLength(getMinLength(typeAndOccurance));
         component.setMaxLength(getMaxLength(typeAndOccurance));
         component.setDocumentation(description);
+        component.setCodeList(codeLists.get(id));
 
         return id;
     }
@@ -425,7 +482,7 @@ public class UnEdifactDefinitionReader {
             return "String";
         }
 
-        if (typeAndOccurance[0].trim().equals("n")) {
+        if (typeAndOccurance[0].trim().startsWith("n")) {
             return "DABigDecimal";
         } else {
             return "String";
@@ -495,15 +552,22 @@ public class UnEdifactDefinitionReader {
         return part;
     }
 
-    public static Edimap parse(Reader dataReader, Reader compositeReader, Reader segmentReader, boolean useShortName) throws IOException, EdiParseException {
+    public static Edimap parse(Reader dataReader, Reader compositeReader, Reader segmentReader, Reader codeReader, boolean useShortName) throws IOException, EdiParseException {
 
-        Map<String, Component> datas = UnEdifactDefinitionReader.readComponents(dataReader, useShortName);
+        Map<String, CodeList> codeLists = new HashMap<>();
+        if (codeReader != null) {
+            codeLists.putAll(UnEdifactDefinitionReader.readCodes(codeReader));
+        }
+        Map<String, Component> datas = UnEdifactDefinitionReader.readComponents(dataReader, codeLists, useShortName);
         Map<String, Field> composites = UnEdifactDefinitionReader.readFields(compositeReader, datas, useShortName);
         List<Segment> segments = UnEdifactDefinitionReader.readSegments(segmentReader, composites, datas, useShortName);
 
         Edimap edimap = new Edimap();
         edimap.setSegments(new SegmentGroup());
         edimap.getSegments().getSegments().addAll(segments);
+        edimap.setSimpleDataElements(Arrays.asList(datas.values().toArray(new Component[]{})));
+        edimap.setCompositeDataElements(Arrays.asList(composites.values().toArray(new Field[]{})));
+
         return edimap;
     }
 

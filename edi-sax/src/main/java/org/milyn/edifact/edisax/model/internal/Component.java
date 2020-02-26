@@ -24,6 +24,7 @@ public class Component extends ValueNode implements ContainerNode {
     private List<SubComponent> subComponent;
     private Boolean required;
     private Boolean truncatable;
+    private CodeList codeList;
 
 	public Component() {
 	}
@@ -68,4 +69,11 @@ public class Component extends ValueNode implements ContainerNode {
         this.truncatable = value;
     }
 
+    public CodeList getCodeList() {
+        return codeList;
+    }
+
+    public void setCodeList(CodeList codeList) {
+        this.codeList = codeList;
+    }
 }

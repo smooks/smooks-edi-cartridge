@@ -26,24 +26,26 @@ import java.util.List;
 
 public class Edimap {
 
-	private URI src;
+    private URI src;
     private List<Import> imports;
     private Description description;
     private Delimiters delimiters;
     private SegmentGroup segments;
     private Boolean ignoreUnmappedSegments;
+    private List<Component> simpleDataElements;
+    private List<Field> compositeDataElements;
 
-    public Edimap() {    	
+    public Edimap() {
     }
-    
+
     public Edimap(URI src) {
-    	this.src = src;
+        this.src = src;
     }
-    
+
     public URI getSrc() {
-    	return src;
+        return src;
     }
-    
+
     public List<Import> getImports() {
         if (imports == null) {
             imports = new ArrayList<Import>();
@@ -68,14 +70,14 @@ public class Edimap {
     }
 
     public void setIgnoreUnmappedSegments(Boolean value) {
-	this.ignoreUnmappedSegments = value;
+        this.ignoreUnmappedSegments = value;
     }
 
     public boolean isIgnoreUnmappedSegments() {
-	return ignoreUnmappedSegments != null && ignoreUnmappedSegments;
+        return ignoreUnmappedSegments != null && ignoreUnmappedSegments;
     }
 
-public SegmentGroup getSegments() {
+    public SegmentGroup getSegments() {
         return segments;
     }
 
@@ -85,5 +87,21 @@ public SegmentGroup getSegments() {
 
     public void write(Writer writer) throws IOException {
         EdimapWriter.write(this, writer);
+    }
+
+    public List<Component> getSimpleDataElements() {
+        return simpleDataElements;
+    }
+
+    public void setSimpleDataElements(List<Component> simpleDataElements) {
+        this.simpleDataElements = simpleDataElements;
+    }
+
+    public List<Field> getCompositeDataElements() {
+        return compositeDataElements;
+    }
+
+    public void setCompositeDataElements(List<Field> compositeDataElements) {
+        this.compositeDataElements = compositeDataElements;
     }
 }
