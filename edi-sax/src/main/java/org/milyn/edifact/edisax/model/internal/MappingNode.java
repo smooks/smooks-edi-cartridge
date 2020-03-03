@@ -32,14 +32,14 @@ public class MappingNode {
     private MappingNode parent;
 
     public MappingNode() {
-	}
-    
-	public MappingNode(String xmltag, String namespace) {
-		this.xmltag = xmltag;
-		this.namespace = namespace;
-	}
+    }
 
-	public String getXmltag() {
+    public MappingNode(String xmltag, String namespace) {
+        this.xmltag = xmltag;
+        this.namespace = namespace;
+    }
+
+    public String getXmltag() {
         return xmltag;
     }
 
@@ -74,11 +74,15 @@ public class MappingNode {
     public String getJavaName() throws IllegalNameException {
         String javaName = xmltag.replace(INDEXED_NODE_SEPARATOR, "_");
 
-        if(name != null && name.trim().length() > 0) {
+        if (name != null && name.trim().length() > 0) {
             javaName += "_" + EDIUtils.encodeClassName(name);
         }
 
         return javaName;
+    }
+
+    public String getXmlName() throws IllegalNameException {
+        return getJavaName().replace("_", "-");
     }
 
     public void setName(String name) {
@@ -92,11 +96,11 @@ public class MappingNode {
         return name;
     }
 
-	public String getNamespace() {
-		return namespace;
-	}
-	
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
-	}
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
 }

@@ -41,7 +41,7 @@ import java.util.zip.ZipInputStream;
 
 /**
  * UN/EDIFACT Specification Reader.
- * 
+ *
  * @author bardl
  */
 public class UnEdifactSpecificationReader implements EdiSpecificationReader {
@@ -78,7 +78,7 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
         definitionFiles = new HashMap<String, byte[]>();
         messageFiles = new HashMap<String, byte[]>();
         readDefinitionEntries(specificationInStream, new ZipDirectoryEntry("eded.", definitionFiles), new ZipDirectoryEntry("edcd.", definitionFiles), new ZipDirectoryEntry("edsd.", definitionFiles), new ZipDirectoryEntry("uncl.", definitionFiles), new ZipDirectoryEntry("edmd.", "*", messageFiles));
-        
+
         if (versions.size() != 1) {
             if (versions.size() == 0) {
                 throw new EdiParseException("Seems that we have a directory containing 0 parseable version inside: " + versions + ".\n All messages:\n\t" + messages);
