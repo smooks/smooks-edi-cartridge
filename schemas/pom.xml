@@ -2,14 +2,91 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>milyn-smooks-parent</artifactId>
-        <groupId>org.milyn</groupId>
+        <groupId>org.milyn.cartridges.edifact</groupId>
+        <artifactId>smooks-edifact-pom</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>schemas</artifactId>
+    <artifactId>edifact-schemas</artifactId>
 
+    <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>${project.build.directory}/generated-resources</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <mainClass>org.milyn.edifact.edg.EDIFACTDfdlSchemaGenerator</mainClass>
+                    <addResourcesToClasspath>true</addResourcesToClasspath>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-schemas</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>
+                                <argument>/d03b.zip</argument>
+                                <argument>${project.build.directory}/classes/schemas/d03b</argument>
+                            </arguments>
+                            <includePluginDependencies>true</includePluginDependencies>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.milyn.cartridges.edifact</groupId>
+                        <artifactId>smooks-edg</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
+                            <includes>
+                                <include>EDIFACT-Common/**</include>
+                            </includes>
+                            <classifier>common</classifier>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>d03b-schemas-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <includes>
+                                <include>d03b/**</include>
+                            </includes>
+                            <classifier>d03b</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

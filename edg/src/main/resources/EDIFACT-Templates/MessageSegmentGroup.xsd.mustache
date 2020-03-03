@@ -1,0 +1,9 @@
+<xsd:element minOccurs="{{value.minOccurs}}" maxOccurs="{{value.maxOccurs}}" name="{{value.xmltag}}">
+    <xsd:complexType>
+        <xsd:sequence>
+            {{#value.segments}}
+                {{value.render}}
+            {{/value.segments}}
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:element>

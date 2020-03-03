@@ -26,13 +26,9 @@
 	* Example use:
 	*   <xsd:import namespace="http://www.ibm.com/dfdl/EDI/Format" schemaLocation="IBM_EDI_Format.xsd"/>
 	*********************************************************************** -->
-
 <xsd:schema targetNamespace="http://www.ibm.com/dfdl/EDI/Format"
             xmlns:ibmEdiFmt="http://www.ibm.com/dfdl/EDI/Format"
             xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/"
-            xmlns:ibmDfdlExtn="http://www.ibm.com/dfdl/extensions"
-            xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions"
-            xmlns:fn="http://www.w3.org/2005/xpath-functions"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <xsd:annotation>
         <xsd:appinfo source="http://www.ogf.org/dfdl/">
@@ -42,8 +38,8 @@
                     Default field separator is "+".
                     Default composite separator is ":".
                     Default repeat separator is "*".  (Change to "+" if syntax version 3 and not using '*').
-                Default decimal separator is ".".  (Change to "," if needed.)
-                Default grouping separator is ",".  (Change to "." if needed.)
+                    Default decimal separator is ".".  (Change to "," if needed.)
+                    Default grouping separator is ",".  (Change to "." if needed.)
                     Default escape character and escape escape character is "?".
                     UNA segment if present overrides above defaults.
                     Grouping separators are never used.
@@ -123,7 +119,8 @@
             </dfdl:defineFormat>
 
             <dfdl:defineEscapeScheme name="EDIEscapeScheme">
-                <dfdl:escapeScheme escapeKind="escapeCharacter" escapeCharacter="{$ibmEdiFmt:EscapeChar}" escapeEscapeCharacter="{$ibmEdiFmt:EscapeChar}" extraEscapedCharacters="+ : '"/>
+                <dfdl:escapeScheme escapeKind="escapeCharacter" escapeCharacter="{$ibmEdiFmt:EscapeChar}"
+                                   escapeEscapeCharacter="{$ibmEdiFmt:EscapeChar}" extraEscapedCharacters="+ : '"/>
             </dfdl:defineEscapeScheme>
 
             <dfdl:defineFormat name="EDISegmentFormat">
@@ -131,15 +128,18 @@
             </dfdl:defineFormat>
 
             <dfdl:defineFormat name="EDISegmentSequenceFormat">
-                <dfdl:format separator="{$ibmEdiFmt:FieldSep}" separatorPosition="prefix" separatorPolicy="suppressedAtEndLax" terminator=""/>
+                <dfdl:format separator="{$ibmEdiFmt:FieldSep}" separatorPosition="prefix"
+                             separatorPolicy="suppressedAtEndLax" terminator=""/>
             </dfdl:defineFormat>
 
             <dfdl:defineFormat name="EDICompositeSequenceFormat">
-                <dfdl:format separator="{$ibmEdiFmt:CompositeSep}" separatorPosition="infix" separatorPolicy="suppressedAtEndLax" terminator=""/>
+                <dfdl:format separator="{$ibmEdiFmt:CompositeSep}" separatorPosition="infix"
+                             separatorPolicy="suppressedAtEndLax" terminator=""/>
             </dfdl:defineFormat>
 
             <dfdl:defineFormat name="EDISegmentPartRepeatSequenceFormat">
-                <dfdl:format separator="{$ibmEdiFmt:RepeatSep}" separatorPosition="infix" separatorPolicy="suppressedAtEndLax" terminator=""/>
+                <dfdl:format separator="{$ibmEdiFmt:RepeatSep}" separatorPosition="infix"
+                             separatorPolicy="suppressedAtEndLax" terminator=""/>
             </dfdl:defineFormat>
 
         </xsd:appinfo>

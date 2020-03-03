@@ -20,13 +20,14 @@
         </xsd:annotation>
     </xsd:element>
 
-<!--    <xsd:element name="unparser" substitutionGroup="smooks:abstract-resource-config" type="smooks-dfdl:writerVisitor">-->
-<!--        <xsd:annotation>-->
-<!--            <xsd:documentation xml:lang="en">-->
-<!--                A visitor that unparses the fragment selected by the "unparseOnElement" attribute.-->
-<!--            </xsd:documentation>-->
-<!--        </xsd:annotation>-->
-<!--    </xsd:element>-->
+    <xsd:element name="unparser" substitutionGroup="smooks:abstract-resource-config"
+                 type="smooks-edifact:writerVisitor">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">
+                A visitor that unparses the fragment selected by the "unparseOnElement" attribute.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
 
     <xsd:complexType name="parser">
         <xsd:annotation>
@@ -34,6 +35,9 @@
         </xsd:annotation>
         <xsd:complexContent>
             <xsd:extension base="smooks:abstract-reader">
+                <xsd:sequence>
+                    <xsd:element name="messages" type="smooks-edifact:messages"/>
+                </xsd:sequence>
                 <xsd:attribute name="schemaURI" type="xsd:string" use="required">
                     <xsd:annotation>
                         <xsd:documentation xml:lang="en">
@@ -62,24 +66,39 @@
         </xsd:complexContent>
     </xsd:complexType>
 
-<!--    <xsd:complexType name="writerVisitor">-->
-<!--        <xsd:complexContent>-->
-<!--            <xsd:extension base="smooks:element-visitor">-->
-<!--                <xsd:attribute name="unparseOnElement" type="xsd:string">-->
-<!--                    <xsd:annotation>-->
-<!--                        <xsd:documentation xml:lang="en">-->
-<!--                            The selector of the fragment to unparse.-->
-<!--                        </xsd:documentation>-->
-<!--                    </xsd:annotation>-->
-<!--                </xsd:attribute>-->
-<!--                <xsd:attribute name="schemaURI" type="xsd:string" use="required">-->
-<!--                    <xsd:annotation>-->
-<!--                        <xsd:documentation xml:lang="en">-->
-<!--                            The URI of the DFDL schema.-->
-<!--                        </xsd:documentation>-->
-<!--                    </xsd:annotation>-->
-<!--                </xsd:attribute>-->
-<!--            </xsd:extension>-->
-<!--        </xsd:complexContent>-->
-<!--    </xsd:complexType>-->
+    <xsd:complexType name="messages">
+        <xsd:sequence>
+            <xsd:element name="message" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string"/>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="writerVisitor">
+        <xsd:complexContent>
+            <xsd:extension base="smooks:element-visitor">
+                <xsd:sequence>
+                    <xsd:element name="messages" type="smooks-edifact:messages"/>
+                </xsd:sequence>
+                <xsd:attribute name="unparseOnElement" type="xsd:string">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="en">
+                            The selector of the fragment to unparse.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="schemaURI" type="xsd:string" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="en">
+                            The URI of the DFDL schema.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
 </xsd:schema>

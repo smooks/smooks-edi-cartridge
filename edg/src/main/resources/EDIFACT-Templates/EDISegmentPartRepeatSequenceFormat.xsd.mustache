@@ -1,0 +1,4 @@
+<xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
+     <xsd:element minOccurs="{{value.minOccurs}}" maxOccurs="{{value.maxOccurs}}" dfdl:nilKind="literalValue" dfdl:useNilForDefault="no"
+                 nillable="true" dfdl:nilValue="%ES;" name="{{value.xmltag}}" type="{{version}}:{{value.xmlName}}"/>
+</xsd:sequence>

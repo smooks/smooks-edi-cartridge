@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/"
+            xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions"
+            xmlns:ibmEdiFmt="http://www.ibm.com/dfdl/EDI/Format"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:{{version}}="http://www.ibm.com/dfdl/edi/un/edifact/{{version}}"
+            targetNamespace="http://www.ibm.com/dfdl/edi/un/edifact/{{version}}">
+
+    <xsd:import namespace="http://www.ibm.com/dfdl/EDI/Format" schemaLocation="/EDIFACT-Common/IBM_EDI_Format.dfdl.xsd"/>
+    <xsd:import namespace="http://www.ibm.com/dfdl/edi/un/service/4.1" schemaLocation="/EDIFACT-Common/EDIFACT-Service-Segments-4.1.dfdl.xsd"/>
+    <xsd:include schemaLocation="EDIFACT-Segments.dfdl.xsd"/>
+
+    <xsd:annotation>
+        <xsd:appinfo source="http://www.ogf.org/dfdl/">
+            <dfdl:format ref="ibmEdiFmt:EDIFormat"/>
+        </xsd:appinfo>
+    </xsd:annotation>
+
+    <xsd:annotation>
+        <xsd:appinfo source="http://www.ibm.com/dfdl/edi/un/edifact">{{version}}</xsd:appinfo>
+        <xsd:documentation>
+            EDIFACT {{version}} messages
+        </xsd:documentation>
+    </xsd:annotation>
+
+    {{#messages}}
+        <xsd:element ibmSchExtn:docRoot="true" name="{{value.segments.xmlName}}" type="{{version}}:{{value.segments.xmlName}}">
+        </xsd:element>
+        <xsd:complexType name="{{value.segments.xmlName}}">
+            <xsd:sequence>
+                {{#value.segments.segments}}
+                    {{value.render}}
+                {{/value.segments.segments}}
+            </xsd:sequence>
+        </xsd:complexType>
+    {{/messages}}
+
+    <xsd:element ibmSchExtn:docRoot="true" name="BadMessage">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" name="Segment" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Name" type="xsd:string" dfdl:lengthKind="explicit" dfdl:length="3">
+                                <xsd:annotation>
+                                    <xsd:appinfo source="http://www.ogf.org/dfdl/">
+                                        <dfdl:discriminator test="{. ne 'UNT' and . ne 'UIT'}"/>
+                                    </xsd:appinfo>
+                                </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element name="Data" type="xsd:hexBinary" dfdl:lengthUnits="bytes"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

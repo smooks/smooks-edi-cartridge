@@ -2,12 +2,34 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.milyn</groupId>
-        <artifactId>milyn-smooks-parent</artifactId>
+        <groupId>org.milyn.cartridges.edifact</groupId>
+        <artifactId>smooks-edifact-pom</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>milyn-smooks-edifact</artifactId>
+    <artifactId>smooks-edifact-cartridge</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.spullara.mustache.java</groupId>
+            <artifactId>compiler</artifactId>
+            <version>${mustache.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.milyn.cartridges.edifact</groupId>
+            <artifactId>edifact-schemas</artifactId>
+            <classifier>common</classifier>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.milyn.cartridges.edifact</groupId>
+            <artifactId>edifact-schemas</artifactId>
+            <classifier>d03b</classifier>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

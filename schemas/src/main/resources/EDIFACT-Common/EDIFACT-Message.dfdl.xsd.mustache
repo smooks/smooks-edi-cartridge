@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+    * IBM hereby grant permission, to those obtaining a copy of these materials,
+    * to use, copy and modify the materials solely for use with DFDL processors.
+    * THESE MATERIALS ARE PROVIDED AS IS WITH NO WARRANTIES OF ANY KIND.
+    *
+    * The United Nations Rules for Electronic Data Interchange for Administration,
+    * Commerce and Transport (UN/EDIFACT) can be obtained from the United Nations
+    * Economic Commission for Europe (UNECE) website:
+    * http://www.unece.org/tradewelcome/areas-of-work/un-centre-for-trade-facilitation-and-e-business-uncefact/outputs/standards/unedifact/directories/download.html
+    *
+    * For any further reproduction of UN/CEFACT material please contact info.ece@unece.org.
+    *
+    * © Copyright (1993-2014) United Nations, all rights reserved
+    *
+    * © Copyright International Business Machines Corporation, 2014
+	*
+	*********************************************************************** -->
+<xsd:schema
+        xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/"
+        xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions"
+        xmlns:ibmEdiFmt="http://www.ibm.com/dfdl/EDI/Format"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:srv="http://www.ibm.com/dfdl/edi/un/service/4.1"
+        xmlns:{{version}}="http://www.ibm.com/dfdl/edi/un/edifact/{{version}}"
+        targetNamespace="http://www.ibm.com/dfdl/edi/un/edifact/{{version}}">
+
+    <xsd:import namespace="http://www.ibm.com/dfdl/EDI/Format" schemaLocation="/EDIFACT-Common/IBM_EDI_Format.dfdl.xsd"/>
+    <xsd:import namespace="http://www.ibm.com/dfdl/edi/un/service/4.1" schemaLocation="/EDIFACT-Common/EDIFACT-Service-Segments-4.1.dfdl.xsd"/>
+    <xsd:include schemaLocation="{{schemaLocation}}"/>
+
+    <xsd:annotation>
+        <xsd:appinfo source="http://www.ogf.org/dfdl/">
+            <dfdl:format ref="ibmEdiFmt:EDIFormat"/>
+        </xsd:appinfo>
+    </xsd:annotation>
+
+    <xsd:element ibmSchExtn:docRoot="true" name="Interchange" dfdl:lengthKind="implicit">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element dfdl:terminator="%WSP*;" dfdl:initiator="UNA" dfdl:length="6" dfdl:lengthKind="explicit" name="UNA" type="srv:UNA" minOccurs="0"/>
+                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UNB" name="UNB" type="srv:UNB-InterchangeHeader">
+                    <xsd:annotation>
+                        <xsd:appinfo source="http://www.ogf.org/dfdl/">
+                            <!-- Supports syntax versions 3 and 4 -->
+                            <dfdl:assert message="Unsupported syntax version" test="{./S001/E0002 eq '3' or ./S001/E0002 eq '4'}"/>
+                        </xsd:appinfo>
+                    </xsd:annotation>
+                </xsd:element>
+                <!-- Content is either Functional Groups or independent Messages, never a mixture -->
+                <xsd:choice>
+                    <xsd:element name="FunctionGroup" maxOccurs="unbounded">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UNG" name="UNG" type="srv:UNG-GroupHeader"/>
+                                <xsd:element ref="{{version}}:Message" maxOccurs="unbounded"/>
+                                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UNE" name="UNE" type="srv:UNE-GroupTrailer"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element ref="{{version}}:Message" maxOccurs="unbounded"/>
+                </xsd:choice>
+                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UNZ" name="UNZ" type="srv:UNZ-InterchangeTrailer"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element ibmSchExtn:docRoot="true" name="Message">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UNH" name="UNH" type="srv:UNH-MessageHeader"/>
+                <xsd:choice>
+                    <xsd:sequence>
+                        <xsd:choice dfdl:choiceDispatchKey="{ ./UNH/S009/E0065 }">
+                            <xsd:element ref="srv:AUTACK" dfdl:choiceBranchKey="AUTACK">
+                                <xsd:annotation>
+                                    <xsd:appinfo source="http://www.ogf.org/dfdl/"></xsd:appinfo>
+                                </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element ref="srv:CONTRL" dfdl:choiceBranchKey="CONTRL">
+                                <xsd:annotation>
+                                    <xsd:appinfo source="http://www.ogf.org/dfdl/"></xsd:appinfo>
+                                </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element ref="srv:KEYMAN" dfdl:choiceBranchKey="KEYMAN">
+                                <xsd:annotation>
+                                    <xsd:appinfo source="http://www.ogf.org/dfdl/"></xsd:appinfo>
+                                </xsd:annotation>
+                            </xsd:element>
+                            {{#messages}}
+                             <xsd:element ref="{{version}}:{{.}}" dfdl:choiceBranchKey="{{.}}">
+                                 <xsd:annotation>
+                                     <xsd:appinfo source="http://www.ogf.org/dfdl/"></xsd:appinfo>
+                                 </xsd:annotation>
+                             </xsd:element>
+                            {{/messages}}
+                        </xsd:choice>
+                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UNT" name="UNT" type="srv:UNT-MessageTrailer"/>
+                    </xsd:sequence>
+                    <xsd:sequence>
+                        <xsd:element ref="{{version}}:BadMessage"/>
+                        <xsd:element dfdl:initiator="UNT" dfdl:ref="ibmEdiFmt:EDISegmentFormat" name="UNT" type="srv:UNT-MessageTrailer"/>
+                    </xsd:sequence>
+                </xsd:choice>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

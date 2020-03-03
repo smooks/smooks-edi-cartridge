@@ -2,8 +2,18 @@
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
                       xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-1.0.xsd">
 
-    <edifact:parser schemaURI="classpath:/EDIFACT-SupplyChain-D03B/EDIFACT-SupplyChain-Messages-D.03B.xsd" indent="true"/>
+    <edifact:parser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd" indent="true">
+        <edifact:messages>
+            <edifact:message>ORDERS</edifact:message>
+            <edifact:message>INVOIC</edifact:message>
+        </edifact:messages>
+    </edifact:parser>
 
-<!--    <dfdl:unparser schemaURI="classpath:/csv.dfdl.xsd" unparseOnElement="file"/>-->
+    <edifact:unparser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnElement="/Interchange">
+        <edifact:messages>
+            <edifact:message>ORDERS</edifact:message>
+            <edifact:message>INVOIC</edifact:message>
+        </edifact:messages>
+    </edifact:unparser>
 
 </smooks-resource-list>

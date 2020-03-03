@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.milyn</groupId>
-        <artifactId>milyn-smooks-parent</artifactId>
+        <groupId>org.milyn.cartridges.edifact</groupId>
+        <artifactId>smooks-edifact-pom</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <name>Milyn :: EDI :: EDIFACT Conversion Tool</name>
-    <artifactId>milyn-smooks-ect</artifactId>
+    <artifactId>smooks-ect</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>org.milyn</groupId>
-            <artifactId>edi-sax</artifactId>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-core</artifactId>
+            <version>${xmlunit.core.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.milyn.cartridges.edifact</groupId>
+            <artifactId>smooks-edi-sax</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -24,39 +29,28 @@
             <artifactId>ant</artifactId>
             <version>1.10.7</version>
         </dependency>
-
         <dependency>
             <groupId>org.eclipse.xsd</groupId>
             <artifactId>org.eclipse.xsd</artifactId>
             <version>2.12.0</version>
             <type>jar</type>
         </dependency>
-
         <dependency>
             <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.ecore</artifactId>
             <version>2.20.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.common</artifactId>
             <version>2.17.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.xmlunit</groupId>
-            <artifactId>xmlunit-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.jdom</groupId>
             <artifactId>jdom2</artifactId>
             <scope>test</scope>
             <version>2.0.6</version>
         </dependency>
-
         <dependency>
             <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.ecore.xmi</artifactId>

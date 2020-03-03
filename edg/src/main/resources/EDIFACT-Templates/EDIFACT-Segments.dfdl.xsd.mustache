@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/"
+            xmlns:ibmEdiFmt="http://www.ibm.com/dfdl/EDI/Format"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.ibm.com/dfdl/edi/un/edifact/{{version}}"
+            xmlns:{{version}}="http://www.ibm.com/dfdl/edi/un/edifact/{{version}}"
+>
+
+    <xsd:import namespace="http://www.ibm.com/dfdl/EDI/Format" schemaLocation="/EDIFACT-Common/IBM_EDI_Format.dfdl.xsd"/>
+    <xsd:import namespace="http://www.ibm.com/dfdl/edi/un/service/4.1" schemaLocation="/EDIFACT-Common/EDIFACT-Service-Segments-4.1.dfdl.xsd"/>
+
+    <xsd:annotation>
+        <xsd:appinfo source="http://www.ogf.org/dfdl/">
+            <dfdl:format ref="ibmEdiFmt:EDIFormat"/>
+        </xsd:appinfo>
+    </xsd:annotation>
+
+
+   {{#segments}}
+        <xsd:complexType name="{{value.xmlName}}">
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
+                {{#value.fields}}
+                    {{value.render}}
+                {{/value.fields}}
+            </xsd:sequence>
+        </xsd:complexType>
+   {{/segments}}
+
+    {{#compositeDataElements}}
+        <xsd:complexType name="{{value.xmlName}}">
+            <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
+                {{#value.components}}
+                    <xsd:element minOccurs="{{value.minOccurs}}" name="{{value.xmltag}}" type="{{version}}:{{value.xmlName}}"/>
+                {{/value.components}}
+            </xsd:sequence>
+        </xsd:complexType>
+    {{/compositeDataElements}}
+
+    {{#dataElements}}
+        <xsd:simpleType name="{{value.xmlName}}">
+            <xsd:restriction base="{{version}}:{{value.base}}">
+                {{#value.codeList}}
+                    {{#codes}}
+                        <xsd:enumeration value="{{value}}"/>
+                    {{/codes}}
+                {{/value.codeList}}
+            </xsd:restriction>
+        </xsd:simpleType>
+   {{/dataElements}}
+
+    {{#alphaTypes}}
+        <xsd:simpleType name="{{value.key}}">
+            <xsd:restriction base="xsd:string">
+                <xsd:minLength value="{{value.value.minLength}}"/>
+                <xsd:maxLength value="{{value.value.maxLength}}"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    {{/alphaTypes}}
+
+    {{#numericTypes}}
+        <xsd:simpleType dfdl:textNumberPattern="{{value.value.textNumberPattern}}" name="{{value.key}}">
+            <xsd:restriction base="xsd:decimal">
+                <xsd:totalDigits value="{{value.value.totalDigits}}"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    {{/numericTypes}}
+
+</xsd:schema>

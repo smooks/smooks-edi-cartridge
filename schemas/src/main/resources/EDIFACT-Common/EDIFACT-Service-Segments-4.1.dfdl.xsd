@@ -28,17 +28,17 @@
     *      <xsd:import namespace="http://www.ibm.com/dfdl/edi/un/service/4.1"
     *                  schemaLocation="EDIFACT-Service-Segments-4.1.xsd"/>
     *********************************************************************** -->
-
 <xsd:schema xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/"
-            xmlns:ibmDfdlExtn="http://www.ibm.com/dfdl/extensions"
             xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions"
             xmlns:ibmEdiFmt="http://www.ibm.com/dfdl/EDI/Format"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:fn="http://www.w3.org/2005/xpath-functions"
             targetNamespace="http://www.ibm.com/dfdl/edi/un/service/4.1"
-            xmlns:srv="http://www.ibm.com/dfdl/edi/un/service/4.1"
->
-    <xsd:import namespace="http://www.ibm.com/dfdl/EDI/Format" schemaLocation="IBM_EDI_Format.xsd"/>
+            xmlns:srv="http://www.ibm.com/dfdl/edi/un/service/4.1">
+
+    <xsd:import namespace="http://www.ibm.com/dfdl/EDI/Format"
+                schemaLocation="/EDIFACT-Common/IBM_EDI_Format.dfdl.xsd"/>
+
     <xsd:annotation>
         <xsd:appinfo source="http://www.ogf.org/dfdl/">
             <dfdl:format ref="ibmEdiFmt:EDIFormat"/>
@@ -48,7 +48,8 @@
     <xsd:complexType name="UNA">
         <xsd:annotation>
             <xsd:documentation>
-                The UNA segment is optional. If present, it specifies the special characters that are to be used to interpret the remainder of the message. There are six characters following UNA in this order:
+                The UNA segment is optional. If present, it specifies the special characters that are to be used to
+                interpret the remainder of the message. There are six characters following UNA in this order:
 
                 - component data element separator (usually :)
                 - data element separator (usually +)
@@ -59,8 +60,10 @@
 
                 The special characters in the sample UNA segment above are also the default values.
 
-                Component data element separator and data element separator are the "first level" and "second level" separators of data elements within a message segment.
-                Referring to them as + and : for brevity, the + separates top-level or composite data elements, and : separates second-level data elements nested within composite data elements.
+                Component data element separator and data element separator are the "first level" and "second level"
+                separators of data elements within a message segment.
+                Referring to them as + and : for brevity, the + separates top-level or composite data elements, and :
+                separates second-level data elements nested within composite data elements.
                 Trailing empty (or null) data elements and their leading separators are omitted to reduce message size.
 
                 Decimal notification is used to separate the integer from the decimal part of non-integer numbers.
@@ -70,55 +73,67 @@
                 This was only added in syntax version 4, until then this was reserved with a space so if space is
                 found use the data element separator.
 
-                Release character (analogous to the \ in regular expressions) is used as a prefix to remove special meaning from the separator, segment termination, and release characters when they are used as plain text.
+                Release character (analogous to the \ in regular expressions) is used as a prefix to remove special
+                meaning from the separator, segment termination, and release characters when they are used as plain
+                text.
 
                 Segment terminator indicates the end of a message segment.
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:element name="CompositeSeparator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" dfdl:escapeSchemeRef="" dfdl:textTrimKind="none"> <!-- removed default=":" no empty is possible for explicit length string -->
+            <xsd:element name="CompositeSeparator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string"
+                         dfdl:escapeSchemeRef=""
+                         dfdl:textTrimKind="none"> <!-- removed default=":" no empty is possible for explicit length string -->
                 <xsd:annotation>
                     <xsd:appinfo source="http://www.ogf.org/dfdl/">
                         <dfdl:setVariable ref="ibmEdiFmt:CompositeSep" value="{if (. eq ' ') then '%SP;' else .}"/>
                     </xsd:appinfo>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:element name="FieldSeparator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" dfdl:escapeSchemeRef="" dfdl:textTrimKind="none"> <!-- removed default="+" no empty is possible -->
+            <xsd:element name="FieldSeparator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string"
+                         dfdl:escapeSchemeRef=""
+                         dfdl:textTrimKind="none"> <!-- removed default="+" no empty is possible -->
                 <xsd:annotation>
                     <xsd:appinfo source="http://www.ogf.org/dfdl/">
                         <dfdl:setVariable ref="ibmEdiFmt:FieldSep" value="{if (. eq ' ') then '%SP;' else .}"/>
                     </xsd:appinfo>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:element name="DecimalSeparator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" default="." dfdl:escapeSchemeRef="" dfdl:textTrimKind="none">
+            <xsd:element name="DecimalSeparator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string"
+                         default="." dfdl:escapeSchemeRef="" dfdl:textTrimKind="none">
                 <xsd:annotation>
                     <xsd:appinfo source="http://www.ogf.org/dfdl/">
                         <dfdl:setVariable ref="ibmEdiFmt:DecimalSep" value="{.}"/>
                     </xsd:appinfo>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:element name="EscapeCharacter" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" default="?" dfdl:escapeSchemeRef="" dfdl:textTrimKind="none">
+            <xsd:element name="EscapeCharacter" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" default="?"
+                         dfdl:escapeSchemeRef="" dfdl:textTrimKind="none">
                 <xsd:annotation>
                     <xsd:appinfo source="http://www.ogf.org/dfdl/">
                         <dfdl:setVariable ref="ibmEdiFmt:EscapeChar" value="{.}"/>
                     </xsd:appinfo>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:element name="RepeatSeparator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" default="*" dfdl:escapeSchemeRef="" dfdl:textTrimKind="none">
+            <xsd:element name="RepeatSeparator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" default="*"
+                         dfdl:escapeSchemeRef="" dfdl:textTrimKind="none">
                 <xsd:annotation>
                     <xsd:appinfo source="http://www.ogf.org/dfdl/">
                         <!-- If v3 syntax then assume field separator -->
-                        <dfdl:setVariable ref="ibmEdiFmt:RepeatSep" value="{if (. eq ' ') then ../FieldSeparator else .}"/>
+                        <dfdl:setVariable ref="ibmEdiFmt:RepeatSep"
+                                          value="{if (. eq ' ') then ../FieldSeparator else .}"/>
                     </xsd:appinfo>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:element name="SegmentTerminator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string" default="'" dfdl:escapeSchemeRef="" dfdl:textTrimKind="none">
+            <xsd:element name="SegmentTerminator" dfdl:length="1" dfdl:lengthKind="explicit" type="xsd:string"
+                         default="'" dfdl:escapeSchemeRef="" dfdl:textTrimKind="none">
                 <xsd:annotation>
                     <xsd:appinfo source="http://www.ogf.org/dfdl/">
                         <!-- This allows newlines on input and tolerates missing segment terminator, but does not output new lines -->
-                        <dfdl:setVariable ref="ibmEdiFmt:SegmentTerm" value="{fn:concat(., '%WSP*;', ' %NL;%WSP*;')}"/>
+                        <!-- <dfdl:setVariable ref="ibmEdiFmt:SegmentTerm" value="{fn:concat(., '%WSP*;', ' %NL;%WSP*;')}"/>-->
                         <!-- Use this function if you also want newlines to appear on output -->
-                        <!-- {fn:concat(., '%NL;', ' ', ., ' %NL;%WSP*;')} -->
+                        <dfdl:setVariable ref="ibmEdiFmt:SegmentTerm"
+                                          value="{fn:concat(., '%NL;', ' ', ., ' %NL;%WSP*;')}"/>
                     </xsd:appinfo>
                 </xsd:annotation>
             </xsd:element>
@@ -130,27 +145,33 @@
     </xsd:element>
     <xsd:complexType name="AUTACK">
         <xsd:sequence>
-            <xsd:element  maxOccurs="99" name="SegGrp-1">
+            <xsd:element maxOccurs="99" name="SegGrp-1">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:sequence dfdl:initiatedContent="yes">
-                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USH"  name="USH" type="srv:USH-SecurityHeader">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USH" name="USH"
+                                         type="srv:USH-SecurityHeader">
                             </xsd:element>
 
-                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"  minOccurs="0" maxOccurs="3" name="USA" type="srv:USA-SecurityAlgorithm">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA" minOccurs="0"
+                                         maxOccurs="3" name="USA" type="srv:USA-SecurityAlgorithm">
                             </xsd:element>
                         </xsd:sequence>
-                        <xsd:element  minOccurs="0" maxOccurs="2" name="SegGrp-2">
+                        <xsd:element minOccurs="0" maxOccurs="2" name="SegGrp-2">
                             <xsd:complexType>
                                 <xsd:sequence>
                                     <xsd:sequence dfdl:initiatedContent="yes">
-                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USC"  name="USC" type="srv:USC-Certificate">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USC"
+                                                     name="USC" type="srv:USC-Certificate">
                                         </xsd:element>
 
-                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"  minOccurs="0" maxOccurs="3" name="USA" type="srv:USA-SecurityAlgorithm">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"
+                                                     minOccurs="0" maxOccurs="3" name="USA"
+                                                     type="srv:USA-SecurityAlgorithm">
                                         </xsd:element>
 
-                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USR"  minOccurs="0" name="USR" type="srv:USR-SecurityResult">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USR"
+                                                     minOccurs="0" name="USR" type="srv:USR-SecurityResult">
                                         </xsd:element>
                                     </xsd:sequence>
 
@@ -162,31 +183,36 @@
                 </xsd:complexType>
             </xsd:element>
             <xsd:sequence dfdl:initiatedContent="yes">
-                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USB"  name="USB" type="srv:USB-SecuredDataIdentification">
+                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USB" name="USB"
+                             type="srv:USB-SecuredDataIdentification">
                 </xsd:element>
             </xsd:sequence>
-            <xsd:element  maxOccurs="9999" name="SegGrp-3">
+            <xsd:element maxOccurs="9999" name="SegGrp-3">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:sequence dfdl:initiatedContent="yes">
-                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USX"  name="USX" type="srv:USX-SecurityReferences">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USX" name="USX"
+                                         type="srv:USX-SecurityReferences">
                             </xsd:element>
 
-                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USY"  maxOccurs="9" name="USY" type="srv:USY-SecurityOnReferences">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USY" maxOccurs="9"
+                                         name="USY" type="srv:USY-SecurityOnReferences">
                             </xsd:element>
                         </xsd:sequence>
 
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element  maxOccurs="99" name="SegGrp-4">
+            <xsd:element maxOccurs="99" name="SegGrp-4">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:sequence dfdl:initiatedContent="yes">
-                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UST"  name="UST" type="srv:UST-SecurityTrailer">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UST" name="UST"
+                                         type="srv:UST-SecurityTrailer">
                             </xsd:element>
 
-                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USR"  minOccurs="0" name="USR" type="srv:USR-SecurityResult">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USR" minOccurs="0"
+                                         name="USR" type="srv:USR-SecurityResult">
                             </xsd:element>
                         </xsd:sequence>
 
@@ -202,24 +228,29 @@
     <xsd:complexType name="CONTRL">
         <xsd:sequence>
             <xsd:sequence dfdl:initiatedContent="yes">
-                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCI"  name="UCI" type="srv:UCI-InterchangeResponse">
+                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCI" name="UCI"
+                             type="srv:UCI-InterchangeResponse">
                 </xsd:element>
             </xsd:sequence>
-            <xsd:element  minOccurs="0" maxOccurs="999999" name="SegGrp-1">
+            <xsd:element minOccurs="0" maxOccurs="999999" name="SegGrp-1">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:sequence dfdl:initiatedContent="yes">
-                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCM"  name="UCM" type="srv:UCM-MessagePackageResponse">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCM" name="UCM"
+                                         type="srv:UCM-MessagePackageResponse">
                             </xsd:element>
                         </xsd:sequence>
-                        <xsd:element  minOccurs="0" maxOccurs="999" name="SegGrp-2">
+                        <xsd:element minOccurs="0" maxOccurs="999" name="SegGrp-2">
                             <xsd:complexType>
                                 <xsd:sequence>
                                     <xsd:sequence dfdl:initiatedContent="yes">
-                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCS"  name="UCS" type="srv:UCS-SegmentErrorIndication">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCS"
+                                                     name="UCS" type="srv:UCS-SegmentErrorIndication">
                                         </xsd:element>
 
-                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCD"  minOccurs="0" maxOccurs="99" name="UCD" type="srv:UCD-DataElementErrorIndication">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCD"
+                                                     minOccurs="0" maxOccurs="99" name="UCD"
+                                                     type="srv:UCD-DataElementErrorIndication">
                                         </xsd:element>
                                     </xsd:sequence>
 
@@ -230,28 +261,34 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element  minOccurs="0" maxOccurs="999999" name="SegGrp-3">
+            <xsd:element minOccurs="0" maxOccurs="999999" name="SegGrp-3">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:sequence dfdl:initiatedContent="yes">
-                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCF"  name="UCF" type="srv:UCF-GroupResponse">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCF" name="UCF"
+                                         type="srv:UCF-GroupResponse">
                             </xsd:element>
                         </xsd:sequence>
-                        <xsd:element  minOccurs="0" maxOccurs="999999" name="SegGrp-4">
+                        <xsd:element minOccurs="0" maxOccurs="999999" name="SegGrp-4">
                             <xsd:complexType>
                                 <xsd:sequence>
                                     <xsd:sequence dfdl:initiatedContent="yes">
-                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCM"  name="UCM" type="srv:UCM-MessagePackageResponse">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCM"
+                                                     name="UCM" type="srv:UCM-MessagePackageResponse">
                                         </xsd:element>
                                     </xsd:sequence>
-                                    <xsd:element  minOccurs="0" maxOccurs="999" name="SegGrp-5">
+                                    <xsd:element minOccurs="0" maxOccurs="999" name="SegGrp-5">
                                         <xsd:complexType>
                                             <xsd:sequence>
                                                 <xsd:sequence dfdl:initiatedContent="yes">
-                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCS"  name="UCS" type="srv:UCS-SegmentErrorIndication">
+                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat"
+                                                                 dfdl:initiator="UCS" name="UCS"
+                                                                 type="srv:UCS-SegmentErrorIndication">
                                                     </xsd:element>
 
-                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UCD"  minOccurs="0" maxOccurs="99" name="UCD" type="srv:UCD-DataElementErrorIndication">
+                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat"
+                                                                 dfdl:initiator="UCD" minOccurs="0" maxOccurs="99"
+                                                                 name="UCD" type="srv:UCD-DataElementErrorIndication">
                                                     </xsd:element>
                                                 </xsd:sequence>
 
@@ -274,37 +311,47 @@
     </xsd:element>
     <xsd:complexType name="KEYMAN">
         <xsd:sequence>
-            <xsd:element  minOccurs="0" maxOccurs="999" name="SegGrp-1">
+            <xsd:element minOccurs="0" maxOccurs="999" name="SegGrp-1">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:sequence dfdl:initiatedContent="yes">
-                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USE"  name="USE" type="srv:USE-SecurityMessageRelation">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USE" name="USE"
+                                         type="srv:USE-SecurityMessageRelation">
                             </xsd:element>
 
-                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USX"  minOccurs="0" name="USX" type="srv:USX-SecurityReferences">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USX" minOccurs="0"
+                                         name="USX" type="srv:USX-SecurityReferences">
                             </xsd:element>
                         </xsd:sequence>
-                        <xsd:element  maxOccurs="9" name="SegGrp-2">
+                        <xsd:element maxOccurs="9" name="SegGrp-2">
                             <xsd:complexType>
                                 <xsd:sequence>
                                     <xsd:sequence dfdl:initiatedContent="yes">
-                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USF"  name="USF" type="srv:USF-KeyManagementFunction">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USF"
+                                                     name="USF" type="srv:USF-KeyManagementFunction">
                                         </xsd:element>
 
-                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"  minOccurs="0" name="USA" type="srv:USA-SecurityAlgorithm">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"
+                                                     minOccurs="0" name="USA" type="srv:USA-SecurityAlgorithm">
                                         </xsd:element>
                                     </xsd:sequence>
-                                    <xsd:element  minOccurs="0" name="SegGrp-3">
+                                    <xsd:element minOccurs="0" name="SegGrp-3">
                                         <xsd:complexType>
                                             <xsd:sequence>
                                                 <xsd:sequence dfdl:initiatedContent="yes">
-                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USC"  name="USC" type="srv:USC-Certificate">
+                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat"
+                                                                 dfdl:initiator="USC" name="USC"
+                                                                 type="srv:USC-Certificate">
                                                     </xsd:element>
 
-                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"  minOccurs="0" maxOccurs="3" name="USA" type="srv:USA-SecurityAlgorithm">
+                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat"
+                                                                 dfdl:initiator="USA" minOccurs="0" maxOccurs="3"
+                                                                 name="USA" type="srv:USA-SecurityAlgorithm">
                                                     </xsd:element>
 
-                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USR"  minOccurs="0" name="USR" type="srv:USR-SecurityResult">
+                                                    <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat"
+                                                                 dfdl:initiator="USR" minOccurs="0" name="USR"
+                                                                 type="srv:USR-SecurityResult">
                                                     </xsd:element>
                                                 </xsd:sequence>
 
@@ -319,24 +366,29 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element  minOccurs="0" maxOccurs="99" name="SegGrp-4">
+            <xsd:element minOccurs="0" maxOccurs="99" name="SegGrp-4">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:sequence dfdl:initiatedContent="yes">
-                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USL"  name="USL" type="srv:USL-SecurityListStatus">
+                            <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USL" name="USL"
+                                         type="srv:USL-SecurityListStatus">
                             </xsd:element>
                         </xsd:sequence>
-                        <xsd:element  maxOccurs="9999" name="SegGrp-5">
+                        <xsd:element maxOccurs="9999" name="SegGrp-5">
                             <xsd:complexType>
                                 <xsd:sequence>
                                     <xsd:sequence dfdl:initiatedContent="yes">
-                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USC"  name="USC" type="srv:USC-Certificate">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USC"
+                                                     name="USC" type="srv:USC-Certificate">
                                         </xsd:element>
 
-                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"  minOccurs="0" maxOccurs="3" name="USA" type="srv:USA-SecurityAlgorithm">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USA"
+                                                     minOccurs="0" maxOccurs="3" name="USA"
+                                                     type="srv:USA-SecurityAlgorithm">
                                         </xsd:element>
 
-                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USR"  minOccurs="0" name="USR" type="srv:USR-SecurityResult">
+                                        <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="USR"
+                                                     minOccurs="0" name="USR" type="srv:USR-SecurityResult">
                                         </xsd:element>
                                     </xsd:sequence>
 
@@ -353,259 +405,265 @@
 
     <xsd:complexType name="UCD-DataElementErrorIndication">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
-            <xsd:element  name="S011" type="srv:S011-DataElementIdentification"/>
+            <xsd:element name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
+            <xsd:element name="S011" type="srv:S011-DataElementIdentification"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UCF-GroupResponse">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0048" type="srv:E0048-GroupReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="S006" type="srv:S006-ApplicationSenderIdentification"/>
-            <xsd:element  minOccurs="0" name="S007" type="srv:S007-ApplicationRecipientIdentification"/>
-            <xsd:element  name="E0083" type="srv:E0083-ActionCoded"/>
-            <xsd:element  minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
-            <xsd:element  minOccurs="0" name="E0135" type="srv:E0135-ServiceSegmentTagCoded"/>
-            <xsd:element  minOccurs="0" name="S011" type="srv:S011-DataElementIdentification"/>
-            <xsd:element  minOccurs="0" name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="E0138" type="srv:E0138-SecuritySegmentPosition"/>
+            <xsd:element name="E0048" type="srv:E0048-GroupReferenceNumber"/>
+            <xsd:element minOccurs="0" name="S006" type="srv:S006-ApplicationSenderIdentification"/>
+            <xsd:element minOccurs="0" name="S007" type="srv:S007-ApplicationRecipientIdentification"/>
+            <xsd:element name="E0083" type="srv:E0083-ActionCoded"/>
+            <xsd:element minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
+            <xsd:element minOccurs="0" name="E0135" type="srv:E0135-ServiceSegmentTagCoded"/>
+            <xsd:element minOccurs="0" name="S011" type="srv:S011-DataElementIdentification"/>
+            <xsd:element minOccurs="0" name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
+            <xsd:element minOccurs="0" name="E0138" type="srv:E0138-SecuritySegmentPosition"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UCI-InterchangeResponse">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0020" type="srv:E0020-InterchangeControlReference"/>
-            <xsd:element  name="S002" type="srv:S002-InterchangeSender"/>
-            <xsd:element  name="S003" type="srv:S003-InterchangeRecipient"/>
-            <xsd:element  name="E0083" type="srv:E0083-ActionCoded"/>
-            <xsd:element  minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
-            <xsd:element  minOccurs="0" name="E0135" type="srv:E0135-ServiceSegmentTagCoded"/>
-            <xsd:element  minOccurs="0" name="S011" type="srv:S011-DataElementIdentification"/>
-            <xsd:element  minOccurs="0" name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="E0138" type="srv:E0138-SecuritySegmentPosition"/>
+            <xsd:element name="E0020" type="srv:E0020-InterchangeControlReference"/>
+            <xsd:element name="S002" type="srv:S002-InterchangeSender"/>
+            <xsd:element name="S003" type="srv:S003-InterchangeRecipient"/>
+            <xsd:element name="E0083" type="srv:E0083-ActionCoded"/>
+            <xsd:element minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
+            <xsd:element minOccurs="0" name="E0135" type="srv:E0135-ServiceSegmentTagCoded"/>
+            <xsd:element minOccurs="0" name="S011" type="srv:S011-DataElementIdentification"/>
+            <xsd:element minOccurs="0" name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
+            <xsd:element minOccurs="0" name="E0138" type="srv:E0138-SecuritySegmentPosition"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UCM-MessagePackageResponse">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  minOccurs="0" name="E0062" type="srv:E0062-MessageReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="S009" type="srv:S009-MessageIdentifier"/>
-            <xsd:element  name="E0083" type="srv:E0083-ActionCoded"/>
-            <xsd:element  minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
-            <xsd:element  minOccurs="0" name="E0135" type="srv:E0135-ServiceSegmentTagCoded"/>
-            <xsd:element  minOccurs="0" name="S011" type="srv:S011-DataElementIdentification"/>
-            <xsd:element  minOccurs="0" name="E0800" type="srv:E0800-PackageReferenceNumber"/>
+            <xsd:element minOccurs="0" name="E0062" type="srv:E0062-MessageReferenceNumber"/>
+            <xsd:element minOccurs="0" name="S009" type="srv:S009-MessageIdentifier"/>
+            <xsd:element name="E0083" type="srv:E0083-ActionCoded"/>
+            <xsd:element minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
+            <xsd:element minOccurs="0" name="E0135" type="srv:E0135-ServiceSegmentTagCoded"/>
+            <xsd:element minOccurs="0" name="S011" type="srv:S011-DataElementIdentification"/>
+            <xsd:element minOccurs="0" name="E0800" type="srv:E0800-PackageReferenceNumber"/>
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
-                <xsd:element  minOccurs="0" maxOccurs="99" name="S020" type="srv:S020-ReferenceIdentification"/>
+                <xsd:element minOccurs="0" maxOccurs="99" name="S020" type="srv:S020-ReferenceIdentification"/>
             </xsd:sequence>
-            <xsd:element  minOccurs="0" name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="E0138" type="srv:E0138-SecuritySegmentPosition"/>
+            <xsd:element minOccurs="0" name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
+            <xsd:element minOccurs="0" name="E0138" type="srv:E0138-SecuritySegmentPosition"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UCS-SegmentErrorIndication">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0096" type="srv:E0096-SegmentPositionInMessageBody"/>
-            <xsd:element  minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
+            <xsd:element name="E0096" type="srv:E0096-SegmentPositionInMessageBody"/>
+            <xsd:element minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UGH-AntiCollisionSegmentGroupHeader">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0087" type="srv:E0087-AntiCollisionSegmentGroupIdentification"/>
+            <xsd:element name="E0087" type="srv:E0087-AntiCollisionSegmentGroupIdentification"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UGT-AntiCollisionSegmentGroupTrailer">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0087" type="srv:E0087-AntiCollisionSegmentGroupIdentification"/>
+            <xsd:element name="E0087" type="srv:E0087-AntiCollisionSegmentGroupIdentification"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UIB-InteractiveInterchangeHeader">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="S001" type="srv:S001-SyntaxIdentifier"/>
-            <xsd:element  minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
-            <xsd:element  minOccurs="0" name="S303" type="srv:S303-TransactionReference"/>
-            <xsd:element  minOccurs="0" name="S018" type="srv:S018-ScenarioIdentification"/>
-            <xsd:element  minOccurs="0" name="S305" type="srv:S305-DialogueIdentification"/>
-            <xsd:element  minOccurs="0" name="S002" type="srv:S002-InterchangeSender"/>
-            <xsd:element  minOccurs="0" name="S003" type="srv:S003-InterchangeRecipient"/>
-            <xsd:element  minOccurs="0" name="S300" type="srv:S300-DateAndOrTimeOfInitiation"/>
-            <xsd:element  minOccurs="0" name="E0325" type="srv:E0325-DuplicateIndicator"/>
-            <xsd:element  minOccurs="0" name="E0035" type="srv:E0035-TestIndicator"/>
+            <xsd:element name="S001" type="srv:S001-SyntaxIdentifier"/>
+            <xsd:element minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
+            <xsd:element minOccurs="0" name="S303" type="srv:S303-TransactionReference"/>
+            <xsd:element minOccurs="0" name="S018" type="srv:S018-ScenarioIdentification"/>
+            <xsd:element minOccurs="0" name="S305" type="srv:S305-DialogueIdentification"/>
+            <xsd:element minOccurs="0" name="S002" type="srv:S002-InterchangeSender"/>
+            <xsd:element minOccurs="0" name="S003" type="srv:S003-InterchangeRecipient"/>
+            <xsd:element minOccurs="0" name="S300" type="srv:S300-DateAndOrTimeOfInitiation"/>
+            <xsd:element minOccurs="0" name="E0325" type="srv:E0325-DuplicateIndicator"/>
+            <xsd:element minOccurs="0" name="E0035" type="srv:E0035-TestIndicator"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UIH-InteractiveMessageHeader">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:annotation><xsd:appinfo source="http://www.ogf.org/dfdl/">
-                <dfdl:discriminator test="{fn:true()}"/>
-            </xsd:appinfo></xsd:annotation>
-            <xsd:element  name="S306" type="srv:S306-InteractiveMessageIdentifier"/>
-            <xsd:element  minOccurs="0" name="E0340" type="srv:E0340-InteractiveMessageReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
-            <xsd:element  minOccurs="0" name="S301" type="srv:S301-StatusOfTransferInteractive"/>
-            <xsd:element  minOccurs="0" name="S300" type="srv:S300-DateAndOrTimeOfInitiation"/>
-            <xsd:element  minOccurs="0" name="E0035" type="srv:E0035-TestIndicator"/>
+            <xsd:annotation>
+                <xsd:appinfo source="http://www.ogf.org/dfdl/">
+                    <dfdl:discriminator test="{fn:true()}"/>
+                </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:element name="S306" type="srv:S306-InteractiveMessageIdentifier"/>
+            <xsd:element minOccurs="0" name="E0340" type="srv:E0340-InteractiveMessageReferenceNumber"/>
+            <xsd:element minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
+            <xsd:element minOccurs="0" name="S301" type="srv:S301-StatusOfTransferInteractive"/>
+            <xsd:element minOccurs="0" name="S300" type="srv:S300-DateAndOrTimeOfInitiation"/>
+            <xsd:element minOccurs="0" name="E0035" type="srv:E0035-TestIndicator"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UIR-InteractiveStatus">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0331" type="srv:E0331-ReportFunctionCoded"/>
+            <xsd:element name="E0331" type="srv:E0331-ReportFunctionCoded"/>
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
-                <xsd:element  minOccurs="0" maxOccurs="9" name="S307" type="srv:S307-StatusInformation"/>
+                <xsd:element minOccurs="0" maxOccurs="9" name="S307" type="srv:S307-StatusInformation"/>
             </xsd:sequence>
-            <xsd:element  minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
-            <xsd:element  minOccurs="0" name="S300" type="srv:S300-DateAndOrTimeOfInitiation"/>
-            <xsd:element  minOccurs="0" name="E0340" type="srv:E0340-InteractiveMessageReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="E0800" type="srv:E0800-PackageReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
-            <xsd:element  minOccurs="0" name="E0096" type="srv:E0096-SegmentPositionInMessageBody"/>
-            <xsd:element  minOccurs="0" name="S011" type="srv:S011-DataElementIdentification"/>
+            <xsd:element minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
+            <xsd:element minOccurs="0" name="S300" type="srv:S300-DateAndOrTimeOfInitiation"/>
+            <xsd:element minOccurs="0" name="E0340" type="srv:E0340-InteractiveMessageReferenceNumber"/>
+            <xsd:element minOccurs="0" name="E0800" type="srv:E0800-PackageReferenceNumber"/>
+            <xsd:element minOccurs="0" name="E0085" type="srv:E0085-SyntaxErrorCoded"/>
+            <xsd:element minOccurs="0" name="E0096" type="srv:E0096-SegmentPositionInMessageBody"/>
+            <xsd:element minOccurs="0" name="S011" type="srv:S011-DataElementIdentification"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UIT-InteractiveMessageTrailer">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  minOccurs="0" name="E0340" type="srv:E0340-InteractiveMessageReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="E0074" type="srv:E0074-NumberOfSegmentsInAMessage"/>
+            <xsd:element minOccurs="0" name="E0340" type="srv:E0340-InteractiveMessageReferenceNumber"/>
+            <xsd:element minOccurs="0" name="E0074" type="srv:E0074-NumberOfSegmentsInAMessage"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UIZ-InteractiveInterchangeTrailer">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
-            <xsd:element  minOccurs="0" name="E0036" type="srv:E0036-InterchangeControlCount"/>
-            <xsd:element  minOccurs="0" name="E0325" type="srv:E0325-DuplicateIndicator"/>
+            <xsd:element minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
+            <xsd:element minOccurs="0" name="E0036" type="srv:E0036-InterchangeControlCount"/>
+            <xsd:element minOccurs="0" name="E0325" type="srv:E0325-DuplicateIndicator"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UNB-InterchangeHeader">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="S001" type="srv:S001-SyntaxIdentifier"/>
-            <xsd:element  name="S002" type="srv:S002-InterchangeSender"/>
-            <xsd:element  name="S003" type="srv:S003-InterchangeRecipient"/>
-            <xsd:element  name="S004" type="srv:S004-DateAndTimeOfPreparation"/>
-            <xsd:element  name="E0020" type="srv:E0020-InterchangeControlReference"/>
-            <xsd:element  minOccurs="0" name="S005" type="srv:S005-RecipientReferencePasswordDetails"/>
-            <xsd:element  minOccurs="0" name="E0026" type="srv:E0026-ApplicationReference"/>
-            <xsd:element  minOccurs="0" name="E0029" type="srv:E0029-ProcessingPriorityCode"/>
-            <xsd:element  minOccurs="0" name="E0031" type="srv:E0031-AcknowledgementRequest"/>
-            <xsd:element  minOccurs="0" name="E0032" type="srv:E0032-InterchangeAgreementIdentifier"/>
-            <xsd:element  minOccurs="0" name="E0035" type="srv:E0035-TestIndicator"/>
+            <xsd:element name="S001" type="srv:S001-SyntaxIdentifier"/>
+            <xsd:element name="S002" type="srv:S002-InterchangeSender"/>
+            <xsd:element name="S003" type="srv:S003-InterchangeRecipient"/>
+            <xsd:element name="S004" type="srv:S004-DateAndTimeOfPreparation"/>
+            <xsd:element name="E0020" type="srv:E0020-InterchangeControlReference"/>
+            <xsd:element minOccurs="0" name="S005" type="srv:S005-RecipientReferencePasswordDetails"/>
+            <xsd:element minOccurs="0" name="E0026" type="srv:E0026-ApplicationReference"/>
+            <xsd:element minOccurs="0" name="E0029" type="srv:E0029-ProcessingPriorityCode"/>
+            <xsd:element minOccurs="0" name="E0031" type="srv:E0031-AcknowledgementRequest"/>
+            <xsd:element minOccurs="0" name="E0032" type="srv:E0032-InterchangeAgreementIdentifier"/>
+            <xsd:element minOccurs="0" name="E0035" type="srv:E0035-TestIndicator"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UNE-GroupTrailer">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0060" type="srv:E0060-GroupControlCount"/>
-            <xsd:element  name="E0048" type="srv:E0048-GroupReferenceNumber"/>
+            <xsd:element name="E0060" type="srv:E0060-GroupControlCount"/>
+            <xsd:element name="E0048" type="srv:E0048-GroupReferenceNumber"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UNG-GroupHeader">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:annotation><xsd:appinfo source="http://www.ogf.org/dfdl/">
-                <dfdl:discriminator test="{fn:true()}"/>
-            </xsd:appinfo></xsd:annotation>
-            <xsd:element  minOccurs="0" name="E0038" type="srv:E0038-MessageGroupIdentification"/>
-            <xsd:element  minOccurs="0" name="S006" type="srv:S006-ApplicationSenderIdentification"/>
-            <xsd:element  minOccurs="0" name="S007" type="srv:S007-ApplicationRecipientIdentification"/>
-            <xsd:element  minOccurs="0" name="S004" type="srv:S004-DateAndTimeOfPreparation"/>
-            <xsd:element  name="E0048" type="srv:E0048-GroupReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
-            <xsd:element  minOccurs="0" name="S008" type="srv:S008-MessageVersion"/>
-            <xsd:element  minOccurs="0" name="E0058" type="srv:E0058-ApplicationPassword"/>
+            <xsd:annotation>
+                <xsd:appinfo source="http://www.ogf.org/dfdl/">
+                    <dfdl:discriminator test="{fn:true()}"/>
+                </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:element minOccurs="0" name="E0038" type="srv:E0038-MessageGroupIdentification"/>
+            <xsd:element minOccurs="0" name="S006" type="srv:S006-ApplicationSenderIdentification"/>
+            <xsd:element minOccurs="0" name="S007" type="srv:S007-ApplicationRecipientIdentification"/>
+            <xsd:element minOccurs="0" name="S004" type="srv:S004-DateAndTimeOfPreparation"/>
+            <xsd:element name="E0048" type="srv:E0048-GroupReferenceNumber"/>
+            <xsd:element minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element minOccurs="0" name="S008" type="srv:S008-MessageVersion"/>
+            <xsd:element minOccurs="0" name="E0058" type="srv:E0058-ApplicationPassword"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UNH-MessageHeader">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:annotation><xsd:appinfo source="http://www.ogf.org/dfdl/">
-                <dfdl:discriminator test="{fn:true()}"/>
-            </xsd:appinfo></xsd:annotation>
-            <xsd:element  name="E0062" type="srv:E0062-MessageReferenceNumber"/>
-            <xsd:element  name="S009" type="srv:S009-MessageIdentifier"/>
-            <xsd:element  minOccurs="0" name="E0068" type="srv:E0068-CommonAccessReference"/>
-            <xsd:element  minOccurs="0" name="S010" type="srv:S010-StatusOfTheTransfer"/>
-            <xsd:element  minOccurs="0" name="S016" type="srv:S016-MessageSubsetIdentification"/>
-            <xsd:element  minOccurs="0" name="S017" type="srv:S017-MessageImplementationGuidelineIdentification"/>
-            <xsd:element  minOccurs="0" name="S018" type="srv:S018-ScenarioIdentification"/>
+            <xsd:annotation>
+                <xsd:appinfo source="http://www.ogf.org/dfdl/">
+                    <dfdl:discriminator test="{fn:true()}"/>
+                </xsd:appinfo>
+            </xsd:annotation>
+            <xsd:element name="E0062" type="srv:E0062-MessageReferenceNumber"/>
+            <xsd:element name="S009" type="srv:S009-MessageIdentifier"/>
+            <xsd:element minOccurs="0" name="E0068" type="srv:E0068-CommonAccessReference"/>
+            <xsd:element minOccurs="0" name="S010" type="srv:S010-StatusOfTheTransfer"/>
+            <xsd:element minOccurs="0" name="S016" type="srv:S016-MessageSubsetIdentification"/>
+            <xsd:element minOccurs="0" name="S017" type="srv:S017-MessageImplementationGuidelineIdentification"/>
+            <xsd:element minOccurs="0" name="S018" type="srv:S018-ScenarioIdentification"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UNO-ObjectHeader">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0800" type="srv:E0800-PackageReferenceNumber"/>
+            <xsd:element name="E0800" type="srv:E0800-PackageReferenceNumber"/>
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
-                <xsd:element  maxOccurs="99" name="S020" type="srv:S020-ReferenceIdentification"/>
+                <xsd:element maxOccurs="99" name="S020" type="srv:S020-ReferenceIdentification"/>
             </xsd:sequence>
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
-                <xsd:element  maxOccurs="99" name="S021" type="srv:S021-ObjectTypeIdentification"/>
+                <xsd:element maxOccurs="99" name="S021" type="srv:S021-ObjectTypeIdentification"/>
             </xsd:sequence>
-            <xsd:element  name="S022" type="srv:S022-StatusOfTheObject"/>
-            <xsd:element  minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
-            <xsd:element  minOccurs="0" name="S301" type="srv:S301-StatusOfTransferInteractive"/>
-            <xsd:element  minOccurs="0" name="S300" type="srv:S300-DateAndOrTimeOfInitiation"/>
-            <xsd:element  minOccurs="0" name="E0035" type="srv:E0035-TestIndicator"/>
+            <xsd:element name="S022" type="srv:S022-StatusOfTheObject"/>
+            <xsd:element minOccurs="0" name="S302" type="srv:S302-DialogueReference"/>
+            <xsd:element minOccurs="0" name="S301" type="srv:S301-StatusOfTransferInteractive"/>
+            <xsd:element minOccurs="0" name="S300" type="srv:S300-DateAndOrTimeOfInitiation"/>
+            <xsd:element minOccurs="0" name="E0035" type="srv:E0035-TestIndicator"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UNP-ObjectTrailer">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0810" type="srv:E0810-LengthOfObjectInOctetsOfBits"/>
-            <xsd:element  name="E0800" type="srv:E0800-PackageReferenceNumber"/>
+            <xsd:element name="E0810" type="srv:E0810-LengthOfObjectInOctetsOfBits"/>
+            <xsd:element name="E0800" type="srv:E0800-PackageReferenceNumber"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UNS-SectionControl">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0081" type="srv:E0081-SectionIdentification"/>
+            <xsd:element name="E0081" type="srv:E0081-SectionIdentification"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UNT-MessageTrailer">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0074" type="srv:E0074-NumberOfSegmentsInAMessage"/>
-            <xsd:element  name="E0062" type="srv:E0062-MessageReferenceNumber"/>
+            <xsd:element name="E0074" type="srv:E0074-NumberOfSegmentsInAMessage"/>
+            <xsd:element name="E0062" type="srv:E0062-MessageReferenceNumber"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="UNZ-InterchangeTrailer">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0036" type="srv:E0036-InterchangeControlCount"/>
-            <xsd:element  name="E0020" type="srv:E0020-InterchangeControlReference"/>
+            <xsd:element name="E0036" type="srv:E0036-InterchangeControlCount"/>
+            <xsd:element name="E0020" type="srv:E0020-InterchangeControlReference"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="USA-SecurityAlgorithm">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="S502" type="srv:S502-SecurityAlgorithm"/>
+            <xsd:element name="S502" type="srv:S502-SecurityAlgorithm"/>
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
-                <xsd:element  minOccurs="0" maxOccurs="9" name="S503" type="srv:S503-AlgorithmParameter"/>
+                <xsd:element minOccurs="0" maxOccurs="9" name="S503" type="srv:S503-AlgorithmParameter"/>
             </xsd:sequence>
 
         </xsd:sequence>
@@ -613,87 +671,87 @@
 
     <xsd:complexType name="USB-SecuredDataIdentification">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0503" type="srv:E0503-ResponseTypeCoded"/>
-            <xsd:element  minOccurs="0" name="S501" type="srv:S501-SecurityDateAndTime"/>
-            <xsd:element  name="S002" type="srv:S002-InterchangeSender"/>
-            <xsd:element  name="S003" type="srv:S003-InterchangeRecipient"/>
+            <xsd:element name="E0503" type="srv:E0503-ResponseTypeCoded"/>
+            <xsd:element minOccurs="0" name="S501" type="srv:S501-SecurityDateAndTime"/>
+            <xsd:element name="S002" type="srv:S002-InterchangeSender"/>
+            <xsd:element name="S003" type="srv:S003-InterchangeRecipient"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="USC-Certificate">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  minOccurs="0" name="E0536" type="srv:E0536-CertificateReference"/>
+            <xsd:element minOccurs="0" name="E0536" type="srv:E0536-CertificateReference"/>
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
-                <xsd:element  minOccurs="0" maxOccurs="2" name="S500" type="srv:S500-SecurityIdentificationDetails"/>
+                <xsd:element minOccurs="0" maxOccurs="2" name="S500" type="srv:S500-SecurityIdentificationDetails"/>
             </xsd:sequence>
-            <xsd:element  minOccurs="0" name="E0545" type="srv:E0545-CertificateSyntaxAndVersionCoded"/>
-            <xsd:element  minOccurs="0" name="E0505" type="srv:E0505-FilterFunctionCoded"/>
-            <xsd:element  minOccurs="0" name="E0507" type="srv:E0507-OriginalCharacterSetEncodingCoded"/>
-            <xsd:element  minOccurs="0" name="E0543" type="srv:E0543-CertificateOriginalCharacterSetRepertoireCoded"/>
-            <xsd:element  minOccurs="0" name="E0546" type="srv:E0546-UserAuthorisationLevel"/>
+            <xsd:element minOccurs="0" name="E0545" type="srv:E0545-CertificateSyntaxAndVersionCoded"/>
+            <xsd:element minOccurs="0" name="E0505" type="srv:E0505-FilterFunctionCoded"/>
+            <xsd:element minOccurs="0" name="E0507" type="srv:E0507-OriginalCharacterSetEncodingCoded"/>
+            <xsd:element minOccurs="0" name="E0543" type="srv:E0543-CertificateOriginalCharacterSetRepertoireCoded"/>
+            <xsd:element minOccurs="0" name="E0546" type="srv:E0546-UserAuthorisationLevel"/>
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
-                <xsd:element  minOccurs="0" maxOccurs="5" name="S505" type="srv:S505-ServiceCharacterForSignature"/>
+                <xsd:element minOccurs="0" maxOccurs="5" name="S505" type="srv:S505-ServiceCharacterForSignature"/>
             </xsd:sequence>
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
-                <xsd:element  minOccurs="0" maxOccurs="4" name="S501" type="srv:S501-SecurityDateAndTime"/>
+                <xsd:element minOccurs="0" maxOccurs="4" name="S501" type="srv:S501-SecurityDateAndTime"/>
             </xsd:sequence>
-            <xsd:element  minOccurs="0" name="E0567" type="srv:E0567-SecurityStatusCoded"/>
-            <xsd:element  minOccurs="0" name="E0569" type="srv:E0569-RevocationReasonCoded"/>
+            <xsd:element minOccurs="0" name="E0567" type="srv:E0567-SecurityStatusCoded"/>
+            <xsd:element minOccurs="0" name="E0569" type="srv:E0569-RevocationReasonCoded"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="USD-DataEncryptionHeader">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0556" type="srv:E0556-LengthOfDataInOctetsOfBits"/>
-            <xsd:element  minOccurs="0" name="E0518" type="srv:E0518-EncryptionReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="E0582" type="srv:E0582-NumberOfPaddingBytes"/>
+            <xsd:element name="E0556" type="srv:E0556-LengthOfDataInOctetsOfBits"/>
+            <xsd:element minOccurs="0" name="E0518" type="srv:E0518-EncryptionReferenceNumber"/>
+            <xsd:element minOccurs="0" name="E0582" type="srv:E0582-NumberOfPaddingBytes"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="USE-SecurityMessageRelation">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0565" type="srv:E0565-MessageRelationCoded"/>
+            <xsd:element name="E0565" type="srv:E0565-MessageRelationCoded"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="USF-KeyManagementFunction">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  minOccurs="0" name="E0579" type="srv:E0579-KeyManagementFunctionQualifier"/>
-            <xsd:element  minOccurs="0" name="S504" type="srv:S504-ListParameter"/>
-            <xsd:element  minOccurs="0" name="E0567" type="srv:E0567-SecurityStatusCoded"/>
-            <xsd:element  minOccurs="0" name="E0572" type="srv:E0572-CertificateSequenceNumber"/>
-            <xsd:element  minOccurs="0" name="E0505" type="srv:E0505-FilterFunctionCoded"/>
+            <xsd:element minOccurs="0" name="E0579" type="srv:E0579-KeyManagementFunctionQualifier"/>
+            <xsd:element minOccurs="0" name="S504" type="srv:S504-ListParameter"/>
+            <xsd:element minOccurs="0" name="E0567" type="srv:E0567-SecurityStatusCoded"/>
+            <xsd:element minOccurs="0" name="E0572" type="srv:E0572-CertificateSequenceNumber"/>
+            <xsd:element minOccurs="0" name="E0505" type="srv:E0505-FilterFunctionCoded"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="USH-SecurityHeader">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0501" type="srv:E0501-SecurityServiceCoded"/>
-            <xsd:element  name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="E0541" type="srv:E0541-ScopeOfSecurityApplicationCoded"/>
-            <xsd:element  minOccurs="0" name="E0503" type="srv:E0503-ResponseTypeCoded"/>
-            <xsd:element  minOccurs="0" name="E0505" type="srv:E0505-FilterFunctionCoded"/>
-            <xsd:element  minOccurs="0" name="E0507" type="srv:E0507-OriginalCharacterSetEncodingCoded"/>
-            <xsd:element  minOccurs="0" name="E0509" type="srv:E0509-RoleOfSecurityProviderCoded"/>
+            <xsd:element name="E0501" type="srv:E0501-SecurityServiceCoded"/>
+            <xsd:element name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
+            <xsd:element minOccurs="0" name="E0541" type="srv:E0541-ScopeOfSecurityApplicationCoded"/>
+            <xsd:element minOccurs="0" name="E0503" type="srv:E0503-ResponseTypeCoded"/>
+            <xsd:element minOccurs="0" name="E0505" type="srv:E0505-FilterFunctionCoded"/>
+            <xsd:element minOccurs="0" name="E0507" type="srv:E0507-OriginalCharacterSetEncodingCoded"/>
+            <xsd:element minOccurs="0" name="E0509" type="srv:E0509-RoleOfSecurityProviderCoded"/>
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
-                <xsd:element  minOccurs="0" maxOccurs="2" name="S500" type="srv:S500-SecurityIdentificationDetails"/>
+                <xsd:element minOccurs="0" maxOccurs="2" name="S500" type="srv:S500-SecurityIdentificationDetails"/>
             </xsd:sequence>
-            <xsd:element  minOccurs="0" name="E0520" type="srv:E0520-SecuritySequenceNumber"/>
-            <xsd:element  minOccurs="0" name="S501" type="srv:S501-SecurityDateAndTime"/>
+            <xsd:element minOccurs="0" name="E0520" type="srv:E0520-SecuritySequenceNumber"/>
+            <xsd:element minOccurs="0" name="S501" type="srv:S501-SecurityDateAndTime"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="USL-SecurityListStatus">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0567" type="srv:E0567-SecurityStatusCoded"/>
+            <xsd:element name="E0567" type="srv:E0567-SecurityStatusCoded"/>
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
-                <xsd:element  minOccurs="0" maxOccurs="9" name="S504" type="srv:S504-ListParameter"/>
+                <xsd:element minOccurs="0" maxOccurs="9" name="S504" type="srv:S504-ListParameter"/>
             </xsd:sequence>
 
         </xsd:sequence>
@@ -702,7 +760,7 @@
     <xsd:complexType name="USR-SecurityResult">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
-                <xsd:element  maxOccurs="2" name="S508" type="srv:S508-ValidationResult"/>
+                <xsd:element maxOccurs="2" name="S508" type="srv:S508-ValidationResult"/>
             </xsd:sequence>
 
         </xsd:sequence>
@@ -710,43 +768,43 @@
 
     <xsd:complexType name="UST-SecurityTrailer">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
-            <xsd:element  name="E0588" type="srv:E0588-NumberOfSecuritySegments"/>
+            <xsd:element name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
+            <xsd:element name="E0588" type="srv:E0588-NumberOfSecuritySegments"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="USU-DataEncryptionTrailer">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0556" type="srv:E0556-LengthOfDataInOctetsOfBits"/>
-            <xsd:element  minOccurs="0" name="E0518" type="srv:E0518-EncryptionReferenceNumber"/>
+            <xsd:element name="E0556" type="srv:E0556-LengthOfDataInOctetsOfBits"/>
+            <xsd:element minOccurs="0" name="E0518" type="srv:E0518-EncryptionReferenceNumber"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="USX-SecurityReferences">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0020" type="srv:E0020-InterchangeControlReference"/>
-            <xsd:element  minOccurs="0" name="S002" type="srv:S002-InterchangeSender"/>
-            <xsd:element  minOccurs="0" name="S003" type="srv:S003-InterchangeRecipient"/>
-            <xsd:element  minOccurs="0" name="E0048" type="srv:E0048-GroupReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="S006" type="srv:S006-ApplicationSenderIdentification"/>
-            <xsd:element  minOccurs="0" name="S007" type="srv:S007-ApplicationRecipientIdentification"/>
-            <xsd:element  minOccurs="0" name="E0062" type="srv:E0062-MessageReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="S009" type="srv:S009-MessageIdentifier"/>
-            <xsd:element  minOccurs="0" name="E0800" type="srv:E0800-PackageReferenceNumber"/>
-            <xsd:element  minOccurs="0" name="S501" type="srv:S501-SecurityDateAndTime"/>
+            <xsd:element name="E0020" type="srv:E0020-InterchangeControlReference"/>
+            <xsd:element minOccurs="0" name="S002" type="srv:S002-InterchangeSender"/>
+            <xsd:element minOccurs="0" name="S003" type="srv:S003-InterchangeRecipient"/>
+            <xsd:element minOccurs="0" name="E0048" type="srv:E0048-GroupReferenceNumber"/>
+            <xsd:element minOccurs="0" name="S006" type="srv:S006-ApplicationSenderIdentification"/>
+            <xsd:element minOccurs="0" name="S007" type="srv:S007-ApplicationRecipientIdentification"/>
+            <xsd:element minOccurs="0" name="E0062" type="srv:E0062-MessageReferenceNumber"/>
+            <xsd:element minOccurs="0" name="S009" type="srv:S009-MessageIdentifier"/>
+            <xsd:element minOccurs="0" name="E0800" type="srv:E0800-PackageReferenceNumber"/>
+            <xsd:element minOccurs="0" name="S501" type="srv:S501-SecurityDateAndTime"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="USY-SecurityOnReferences">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
-            <xsd:element  name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
+            <xsd:element name="E0534" type="srv:E0534-SecurityReferenceNumber"/>
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentPartRepeatSequenceFormat">
-                <xsd:element  minOccurs="0" maxOccurs="2" name="S508" type="srv:S508-ValidationResult"/>
+                <xsd:element minOccurs="0" maxOccurs="2" name="S508" type="srv:S508-ValidationResult"/>
             </xsd:sequence>
-            <xsd:element  minOccurs="0" name="E0571" type="srv:E0571-SecurityErrorCoded"/>
+            <xsd:element minOccurs="0" name="E0571" type="srv:E0571-SecurityErrorCoded"/>
 
         </xsd:sequence>
     </xsd:complexType>
@@ -3243,295 +3301,296 @@
 
     <xsd:complexType name="S001-SyntaxIdentifier">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0001" type="srv:E0001-SyntaxIdentifier"/>
-            <xsd:element  name="E0002" type="srv:E0002-SyntaxVersionNumber"/>
-            <xsd:element  minOccurs="0" name="E0080" type="srv:E0080-ServiceCodeListDirectoryVersionNumber"/>
-            <xsd:element  minOccurs="0" name="E0133" type="srv:E0133-CharacterEncodingCoded"/>
-            <xsd:element  minOccurs="0" name="E0076" type="srv:E0076-SyntaxReleaseNumber"/>
+            <xsd:element name="E0001" type="srv:E0001-SyntaxIdentifier"/>
+            <xsd:element name="E0002" type="srv:E0002-SyntaxVersionNumber"/>
+            <xsd:element minOccurs="0" name="E0080" type="srv:E0080-ServiceCodeListDirectoryVersionNumber"/>
+            <xsd:element minOccurs="0" name="E0133" type="srv:E0133-CharacterEncodingCoded"/>
+            <xsd:element minOccurs="0" name="E0076" type="srv:E0076-SyntaxReleaseNumber"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S002-InterchangeSender">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0004" type="srv:E0004-InterchangeSenderIdentification"/>
-            <xsd:element  minOccurs="0" name="E0007" type="srv:E0007-IdentificationCodeQualifier"/>
-            <xsd:element  minOccurs="0" name="E0008" type="srv:E0008-InterchangeSenderInternalIdentification"/>
-            <xsd:element  minOccurs="0" name="E0042" type="srv:E0042-InterchangeSenderInternalSubIdentification"/>
+            <xsd:element name="E0004" type="srv:E0004-InterchangeSenderIdentification"/>
+            <xsd:element minOccurs="0" name="E0007" type="srv:E0007-IdentificationCodeQualifier"/>
+            <xsd:element minOccurs="0" name="E0008" type="srv:E0008-InterchangeSenderInternalIdentification"/>
+            <xsd:element minOccurs="0" name="E0042" type="srv:E0042-InterchangeSenderInternalSubIdentification"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S003-InterchangeRecipient">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0010" type="srv:E0010-InterchangeRecipientIdentification"/>
-            <xsd:element  minOccurs="0" name="E0007" type="srv:E0007-IdentificationCodeQualifier"/>
-            <xsd:element  minOccurs="0" name="E0014" type="srv:E0014-InterchangeRecipientInternalIdentification"/>
-            <xsd:element  minOccurs="0" name="E0046" type="srv:E0046-InterchangeRecipientInternalSubIdentification"/>
+            <xsd:element name="E0010" type="srv:E0010-InterchangeRecipientIdentification"/>
+            <xsd:element minOccurs="0" name="E0007" type="srv:E0007-IdentificationCodeQualifier"/>
+            <xsd:element minOccurs="0" name="E0014" type="srv:E0014-InterchangeRecipientInternalIdentification"/>
+            <xsd:element minOccurs="0" name="E0046" type="srv:E0046-InterchangeRecipientInternalSubIdentification"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S004-DateAndTimeOfPreparation">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0017" type="srv:E0017-Date"/>
-            <xsd:element  name="E0019" type="srv:E0019-Time"/>
+            <xsd:element name="E0017" type="srv:E0017-Date"/>
+            <xsd:element name="E0019" type="srv:E0019-Time"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S005-RecipientReferencePasswordDetails">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0022" type="srv:E0022-RecipientReferencePassword"/>
-            <xsd:element  minOccurs="0" name="E0025" type="srv:E0025-RecipientReferencePasswordQualifier"/>
+            <xsd:element name="E0022" type="srv:E0022-RecipientReferencePassword"/>
+            <xsd:element minOccurs="0" name="E0025" type="srv:E0025-RecipientReferencePasswordQualifier"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S006-ApplicationSenderIdentification">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0040" type="srv:E0040-ApplicationSenderIdentification"/>
-            <xsd:element  minOccurs="0" name="E0007" type="srv:E0007-IdentificationCodeQualifier"/>
+            <xsd:element name="E0040" type="srv:E0040-ApplicationSenderIdentification"/>
+            <xsd:element minOccurs="0" name="E0007" type="srv:E0007-IdentificationCodeQualifier"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S007-ApplicationRecipientIdentification">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0044" type="srv:E0044-ApplicationRecipientIdentification"/>
-            <xsd:element  minOccurs="0" name="E0007" type="srv:E0007-IdentificationCodeQualifier"/>
+            <xsd:element name="E0044" type="srv:E0044-ApplicationRecipientIdentification"/>
+            <xsd:element minOccurs="0" name="E0007" type="srv:E0007-IdentificationCodeQualifier"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S008-MessageVersion">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0052" type="srv:E0052-MessageVersionNumber"/>
-            <xsd:element  name="E0054" type="srv:E0054-MessageReleaseNumber"/>
-            <xsd:element  minOccurs="0" name="E0057" type="srv:E0057-AssociationAssignedCode"/>
+            <xsd:element name="E0052" type="srv:E0052-MessageVersionNumber"/>
+            <xsd:element name="E0054" type="srv:E0054-MessageReleaseNumber"/>
+            <xsd:element minOccurs="0" name="E0057" type="srv:E0057-AssociationAssignedCode"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S009-MessageIdentifier">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0065" type="srv:E0065-MessageType"/>
-            <xsd:element  name="E0052" type="srv:E0052-MessageVersionNumber"/>
-            <xsd:element  name="E0054" type="srv:E0054-MessageReleaseNumber"/>
-            <xsd:element  name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
-            <xsd:element  minOccurs="0" name="E0057" type="srv:E0057-AssociationAssignedCode"/>
-            <xsd:element  minOccurs="0" name="E0110" type="srv:E0110-CodeListDirectoryVersionNumber"/>
-            <xsd:element  minOccurs="0" name="E0113" type="srv:E0113-MessageTypeSubFunctionIdentification"/>
+            <xsd:element name="E0065" type="srv:E0065-MessageType"/>
+            <xsd:element name="E0052" type="srv:E0052-MessageVersionNumber"/>
+            <xsd:element name="E0054" type="srv:E0054-MessageReleaseNumber"/>
+            <xsd:element name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element minOccurs="0" name="E0057" type="srv:E0057-AssociationAssignedCode"/>
+            <xsd:element minOccurs="0" name="E0110" type="srv:E0110-CodeListDirectoryVersionNumber"/>
+            <xsd:element minOccurs="0" name="E0113" type="srv:E0113-MessageTypeSubFunctionIdentification"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S010-StatusOfTheTransfer">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0070" type="srv:E0070-SequenceOfTransfers"/>
-            <xsd:element  minOccurs="0" name="E0073" type="srv:E0073-FirstAndLastTransfer"/>
+            <xsd:element name="E0070" type="srv:E0070-SequenceOfTransfers"/>
+            <xsd:element minOccurs="0" name="E0073" type="srv:E0073-FirstAndLastTransfer"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S011-DataElementIdentification">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0098" type="srv:E0098-ErroneousDataElementPositionInSegment"/>
-            <xsd:element  minOccurs="0" name="E0104" type="srv:E0104-ErroneousComponentDataElementPosition"/>
-            <xsd:element  minOccurs="0" name="E0136" type="srv:E0136-ErroneousDataElementOccurrence"/>
+            <xsd:element name="E0098" type="srv:E0098-ErroneousDataElementPositionInSegment"/>
+            <xsd:element minOccurs="0" name="E0104" type="srv:E0104-ErroneousComponentDataElementPosition"/>
+            <xsd:element minOccurs="0" name="E0136" type="srv:E0136-ErroneousDataElementOccurrence"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S016-MessageSubsetIdentification">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0115" type="srv:E0115-MessageSubsetIdentification"/>
-            <xsd:element  minOccurs="0" name="E0116" type="srv:E0116-MessageSubsetVersionNumber"/>
-            <xsd:element  minOccurs="0" name="E0118" type="srv:E0118-MessageSubsetReleaseNumber"/>
-            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element name="E0115" type="srv:E0115-MessageSubsetIdentification"/>
+            <xsd:element minOccurs="0" name="E0116" type="srv:E0116-MessageSubsetVersionNumber"/>
+            <xsd:element minOccurs="0" name="E0118" type="srv:E0118-MessageSubsetReleaseNumber"/>
+            <xsd:element minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S017-MessageImplementationGuidelineIdentification">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0121" type="srv:E0121-MessageImplementationGuidelineIdentification"/>
-            <xsd:element  minOccurs="0" name="E0122" type="srv:E0122-MessageImplementationGuidelineVersionNumber"/>
-            <xsd:element  minOccurs="0" name="E0124" type="srv:E0124-MessageImplementationGuidelineReleaseNumber"/>
-            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element name="E0121" type="srv:E0121-MessageImplementationGuidelineIdentification"/>
+            <xsd:element minOccurs="0" name="E0122" type="srv:E0122-MessageImplementationGuidelineVersionNumber"/>
+            <xsd:element minOccurs="0" name="E0124" type="srv:E0124-MessageImplementationGuidelineReleaseNumber"/>
+            <xsd:element minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S018-ScenarioIdentification">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0127" type="srv:E0127-ScenarioIdentification"/>
-            <xsd:element  minOccurs="0" name="E0128" type="srv:E0128-ScenarioVersionNumber"/>
-            <xsd:element  minOccurs="0" name="E0130" type="srv:E0130-ScenarioReleaseNumber"/>
-            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element name="E0127" type="srv:E0127-ScenarioIdentification"/>
+            <xsd:element minOccurs="0" name="E0128" type="srv:E0128-ScenarioVersionNumber"/>
+            <xsd:element minOccurs="0" name="E0130" type="srv:E0130-ScenarioReleaseNumber"/>
+            <xsd:element minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S020-ReferenceIdentification">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0813" type="srv:E0813-ReferenceQualifier"/>
-            <xsd:element  name="E0802" type="srv:E0802-ReferenceIdentificationNumber"/>
+            <xsd:element name="E0813" type="srv:E0813-ReferenceQualifier"/>
+            <xsd:element name="E0802" type="srv:E0802-ReferenceIdentificationNumber"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S021-ObjectTypeIdentification">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0805" type="srv:E0805-ObjectTypeQualifier"/>
-            <xsd:element  minOccurs="0" name="E0809" type="srv:E0809-ObjectTypeAttributeIdentification"/>
-            <xsd:element  minOccurs="0" name="E0808" type="srv:E0808-ObjectTypeAttribute"/>
-            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element name="E0805" type="srv:E0805-ObjectTypeQualifier"/>
+            <xsd:element minOccurs="0" name="E0809" type="srv:E0809-ObjectTypeAttributeIdentification"/>
+            <xsd:element minOccurs="0" name="E0808" type="srv:E0808-ObjectTypeAttribute"/>
+            <xsd:element minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S022-StatusOfTheObject">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0810" type="srv:E0810-LengthOfObjectInOctetsOfBits"/>
-            <xsd:element  minOccurs="0" name="E0814" type="srv:E0814-NumberOfSegmentsBeforeObject"/>
-            <xsd:element  minOccurs="0" name="E0070" type="srv:E0070-SequenceOfTransfers"/>
-            <xsd:element  minOccurs="0" name="E0073" type="srv:E0073-FirstAndLastTransfer"/>
+            <xsd:element name="E0810" type="srv:E0810-LengthOfObjectInOctetsOfBits"/>
+            <xsd:element minOccurs="0" name="E0814" type="srv:E0814-NumberOfSegmentsBeforeObject"/>
+            <xsd:element minOccurs="0" name="E0070" type="srv:E0070-SequenceOfTransfers"/>
+            <xsd:element minOccurs="0" name="E0073" type="srv:E0073-FirstAndLastTransfer"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S300-DateAndOrTimeOfInitiation">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  minOccurs="0" name="E0338" type="srv:E0338-EventDate"/>
-            <xsd:element  minOccurs="0" name="E0314" type="srv:E0314-EventTime"/>
-            <xsd:element  minOccurs="0" name="E0336" type="srv:E0336-TimeOffset"/>
+            <xsd:element minOccurs="0" name="E0338" type="srv:E0338-EventDate"/>
+            <xsd:element minOccurs="0" name="E0314" type="srv:E0314-EventTime"/>
+            <xsd:element minOccurs="0" name="E0336" type="srv:E0336-TimeOffset"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S301-StatusOfTransferInteractive">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  minOccurs="0" name="E0320" type="srv:E0320-SenderSequenceNumber"/>
-            <xsd:element  minOccurs="0" name="E0323" type="srv:E0323-TransferPositionCoded"/>
-            <xsd:element  minOccurs="0" name="E0325" type="srv:E0325-DuplicateIndicator"/>
+            <xsd:element minOccurs="0" name="E0320" type="srv:E0320-SenderSequenceNumber"/>
+            <xsd:element minOccurs="0" name="E0323" type="srv:E0323-TransferPositionCoded"/>
+            <xsd:element minOccurs="0" name="E0325" type="srv:E0325-DuplicateIndicator"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S302-DialogueReference">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0300" type="srv:E0300-InitiatorControlReference"/>
-            <xsd:element  minOccurs="0" name="E0303" type="srv:E0303-InitiatorReferenceIdentification"/>
-            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
-            <xsd:element  minOccurs="0" name="E0304" type="srv:E0304-ResponderControlReference"/>
+            <xsd:element name="E0300" type="srv:E0300-InitiatorControlReference"/>
+            <xsd:element minOccurs="0" name="E0303" type="srv:E0303-InitiatorReferenceIdentification"/>
+            <xsd:element minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element minOccurs="0" name="E0304" type="srv:E0304-ResponderControlReference"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S303-TransactionReference">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0306" type="srv:E0306-TransactionControlReference"/>
-            <xsd:element  minOccurs="0" name="E0303" type="srv:E0303-InitiatorReferenceIdentification"/>
-            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element name="E0306" type="srv:E0306-TransactionControlReference"/>
+            <xsd:element minOccurs="0" name="E0303" type="srv:E0303-InitiatorReferenceIdentification"/>
+            <xsd:element minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S305-DialogueIdentification">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0311" type="srv:E0311-DialogueIdentification"/>
-            <xsd:element  minOccurs="0" name="E0342" type="srv:E0342-DialogueVersionNumber"/>
-            <xsd:element  minOccurs="0" name="E0344" type="srv:E0344-DialogueReleaseNumber"/>
-            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element name="E0311" type="srv:E0311-DialogueIdentification"/>
+            <xsd:element minOccurs="0" name="E0342" type="srv:E0342-DialogueVersionNumber"/>
+            <xsd:element minOccurs="0" name="E0344" type="srv:E0344-DialogueReleaseNumber"/>
+            <xsd:element minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S306-InteractiveMessageIdentifier">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0065" type="srv:E0065-MessageType"/>
-            <xsd:element  name="E0052" type="srv:E0052-MessageVersionNumber"/>
-            <xsd:element  name="E0054" type="srv:E0054-MessageReleaseNumber"/>
-            <xsd:element  minOccurs="0" name="E0113" type="srv:E0113-MessageTypeSubFunctionIdentification"/>
-            <xsd:element  minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
-            <xsd:element  minOccurs="0" name="E0057" type="srv:E0057-AssociationAssignedCode"/>
+            <xsd:element name="E0065" type="srv:E0065-MessageType"/>
+            <xsd:element name="E0052" type="srv:E0052-MessageVersionNumber"/>
+            <xsd:element name="E0054" type="srv:E0054-MessageReleaseNumber"/>
+            <xsd:element minOccurs="0" name="E0113" type="srv:E0113-MessageTypeSubFunctionIdentification"/>
+            <xsd:element minOccurs="0" name="E0051" type="srv:E0051-ControllingAgencyCoded"/>
+            <xsd:element minOccurs="0" name="E0057" type="srv:E0057-AssociationAssignedCode"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S307-StatusInformation">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  minOccurs="0" name="E0333" type="srv:E0333-StatusCoded"/>
-            <xsd:element  minOccurs="0" name="E0332" type="srv:E0332-Status"/>
-            <xsd:element  minOccurs="0" name="E0335" type="srv:E0335-LanguageCoded"/>
+            <xsd:element minOccurs="0" name="E0333" type="srv:E0333-StatusCoded"/>
+            <xsd:element minOccurs="0" name="E0332" type="srv:E0332-Status"/>
+            <xsd:element minOccurs="0" name="E0335" type="srv:E0335-LanguageCoded"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S500-SecurityIdentificationDetails">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0577" type="srv:E0577-SecurityPartyQualifier"/>
-            <xsd:element  minOccurs="0" name="E0538" type="srv:E0538-KeyName"/>
-            <xsd:element  minOccurs="0" name="E0511" type="srv:E0511-SecurityPartyIdentification"/>
-            <xsd:element  minOccurs="0" name="E0513" type="srv:E0513-SecurityPartyCodeListQualifier"/>
-            <xsd:element  minOccurs="0" name="E0515" type="srv:E0515-SecurityPartyCodeListResponsibleAgencyCoded"/>
-            <xsd:element  minOccurs="0" maxOccurs="3" dfdl:nilKind="literalValue" dfdl:useNilForDefault="no" nillable="true" dfdl:nilValue="%ES;" name="E0586" type="srv:E0586-SecurityPartyName"/>
+            <xsd:element name="E0577" type="srv:E0577-SecurityPartyQualifier"/>
+            <xsd:element minOccurs="0" name="E0538" type="srv:E0538-KeyName"/>
+            <xsd:element minOccurs="0" name="E0511" type="srv:E0511-SecurityPartyIdentification"/>
+            <xsd:element minOccurs="0" name="E0513" type="srv:E0513-SecurityPartyCodeListQualifier"/>
+            <xsd:element minOccurs="0" name="E0515" type="srv:E0515-SecurityPartyCodeListResponsibleAgencyCoded"/>
+            <xsd:element minOccurs="0" maxOccurs="3" dfdl:nilKind="literalValue" dfdl:useNilForDefault="no"
+                         nillable="true" dfdl:nilValue="%ES;" name="E0586" type="srv:E0586-SecurityPartyName"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S501-SecurityDateAndTime">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0517" type="srv:E0517-DateAndTimeQualifier"/>
-            <xsd:element  minOccurs="0" name="E0338" type="srv:E0338-EventDate"/>
-            <xsd:element  minOccurs="0" name="E0314" type="srv:E0314-EventTime"/>
-            <xsd:element  minOccurs="0" name="E0336" type="srv:E0336-TimeOffset"/>
+            <xsd:element name="E0517" type="srv:E0517-DateAndTimeQualifier"/>
+            <xsd:element minOccurs="0" name="E0338" type="srv:E0338-EventDate"/>
+            <xsd:element minOccurs="0" name="E0314" type="srv:E0314-EventTime"/>
+            <xsd:element minOccurs="0" name="E0336" type="srv:E0336-TimeOffset"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S502-SecurityAlgorithm">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0523" type="srv:E0523-UseOfAlgorithmCoded"/>
-            <xsd:element  minOccurs="0" name="E0525" type="srv:E0525-CryptographicModeOfOperationCoded"/>
-            <xsd:element  minOccurs="0" name="E0533" type="srv:E0533-ModeOfOperationCodeListIdentifier"/>
-            <xsd:element  minOccurs="0" name="E0527" type="srv:E0527-AlgorithmCoded"/>
-            <xsd:element  minOccurs="0" name="E0529" type="srv:E0529-AlgorithmCodeListIdentifier"/>
-            <xsd:element  minOccurs="0" name="E0591" type="srv:E0591-PaddingMechanismCoded"/>
-            <xsd:element  minOccurs="0" name="E0601" type="srv:E0601-PaddingMechanismCodeListIdentifier"/>
+            <xsd:element name="E0523" type="srv:E0523-UseOfAlgorithmCoded"/>
+            <xsd:element minOccurs="0" name="E0525" type="srv:E0525-CryptographicModeOfOperationCoded"/>
+            <xsd:element minOccurs="0" name="E0533" type="srv:E0533-ModeOfOperationCodeListIdentifier"/>
+            <xsd:element minOccurs="0" name="E0527" type="srv:E0527-AlgorithmCoded"/>
+            <xsd:element minOccurs="0" name="E0529" type="srv:E0529-AlgorithmCodeListIdentifier"/>
+            <xsd:element minOccurs="0" name="E0591" type="srv:E0591-PaddingMechanismCoded"/>
+            <xsd:element minOccurs="0" name="E0601" type="srv:E0601-PaddingMechanismCodeListIdentifier"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S503-AlgorithmParameter">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0531" type="srv:E0531-AlgorithmParameterQualifier"/>
-            <xsd:element  name="E0554" type="srv:E0554-AlgorithmParameterValue"/>
+            <xsd:element name="E0531" type="srv:E0531-AlgorithmParameterQualifier"/>
+            <xsd:element name="E0554" type="srv:E0554-AlgorithmParameterValue"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S504-ListParameter">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0575" type="srv:E0575-ListParameterQualifier"/>
-            <xsd:element  name="E0558" type="srv:E0558-ListParameter"/>
+            <xsd:element name="E0575" type="srv:E0575-ListParameterQualifier"/>
+            <xsd:element name="E0558" type="srv:E0558-ListParameter"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S505-ServiceCharacterForSignature">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0551" type="srv:E0551-ServiceCharacterForSignatureQualifier"/>
-            <xsd:element  name="E0548" type="srv:E0548-ServiceCharacterForSignature"/>
+            <xsd:element name="E0551" type="srv:E0551-ServiceCharacterForSignatureQualifier"/>
+            <xsd:element name="E0548" type="srv:E0548-ServiceCharacterForSignature"/>
 
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="S508-ValidationResult">
         <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
-            <xsd:element  name="E0563" type="srv:E0563-ValidationValueQualifier"/>
-            <xsd:element  minOccurs="0" name="E0560" type="srv:E0560-ValidationValue"/>
+            <xsd:element name="E0563" type="srv:E0563-ValidationValueQualifier"/>
+            <xsd:element minOccurs="0" name="E0560" type="srv:E0560-ValidationValue"/>
 
         </xsd:sequence>
     </xsd:complexType>
