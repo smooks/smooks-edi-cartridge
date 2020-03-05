@@ -43,7 +43,7 @@ public class SegmentsTemplate extends Template {
                     textNumberPattern = "0000";
                 } else {
                     base += "1-" + de.get("maxLength");
-                    textNumberPattern = "#.#";
+                    textNumberPattern = "";
                 }
                 numericTypes.put(base, new HashMap<String, String>() {{
                     this.put("totalDigits", String.valueOf(de.get("maxLength")));

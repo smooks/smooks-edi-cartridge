@@ -22,6 +22,7 @@
         <gpg.skip>true</gpg.skip>
         <mustache.version>0.9.6</mustache.version>
         <xmlunit.core.version>2.6.3</xmlunit.core.version>
+        <junit.version>5.6.0</junit.version>
     </properties>
 
     <build>
@@ -135,7 +136,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.6.0</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

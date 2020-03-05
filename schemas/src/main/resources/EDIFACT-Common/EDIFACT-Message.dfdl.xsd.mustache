@@ -38,7 +38,7 @@
     <xsd:element ibmSchExtn:docRoot="true" name="Interchange" dfdl:lengthKind="implicit">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element dfdl:terminator="%WSP*;" dfdl:initiator="UNA" dfdl:length="6" dfdl:lengthKind="explicit" name="UNA" type="srv:UNA" minOccurs="0"/>
+                <xsd:element dfdl:terminator="%NL;%WSP*; %WSP*;" dfdl:initiator="UNA" dfdl:length="6" dfdl:lengthKind="explicit" name="UNA" type="srv:UNA" minOccurs="0"/>
                 <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UNB" name="UNB" type="srv:UNB-InterchangeHeader">
                     <xsd:annotation>
                         <xsd:appinfo source="http://www.ogf.org/dfdl/">

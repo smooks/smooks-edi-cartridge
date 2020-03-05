@@ -46,7 +46,7 @@
              -->
 
             <!-- Variables used to store delimiter values from the UNA. -->
-            <dfdl:defineVariable defaultValue="'%WSP*; %NL;%WSP*;" name="SegmentTerm" type="xsd:string"/>
+            <dfdl:defineVariable defaultValue="'%NL;%WSP*; '%WSP*; %NL;%WSP*;" name="SegmentTerm" type="xsd:string"/>
             <dfdl:defineVariable defaultValue="+" name="FieldSep" type="xsd:string"/>
             <dfdl:defineVariable defaultValue=":" name="CompositeSep" type="xsd:string"/>
             <dfdl:defineVariable defaultValue="?" name="EscapeChar" type="xsd:string"/>
