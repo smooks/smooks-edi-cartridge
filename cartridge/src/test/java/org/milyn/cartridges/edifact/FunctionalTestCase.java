@@ -1,4 +1,4 @@
-package org.milyn.dfdl;
+package org.milyn.cartridges.edifact;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
