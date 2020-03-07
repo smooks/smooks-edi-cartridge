@@ -11,12 +11,12 @@ public class EDIFACTDfdlSchemaGeneratorTestCase {
 
     @Test
     public void testMain() throws Throwable {
-        assertFalse(new File("target/EDIFACT-Segments.dfdl.xsd").exists());
-        assertFalse(new File("target/EDIFACT-Messages.dfdl.xsd").exists());
+        assertFalse(new File("target/d03b/EDIFACT-Segments.dfdl.xsd").exists());
+        assertFalse(new File("target/d03b/EDIFACT-Messages.dfdl.xsd").exists());
 
         EDIFACTDfdlSchemaGenerator.main(new String[]{"/d03b.zip", "target/"});
 
-        assertTrue(new File("target/EDIFACT-Segments.dfdl.xsd").exists());
-        assertTrue(new File("target/EDIFACT-Messages.dfdl.xsd").exists());
+        assertTrue(new File("target/d03b/EDIFACT-Segments.dfdl.xsd").exists());
+        assertTrue(new File("target/d03b/EDIFACT-Messages.dfdl.xsd").exists());
     }
 }
