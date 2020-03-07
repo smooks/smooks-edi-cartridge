@@ -150,7 +150,7 @@ public class UnEdifactDefinitionReader {
      * Group1 = change indicator
      * Group2 = code
      */
-    private static final Pattern CODE = Pattern.compile("^(\\+|\\*|#|\\|X)? +([A-Z0-9]+) +.+");
+    private static final Pattern CODE = Pattern.compile("^(\\+|\\*|#|\\||X)? +([A-Z0-9]+) +.+");
 
     private static List<Segment> readSegments(Reader reader, Map<String, Field> composites, Map<String, Component> datas, boolean useShortName) throws IOException, EdiParseException {
         List<Segment> segments = new ArrayList<Segment>();
@@ -334,6 +334,9 @@ public class UnEdifactDefinitionReader {
             Matcher codeMatcher = CODE.matcher(line);
             if (codeMatcher.matches()){
                 codeList.getCodes().add(codeMatcher.group(2));
+                while (line != null && line.length() > 0) {
+                    line = reader.readLine();
+                }
             }
             line = reader.readLine();
         }
