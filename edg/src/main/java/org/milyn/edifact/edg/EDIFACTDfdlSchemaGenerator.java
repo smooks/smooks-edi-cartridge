@@ -42,7 +42,7 @@ public final class EDIFACTDfdlSchemaGenerator {
         Arrays.stream(Arrays.copyOfRange(args, 0, args.length - 1)).parallel().forEach(s -> {
             try {
                 generateDFDLSchemas(s, args[args.length - 1]);
-                LOGGER.info("Generated {} schemas.", s);
+                LOGGER.info("Generated {} schemas", s);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
