@@ -7,14 +7,14 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class EDIFACTDfdlSchemaGeneratorTestCase {
+public class EdifactDfdlSchemaGeneratorTestCase {
 
     @Test
     public void testMain() throws Throwable {
         assertFalse(new File("target/d03b/EDIFACT-Segments.dfdl.xsd").exists());
         assertFalse(new File("target/d03b/EDIFACT-Messages.dfdl.xsd").exists());
 
-        EDIFACTDfdlSchemaGenerator.main(new String[]{"/d03b.zip", "target/"});
+        EdifactDfdlSchemaGenerator.main(new String[]{"/d03b.zip", "target/"});
 
         assertTrue(new File("target/d03b/EDIFACT-Segments.dfdl.xsd").exists());
         assertTrue(new File("target/d03b/EDIFACT-Messages.dfdl.xsd").exists());

@@ -27,22 +27,22 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.zip.ZipInputStream;
 
-public final class EDIFACTDfdlSchemaGenerator {
+public final class EdifactDfdlSchemaGenerator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EDIFACTDfdlSchemaGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EdifactDfdlSchemaGenerator.class);
     private static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
     private static final TransformerFactory TRANSFORMER_FACTORY = TransformerFactory.newInstance();
 
 
-    private EDIFACTDfdlSchemaGenerator() {
+    private EdifactDfdlSchemaGenerator() {
 
     }
 
-    public static void main(final String[] args) throws Throwable {
+    public static void main(final String[] args) {
         Arrays.stream(Arrays.copyOfRange(args, 0, args.length - 1)).parallel().forEach(s -> {
             try {
+                LOGGER.info("Generating schemas from {}...", s);
                 generateDFDLSchemas(s, args[args.length - 1]);
-                LOGGER.info("Generated {} schemas", s);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -50,7 +50,7 @@ public final class EDIFACTDfdlSchemaGenerator {
     }
 
     private static void generateDFDLSchemas(String spec, String outputDirectory) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException, TransformerException {
-        final InputStream resourceAsStream = EDIFACTDfdlSchemaGenerator.class.getResourceAsStream(spec);
+        final InputStream resourceAsStream = EdifactDfdlSchemaGenerator.class.getResourceAsStream(spec);
         final UnEdifactSpecificationReader unEdifactSpecificationReader = new UnEdifactSpecificationReader(new ZipInputStream(resourceAsStream), true, true);
 
         final String[] namespace = unEdifactSpecificationReader.getDefinitionModel().getDescription().getNamespace().split(":");

@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Resource(type = "edifact-parser")
-public abstract class AbstractEDIFACTParserContentHandlerFactory extends AbstractDFDLContentHandlerFactory {
+public abstract class AbstractEdifactParserContentHandlerFactory extends AbstractDFDLContentHandlerFactory {
 
     private static final Mustache MUSTACHE;
 
