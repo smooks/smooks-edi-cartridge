@@ -22,13 +22,14 @@
             <groupId>org.milyn.cartridges.edifact</groupId>
             <artifactId>edifact-schemas</artifactId>
             <classifier>common</classifier>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.milyn.cartridges.edifact</groupId>
             <artifactId>edifact-schemas</artifactId>
             <classifier>d03b</classifier>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${project.version}</version>
+            <type>jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>

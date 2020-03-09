@@ -93,7 +93,7 @@
                                 <argument>/d98b.zip</argument>
                                 <argument>/d99a.zip</argument>
                                 <argument>/d99b.zip</argument>
-                                <argument>${project.build.directory}/classes/schemas</argument>
+                                <argument>${project.build.directory}/classes</argument>
                             </arguments>
                             <includePluginDependencies>true</includePluginDependencies>
                         </configuration>
@@ -130,7 +130,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d00a/**</include>
                             </includes>
@@ -144,7 +144,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d00b/**</include>
                             </includes>
@@ -158,7 +158,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d01a/**</include>
                             </includes>
@@ -172,7 +172,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d01b/**</include>
                             </includes>
@@ -186,7 +186,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d01c/**</include>
                             </includes>
@@ -200,7 +200,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d02a/**</include>
                             </includes>
@@ -214,7 +214,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d02b/**</include>
                             </includes>
@@ -228,7 +228,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d03a/**</include>
                             </includes>
@@ -242,7 +242,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d03b/**</include>
                             </includes>
@@ -256,7 +256,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d04a/**</include>
                             </includes>
@@ -270,7 +270,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d04b/**</include>
                             </includes>
@@ -284,7 +284,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d05a/**</include>
                             </includes>
@@ -298,7 +298,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d05b/**</include>
                             </includes>
@@ -312,7 +312,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d06a/**</include>
                             </includes>
@@ -326,7 +326,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d06b/**</include>
                             </includes>
@@ -340,7 +340,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d07a/**</include>
                             </includes>
@@ -354,7 +354,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d08a/**</include>
                             </includes>
@@ -368,7 +368,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d08b/**</include>
                             </includes>
@@ -382,7 +382,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d09a/**</include>
                             </includes>
@@ -396,7 +396,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d09b/**</include>
                             </includes>
@@ -410,7 +410,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d10a/**</include>
                             </includes>
@@ -424,7 +424,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d11a/**</include>
                             </includes>
@@ -438,7 +438,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d11b/**</include>
                             </includes>
@@ -452,7 +452,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d12a/**</include>
                             </includes>
@@ -466,7 +466,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d12b/**</include>
                             </includes>
@@ -480,7 +480,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d13a/**</include>
                             </includes>
@@ -494,7 +494,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d13b/**</include>
                             </includes>
@@ -508,7 +508,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d14a/**</include>
                             </includes>
@@ -522,7 +522,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d14b/**</include>
                             </includes>
@@ -536,7 +536,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d15a/**</include>
                             </includes>
@@ -550,7 +550,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d15b/**</include>
                             </includes>
@@ -564,7 +564,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d16a/**</include>
                             </includes>
@@ -578,7 +578,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d16b/**</include>
                             </includes>
@@ -592,7 +592,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d17a/**</include>
                             </includes>
@@ -606,7 +606,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d17b/**</include>
                             </includes>
@@ -620,7 +620,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d18a/**</include>
                             </includes>
@@ -634,7 +634,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d18b/**</include>
                             </includes>
@@ -648,7 +648,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d19a/**</include>
                             </includes>
@@ -662,7 +662,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d19b/**</include>
                             </includes>
@@ -676,7 +676,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d93a/**</include>
                             </includes>
@@ -690,7 +690,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d94a/**</include>
                             </includes>
@@ -704,7 +704,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d94b/**</include>
                             </includes>
@@ -718,7 +718,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d95a/**</include>
                             </includes>
@@ -732,7 +732,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d95b/**</include>
                             </includes>
@@ -746,7 +746,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d96a/**</include>
                             </includes>
@@ -760,7 +760,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d96b/**</include>
                             </includes>
@@ -774,7 +774,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d97a/**</include>
                             </includes>
@@ -788,7 +788,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d97b/**</include>
                             </includes>
@@ -802,7 +802,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d98a/**</include>
                             </includes>
@@ -816,7 +816,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d98b/**</include>
                             </includes>
@@ -830,7 +830,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d99a/**</include>
                             </includes>
@@ -844,7 +844,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classesDirectory>${project.build.directory}/classes/schemas</classesDirectory>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
                                 <include>d99b/**</include>
                             </includes>
