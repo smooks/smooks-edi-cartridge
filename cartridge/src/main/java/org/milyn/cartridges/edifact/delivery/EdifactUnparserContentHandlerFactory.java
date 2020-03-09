@@ -8,7 +8,7 @@ import org.milyn.delivery.ContentHandler;
 import org.milyn.delivery.annotation.Resource;
 
 @Resource(type = "edifact-unparser")
-public class EDIFACTUnparserContentHandlerFactory extends AbstractEDIFACTParserContentHandlerFactory {
+public class EdifactUnparserContentHandlerFactory extends AbstractEdifactParserContentHandlerFactory {
 
     @Override
     public ContentHandler doCreate(final SmooksResourceConfiguration resourceConfig, final String dataProcessorName, final DataProcessor dataProcessor) {

@@ -6,7 +6,7 @@ import org.milyn.delivery.ContentHandler;
 import org.milyn.delivery.annotation.Resource;
 
 @Resource(type = "edifact-parser")
-public class EDIFACTParserContentHandlerFactory extends AbstractEDIFACTParserContentHandlerFactory {
+public class EdifactParserContentHandlerFactory extends AbstractEdifactParserContentHandlerFactory {
 
     @Override
     public ContentHandler doCreate(SmooksResourceConfiguration resourceConfig, String dataProcessorName, DataProcessor dataProcessor) {

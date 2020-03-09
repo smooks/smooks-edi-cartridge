@@ -3,6 +3,8 @@ package org.milyn.edifact.edg;
 import org.milyn.edifact.ect.formats.unedifact.UnEdifactSpecificationReader;
 import org.milyn.edifact.edg.template.MessagesTemplate;
 import org.milyn.edifact.edg.template.SegmentsTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -22,34 +24,46 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.*;
+import java.util.Arrays;
 import java.util.zip.ZipInputStream;
 
-public final class EDIFACTDfdlSchemaGenerator {
+public final class EdifactDfdlSchemaGenerator {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(EdifactDfdlSchemaGenerator.class);
     private static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
     private static final TransformerFactory TRANSFORMER_FACTORY = TransformerFactory.newInstance();
 
 
-    private EDIFACTDfdlSchemaGenerator() {
+    private EdifactDfdlSchemaGenerator() {
 
     }
 
-    public static void main(final String[] args) throws Throwable {
-        final String specPath = args[0];
-        final String outputDirectory = args[1];
-        new File(outputDirectory).mkdirs();
+    public static void main(final String[] args) {
+        Arrays.stream(Arrays.copyOfRange(args, 0, args.length - 1)).parallel().forEach(s -> {
+            try {
+                LOGGER.info("Generating schemas from {}...", s);
+                generateDFDLSchemas(s, args[args.length - 1]);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
 
-        final InputStream resourceAsStream = EDIFACTDfdlSchemaGenerator.class.getResourceAsStream(specPath);
+    private static void generateDFDLSchemas(String spec, String outputDirectory) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException, TransformerException {
+        final InputStream resourceAsStream = EdifactDfdlSchemaGenerator.class.getResourceAsStream(spec);
         final UnEdifactSpecificationReader unEdifactSpecificationReader = new UnEdifactSpecificationReader(new ZipInputStream(resourceAsStream), true, true);
 
         final String[] namespace = unEdifactSpecificationReader.getDefinitionModel().getDescription().getNamespace().split(":");
         final String version = namespace[3].replace("-", "").toUpperCase();
+        final String versionOutputDirectory = outputDirectory + "/" + version.toLowerCase();
+
+        new File(versionOutputDirectory).mkdirs();
 
         final String segmentsSchema = new SegmentsTemplate(version, unEdifactSpecificationReader).materialise();
-        write(segmentsSchema, outputDirectory + "/EDIFACT-Segments.dfdl.xsd");
+        write(segmentsSchema, versionOutputDirectory + "/EDIFACT-Segments.dfdl.xsd");
 
         String messagesSchema = new MessagesTemplate(version, unEdifactSpecificationReader).materialise();
-        write(messagesSchema, outputDirectory + "/EDIFACT-Messages.dfdl.xsd");
+        write(messagesSchema, versionOutputDirectory + "/EDIFACT-Messages.dfdl.xsd");
     }
 
     private static void write(final String xml, final String fileName) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException, TransformerException {

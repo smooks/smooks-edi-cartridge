@@ -29,6 +29,6 @@ public class FunctionalTestCase {
     public void testSmooksConfig(String fileName) throws Exception {
         String result = filterAndSerialize(executionContext, getClass().getResourceAsStream(fileName), smooks);
 
-        assertEquals(StreamUtils.readStreamAsString(getClass().getResourceAsStream(fileName)), result);
+        assertEquals(StreamUtils.readStreamAsString(getClass().getResourceAsStream(fileName)).replaceAll("\\n", "\r\n"), result);
     }
 }

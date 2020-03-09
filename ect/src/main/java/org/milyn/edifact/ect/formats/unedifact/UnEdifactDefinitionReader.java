@@ -142,13 +142,15 @@ public class UnEdifactDefinitionReader {
      */
     private static final Pattern SECOND_SEGMENT_ELEMENT = Pattern.compile("^(.*) *( C| M) *(\\d)?.*");
 
+    private static final Pattern CODE_ID = Pattern.compile("[SX\\|\\+\\-\\*\\# ]*(\\w{4}) *(.*)");
+
     /**
      * Extracts information from a code.
      * Example: "+    533   Original accounting voucher"
      * Group1 = change indicator
      * Group2 = code
      */
-    private static final Pattern CODE = Pattern.compile("^(\\+|\\*|#|\\|X)? +(\\w+)  +.+");
+    private static final Pattern CODE = Pattern.compile("^(\\+|\\*|#|\\||X)? +([A-Z0-9]+) +.+");
 
     private static List<Segment> readSegments(Reader reader, Map<String, Field> composites, Map<String, Component> datas, boolean useShortName) throws IOException, EdiParseException {
         List<Segment> segments = new ArrayList<Segment>();
@@ -317,7 +319,7 @@ public class UnEdifactDefinitionReader {
         }
 
         String id;
-        Matcher headerMatcher = ELEMENT_HEADER.matcher(line);
+        Matcher headerMatcher = CODE_ID.matcher(line);
         if (headerMatcher.matches()) {
             id = headerMatcher.group(1);
         } else {
@@ -332,6 +334,9 @@ public class UnEdifactDefinitionReader {
             Matcher codeMatcher = CODE.matcher(line);
             if (codeMatcher.matches()){
                 codeList.getCodes().add(codeMatcher.group(2));
+                while (line != null && line.length() > 0) {
+                    line = reader.readLine();
+                }
             }
             line = reader.readLine();
         }
