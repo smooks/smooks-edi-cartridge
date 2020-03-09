@@ -29,7 +29,6 @@
             <artifactId>edifact-schemas</artifactId>
             <classifier>d03b</classifier>
             <version>${project.version}</version>
-            <type>jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
