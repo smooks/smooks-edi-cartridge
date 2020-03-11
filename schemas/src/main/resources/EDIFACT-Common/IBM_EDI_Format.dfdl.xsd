@@ -46,13 +46,13 @@
              -->
 
             <!-- Variables used to store delimiter values from the UNA. -->
-            <dfdl:defineVariable defaultValue="'%NL;%WSP*; '%WSP*; %NL;%WSP*;" name="SegmentTerm" type="xsd:string"/>
-            <dfdl:defineVariable defaultValue="+" name="FieldSep" type="xsd:string"/>
-            <dfdl:defineVariable defaultValue=":" name="CompositeSep" type="xsd:string"/>
-            <dfdl:defineVariable defaultValue="?" name="EscapeChar" type="xsd:string"/>
-            <dfdl:defineVariable defaultValue="*" name="RepeatSep" type="xsd:string"/>
-            <dfdl:defineVariable defaultValue="." name="DecimalSep" type="xsd:string"/>
-            <dfdl:defineVariable defaultValue="," name="GroupingSep" type="xsd:string"/>
+            <dfdl:defineVariable defaultValue="'%NL;%WSP*; '%WSP*; %NL;%WSP*;" name="SegmentTerm" type="xsd:string" external="true"/>
+            <dfdl:defineVariable defaultValue="+" name="FieldSep" type="xsd:string" external="true"/>
+            <dfdl:defineVariable defaultValue=":" name="CompositeSep" type="xsd:string" external="true"/>
+            <dfdl:defineVariable defaultValue="?" name="EscapeChar" type="xsd:string" external="true"/>
+            <dfdl:defineVariable defaultValue="*" name="RepeatSep" type="xsd:string" external="true"/>
+            <dfdl:defineVariable defaultValue="." name="DecimalSep" type="xsd:string" external="true"/>
+            <dfdl:defineVariable defaultValue="," name="GroupingSep" type="xsd:string" external="true"/>
 
             <dfdl:defineFormat name="EDIFormat">
                 <dfdl:format encoding="iso-8859-1"
