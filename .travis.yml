@@ -6,3 +6,9 @@ before_install:
 
 jdk:
   - openjdk8
+
+deploy:
+  provider: script
+  script: bash deploy.sh
+  on:
+    branch: master
