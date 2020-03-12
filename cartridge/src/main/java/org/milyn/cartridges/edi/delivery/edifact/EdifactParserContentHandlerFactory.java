@@ -13,6 +13,7 @@ public class EdifactParserContentHandlerFactory extends AbstractEdifactParserCon
     public ContentHandler doCreate(final SmooksResourceConfiguration smooksResourceConfiguration, final DfdlSchema dfdlSchema, final DataProcessor dataProcessor) {
         smooksResourceConfiguration.setParameter("dataProcessorName", dfdlSchema.getName());
         smooksResourceConfiguration.setResource("org.milyn.cartridges.dfdl.DfdlParser");
-        return null;
+        return new ContentHandler() {
+        };
     }
 }
