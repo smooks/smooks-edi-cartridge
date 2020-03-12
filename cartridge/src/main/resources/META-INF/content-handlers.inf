@@ -1,2 +1,4 @@
-org.milyn.cartridges.edifact.delivery.EdifactParserContentHandlerFactory
-org.milyn.cartridges.edifact.delivery.EdifactUnparserContentHandlerFactory
+org.milyn.cartridges.edi.delivery.EdiParserContentHandlerFactory
+org.milyn.cartridges.edi.delivery.EdiUnparserContentHandlerFactory
+org.milyn.cartridges.edi.delivery.edifact.EdifactParserContentHandlerFactory
+org.milyn.cartridges.edi.delivery.edifact.EdifactUnparserContentHandlerFactory

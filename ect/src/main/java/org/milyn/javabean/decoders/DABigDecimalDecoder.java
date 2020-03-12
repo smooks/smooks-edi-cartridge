@@ -17,7 +17,7 @@ package org.milyn.javabean.decoders;
 
 import org.milyn.container.ExecutionContext;
 import org.milyn.delivery.Filter;
-import org.milyn.edifact.edisax.model.internal.Delimiters;
+import org.milyn.edi.edisax.model.internal.Delimiters;
 import org.milyn.javabean.DataDecodeException;
 import org.milyn.javabean.DecodeType;
 
