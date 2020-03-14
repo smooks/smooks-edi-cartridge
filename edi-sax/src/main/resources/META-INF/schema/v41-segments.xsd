@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<xsd:schema xmlns:unedifact="urn:org.milyn.edi.unedifact.v41"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:org.milyn.edi.unedifact.v41">
+<xsd:schema xmlns:unedifact="urn:org.smooks.edi.unedifact.v41"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:org.smooks.edi.unedifact.v41">
 	<xsd:element name="unEdifact" type="unedifact:unEdifact" />
 	<xsd:complexType name="Unz">
 		<xsd:sequence>

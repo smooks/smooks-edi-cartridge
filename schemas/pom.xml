@@ -27,7 +27,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <configuration>
-                    <mainClass>org.milyn.edi.edg.EdifactDfdlSchemaGenerator</mainClass>
+                    <mainClass>org.smooks.edi.edg.EdifactDfdlSchemaGenerator</mainClass>
                     <addResourcesToClasspath>true</addResourcesToClasspath>
                 </configuration>
                 <executions>

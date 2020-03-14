@@ -1,5 +1,5 @@
-<env:unEdifact xmlns:env="urn:org.milyn.edi.unedifact.v41">
-	<env:UNB xmlns:env="urn:org.milyn.edi.unedifact.v41">
+<env:unEdifact xmlns:env="urn:org.smooks.edi.unedifact.v41">
+	<env:UNB xmlns:env="urn:org.smooks.edi.unedifact.v41">
 		<env:syntaxIdentifier>
 			<env:id>UNOA</env:id>
 			<env:versionNum>4</env:versionNum>
@@ -19,8 +19,8 @@
 		<env:controlRef>16</env:controlRef>
 		<env:applicationRef>ACE</env:applicationRef>
 	</env:UNB>
-	<env:interchangeMessage xmlns:c="urn:org.milyn.edi.unedifact:un:d03b:common"
-		xmlns:paxlst="urn:org.milyn.edi.unedifact:un:d03b:paxlst">
+	<env:interchangeMessage xmlns:c="urn:org.smooks.edi.unedifact:un:d03b:common"
+		xmlns:paxlst="urn:org.smooks.edi.unedifact:un:d03b:paxlst">
 		<env:UNH>
 			<env:messageRefNum>PAXLST16</env:messageRefNum>
 			<env:messageIdentifier>
@@ -198,7 +198,7 @@
 			<env:messageRefNum>PAXLST16</env:messageRefNum>
 		</env:UNT>
 	</env:interchangeMessage>
-	<env:UNZ xmlns:env="urn:org.milyn.edi.unedifact.v41">
+	<env:UNZ xmlns:env="urn:org.smooks.edi.unedifact.v41">
 		<env:controlCount>1</env:controlCount>
 		<env:controlRef>16</env:controlRef>
 	</env:UNZ>
