@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:smooks="https://www.smooks.org/xsd/smooks-1.2.xsd"
-            xmlns:smooks-edi="https://www.smooks.org/xsd/smooks/edi-1.0.xsd"
+            xmlns:smooks-edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
             xmlns:smooks-dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"
-            targetNamespace="https://www.smooks.org/xsd/smooks/edi-1.0.xsd"
+            targetNamespace="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
             elementFormDefault="qualified">
 
     <xsd:import namespace="https://www.smooks.org/xsd/smooks-1.2.xsd"/>
