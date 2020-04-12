@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.milyn.cartridges.edi</groupId>
+        <groupId>org.smooks.cartridges.edi</groupId>
         <artifactId>smooks-edi-pom</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
@@ -20,7 +20,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.milyn.cartridges.edi</groupId>
+            <groupId>org.smooks.cartridges.edi</groupId>
             <artifactId>smooks-edi-sax</artifactId>
             <version>${project.version}</version>
         </dependency>
