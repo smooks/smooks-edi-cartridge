@@ -1,4 +1,0 @@
-org.smooks.cartridges.edi.delivery.EdiParserContentHandlerFactory
-org.smooks.cartridges.edi.delivery.EdiUnparserContentHandlerFactory
-org.smooks.cartridges.edi.delivery.edifact.EdifactParserContentHandlerFactory
-org.smooks.cartridges.edi.delivery.edifact.EdifactUnparserContentHandlerFactory
