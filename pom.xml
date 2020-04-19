@@ -14,7 +14,8 @@
         <module>ect</module>
         <module>edg</module>
         <module>schemas</module>
-        <module>cartridge</module>
+        <module>edi-cartridge</module>
+        <module>edifact-cartridge</module>
     </modules>
 
     <properties>
