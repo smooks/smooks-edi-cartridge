@@ -118,20 +118,6 @@
                         <configuration>
                             <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
-                                <include>EDIFACT-Common/**</include>
-                            </includes>
-                            <classifier>common</classifier>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>d00a-schemas-jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
-                            <includes>
                                 <include>d00a/**</include>
                             </includes>
                             <classifier>d00a</classifier>

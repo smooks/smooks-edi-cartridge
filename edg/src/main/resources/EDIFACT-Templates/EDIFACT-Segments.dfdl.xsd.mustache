@@ -28,7 +28,7 @@
         <xsd:complexType name="{{value.xmlName}}">
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDICompositeSequenceFormat">
                 {{#value.components}}
-                    <xsd:element minOccurs="{{value.minOccurs}}" name="{{value.xmltag}}" type="{{version}}:{{value.xmlName}}"/>
+                    <xsd:element minOccurs="{{value.minOccurs}}" maxOccurs="{{value.maxOccurs}}" name="{{value.xmltag}}" type="{{version}}:{{value.xmlName}}"/>
                 {{/value.components}}
             </xsd:sequence>
         </xsd:complexType>

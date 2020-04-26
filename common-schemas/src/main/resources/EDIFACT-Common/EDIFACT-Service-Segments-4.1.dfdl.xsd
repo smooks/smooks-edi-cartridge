@@ -1662,7 +1662,7 @@
             <xsd:enumeration value="RESMSG">
             </xsd:enumeration>
             <xsd:enumeration value="RESREQ">
-            </xsd:enumeration>f
+            </xsd:enumeration>
             <xsd:enumeration value="RESRSP">
             </xsd:enumeration>
             <xsd:enumeration value="RETACC">

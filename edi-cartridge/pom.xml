@@ -15,8 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>org.smooks.cartridges.edi</groupId>
-            <artifactId>edifact-schemas</artifactId>
-            <classifier>common</classifier>
+            <artifactId>edi-schemas</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
