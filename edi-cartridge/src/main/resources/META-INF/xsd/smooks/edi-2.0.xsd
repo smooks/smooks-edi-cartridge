@@ -55,7 +55,7 @@
     </xsd:complexType>
 
     <xsd:attributeGroup name="parserUnparserAttributes">
-        <xsd:attribute name="segmentTerminator" type="xsd:string" default="'%NL;%WSP*; '%WSP*; %NL;%WSP*;"/>
+        <xsd:attribute name="segmentTerminator" type="xsd:string" default="'%NL;%WSP*; '%WSP*;"/>
         <xsd:attribute name="dataElementSeparator" type="xsd:string" default="+"/>
         <xsd:attribute name="compositeDataElementSeparator" type="xsd:string" default=":"/>
         <xsd:attribute name="escapeCharacter" type="xsd:string" default="?"/>

@@ -18,7 +18,7 @@ public class EdiReaderConfigurator implements ReaderConfigurator {
     protected Boolean validateDFDLSchemas = false;
     protected Boolean indent = false;
     protected String targetProfile;
-    protected String segmentTerminator = "'%NL;%WSP*; '%WSP*; %NL;%WSP*;";
+    protected String segmentTerminator = "'%NL;%WSP*; '%WSP*;";
     protected String dataElementSeparator = "+";
     protected String compositeDataElementSeparator = ":";
     protected String escapeCharacter = "?";
