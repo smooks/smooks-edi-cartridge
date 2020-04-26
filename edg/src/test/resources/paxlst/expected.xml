@@ -1,6 +1,6 @@
-<D03B:Interchange
-        xmlns:D03B="http://www.ibm.com/dfdl/edi/un/edifact/D03B"
->
+<D03B:Interchange xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:D03B="http://www.ibm.com/dfdl/edi/un/edifact/D03B"
+                  xmlns:srv="http://www.ibm.com/dfdl/edi/un/service/4.1">
     <UNB>
         <S001>
             <E0001>UNOA</E0001>
@@ -113,6 +113,21 @@
                     </NAD>
                     <ATT>
                         <E9017>2</E9017>
+                        <C956>
+                            <E9019>M</E9019>
+                        </C956>
+                        <C956>
+                            <E9019>M</E9019>
+                        </C956>
+                        <C956>
+                            <E9019>M</E9019>
+                        </C956>
+                        <C956>
+                            <E9019>M</E9019>
+                        </C956>
+                        <C956>
+                            <E9019>M</E9019>
+                        </C956>
                     </ATT>
                     <DTM>
                         <C507>
