@@ -67,7 +67,8 @@ public class SegmentsTemplate extends Template {
         final List<SegmentGroup> undefinedSegments = segments.stream().filter(s -> !s.getSegcode().equals("UGH") && !s.getSegcode().equals("UGT") && !s.getSegcode().equals("UNS")).collect(Collectors.toList());
         undefinedSegments.forEach(s -> ((Segment) s).getFields().forEach(f -> f.setXmltag(f.getXmltag().toUpperCase())));
 
-        final List<Map<String, Object>> undefinedSegmentsAsMap = OBJECT_MAPPER.convertValue(undefinedSegments, new TypeReference<List<Map<String, Object>>>(){});
+        final List<Map<String, Object>> undefinedSegmentsAsMap = OBJECT_MAPPER.convertValue(undefinedSegments, new TypeReference<List<Map<String, Object>>>() {
+        });
         undefinedSegmentsAsMap.forEach(s -> ((List<Map<String, Object>>) s.get("fields")).forEach(f -> f.put("minOccurs", (boolean) f.get("required") ? 1 : 0)));
         reduceFields(undefinedSegmentsAsMap);
 
@@ -78,8 +79,11 @@ public class SegmentsTemplate extends Template {
         compositeDataElements.forEach(f -> f.getComponents().forEach(c -> {
             c.setXmltag(c.getXmltag().toUpperCase());
         }));
-        final List<Map<String, Object>> compositeDataElementsAsMap = OBJECT_MAPPER.convertValue(compositeDataElements, new TypeReference<List<Map<String, Object>>>(){});
+        final List<Map<String, Object>> compositeDataElementsAsMap = OBJECT_MAPPER.convertValue(compositeDataElements, new TypeReference<List<Map<String, Object>>>() {
+        });
         compositeDataElementsAsMap.forEach(s -> ((List<Map<String, Object>>) s.get("components")).forEach(f -> f.put("minOccurs", (boolean) f.get("required") ? 1 : 0)));
+
+        reduceComponents(compositeDataElementsAsMap);
 
         return compositeDataElementsAsMap;
     }
@@ -89,7 +93,63 @@ public class SegmentsTemplate extends Template {
             de.setXmltag(de.getXmltag().toUpperCase());
         });
 
-        return OBJECT_MAPPER.convertValue(simpleDataElements, new TypeReference<List<Map<String, Object>>>(){});
+        return OBJECT_MAPPER.convertValue(simpleDataElements, new TypeReference<List<Map<String, Object>>>() {
+        });
+    }
+
+    private void reduceComponents(final List<Map<String, Object>> compositeDataElements) {
+        for (Map<String, Object> compositeDataElement : compositeDataElements) {
+            final List<Map<String, Object>> components = (List<Map<String, Object>>) compositeDataElement.get("components");
+            if (!components.isEmpty()) {
+                compositeDataElement.put("components", reduceComponents(components.get(0), components.size() > 1 ? components.subList(1, components.size()) : Collections.EMPTY_LIST));
+            }
+        }
+    }
+
+    private List<Map<String, Object>> reduceComponents(Map<String, Object> componentHead, List<Map<String, Object>> componentsTail) {
+        final String xmlTagComponentHead = (String) componentHead.get("xmltag");
+        final AtomicInteger maxOccurs = new AtomicInteger(1);
+        final List<Map<String, Object>> components = new ArrayList<>();
+        components.add(componentHead);
+        if (!componentsTail.isEmpty()) {
+            for (Map<String, Object> nextComponent : componentsTail) {
+                final String xmlTagNextComponent = (String) nextComponent.get("xmltag");
+                if (xmlTagComponentHead.equals(xmlTagNextComponent)) {
+                    maxOccurs.getAndIncrement();
+                } else {
+                    break;
+                }
+            }
+
+            if (componentsTail.size() > (maxOccurs.get() - 1)) {
+                final Map<String, Object> newComponentHead = componentsTail.get(maxOccurs.get() - 1);
+                final List<Map<String, Object>> newComponentsTail;
+                if (componentsTail.size() > maxOccurs.get()) {
+                    newComponentsTail = componentsTail.subList(maxOccurs.get(), componentsTail.size());
+                } else {
+                    newComponentsTail = Collections.EMPTY_LIST;
+                }
+                final List<Map<String, Object>> reducedTailComponents = reduceComponents(newComponentHead, newComponentsTail);
+                for (Map<String, Object> nextComponent : reducedTailComponents) {
+                    final String xmlTagNextComponent = (String) nextComponent.get("xmltag");
+                    if (xmlTagComponentHead.equals(xmlTagNextComponent)) {
+                        final char nextLetter;
+                        if (Character.isLetter(xmlTagComponentHead.charAt(xmlTagComponentHead.length() - 1))) {
+                            nextLetter = ((char) (xmlTagComponentHead.charAt(xmlTagComponentHead.length() - 1) + 1));
+                        } else {
+                            componentHead.put("xmltag", xmlTagComponentHead + "a");
+                            nextLetter = 'b';
+                        }
+                        nextComponent.put("xmltag", xmlTagNextComponent + nextLetter);
+                    }
+                }
+
+                components.addAll(reducedTailComponents);
+            }
+        }
+
+        componentHead.put("maxOccurs", maxOccurs.get());
+        return components;
     }
 
     private void reduceFields(final List<Map<String, Object>> segments) {
@@ -124,7 +184,7 @@ public class SegmentsTemplate extends Template {
         }
 
         if (repetitions.get() > 0) {
-            fieldHead.put("maxOccurs", repetitions);
+            fieldHead.put("maxOccurs", repetitions.get());
         } else {
             fieldHead.put("maxOccurs", fieldHead.get("cardinality"));
         }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ASCII"?>
+
+<tdml:testSuite
+        suiteName="ISA"
+        xmlns:tdml="http://www.ibm.com/xmlns/dfdl/testData"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        defaultImplementations="ibm daffodil"
+        xsi:schemaLocation="http://www.ibm.com/xmlns/dfdl/testData"
+        defaultRoundTrip="none">
+
+    <tdml:parserTestCase name="PAXLST" root="Interchange" model="target/generated-test-resources/d03b/EDIFACT-Message.dfdl.xsd">
+        <tdml:document>
+            <tdml:documentPart type="file">paxlst/paxlst.txt</tdml:documentPart>
+        </tdml:document>
+
+        <tdml:infoset>
+            <tdml:dfdlInfoset type="file">paxlst/expected.xml</tdml:dfdlInfoset>
+        </tdml:infoset>
+    </tdml:parserTestCase>
+
+    <tdml:parserTestCase name="INVOIC" root="Interchange" model="target/generated-test-resources/d03b/EDIFACT-Message.dfdl.xsd">
+        <tdml:document>
+            <tdml:documentPart type="file">invoic/invoic.txt</tdml:documentPart>
+        </tdml:document>
+
+        <tdml:infoset>
+            <tdml:dfdlInfoset type="file">invoic/expected.xml</tdml:dfdlInfoset>
+        </tdml:infoset>
+    </tdml:parserTestCase>
+</tdml:testSuite>

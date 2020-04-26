@@ -46,7 +46,7 @@ public class MessagesTemplate extends Template {
             templatizeSegments(nestedSegments.get(0), tail(nestedSegments), true);
         }
 
-        if (headSegment.get("segcode").equals("UNS")) {
+        if (headSegment.get("segcode").equals("UNS") || headSegment.get("segcode").equals("UGH") || headSegment.get("segcode").equals("UGT")) {
             headSegment.put("namespacePrefix", "srv");
         } else {
             headSegment.put("namespacePrefix", version);
