@@ -129,7 +129,7 @@
 
             <dfdl:defineFormat name="EDISegmentSequenceFormat">
                 <dfdl:format separator="{$ibmEdiFmt:FieldSep}" separatorPosition="prefix"
-                             separatorPolicy="suppressedAtEndLax" terminator=""/>
+                             separatorPolicy="suppressedAtEndStrict" terminator=""/>
             </dfdl:defineFormat>
 
             <dfdl:defineFormat name="EDICompositeSequenceFormat">
