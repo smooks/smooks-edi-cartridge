@@ -23,7 +23,7 @@ public class EdiDataProcessorFactory extends DataProcessorFactory {
     public DataProcessor createDataProcessor() {
         try {
             final Map<String, String> variables = new HashMap<>();
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}SegmentTerm", smooksResourceConfiguration.getStringParameter("segmentTerminator", "'%NL;%WSP*; '%WSP*; %NL;%WSP*;"));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}SegmentTerm", smooksResourceConfiguration.getStringParameter("segmentTerminator", "'%NL;%WSP*; '%WSP*;"));
             variables.put("{http://www.ibm.com/dfdl/EDI/Format}FieldSep", smooksResourceConfiguration.getStringParameter("dataElementSeparator", "+"));
             variables.put("{http://www.ibm.com/dfdl/EDI/Format}CompositeSep", smooksResourceConfiguration.getStringParameter("compositeDataElementSeparator", ":"));
             variables.put("{http://www.ibm.com/dfdl/EDI/Format}EscapeChar", smooksResourceConfiguration.getStringParameter("escapeCharacter", "?"));
