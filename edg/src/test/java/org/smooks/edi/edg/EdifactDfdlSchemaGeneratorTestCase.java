@@ -5,6 +5,7 @@ import com.github.mustachejava.Mustache;
 import org.apache.commons.io.FileUtils;
 import org.apache.daffodil.tdml.Runner;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import scala.Option;
 
@@ -26,29 +27,20 @@ public class EdifactDfdlSchemaGeneratorTestCase {
 
     @Test
     public void testMain() throws Throwable {
-        assertFalse(new File("target/generated-test-resources/d03b/EDIFACT-Segments.dfdl.xsd").exists());
+        assertFalse(new File("target/generated-test-resources/d03b/EDIFACT-Interchange.dfdl.xsd").exists());
         assertFalse(new File("target/generated-test-resources/d03b/EDIFACT-Messages.dfdl.xsd").exists());
+        assertFalse(new File("target/generated-test-resources/d03b/EDIFACT-Segments.dfdl.xsd").exists());
 
         EdifactDfdlSchemaGenerator.main(new String[]{"/d03b.zip", "target/generated-test-resources"});
 
-        assertTrue(new File("target/generated-test-resources/d03b/EDIFACT-Segments.dfdl.xsd").exists());
+        assertTrue(new File("target/generated-test-resources/d03b/EDIFACT-Interchange.dfdl.xsd").exists());
         assertTrue(new File("target/generated-test-resources/d03b/EDIFACT-Messages.dfdl.xsd").exists());
+        assertTrue(new File("target/generated-test-resources/d03b/EDIFACT-Segments.dfdl.xsd").exists());
     }
 
     @Test
     public void testDfdlSchema() throws Throwable {
         EdifactDfdlSchemaGenerator.main(new String[]{"/d03b.zip", "target/generated-test-resources"});
-
-        final File generatedSchema = new File("target/generated-test-resources/d03b/EDIFACT-Message.dfdl.xsd");
-        Mustache mustache = new DefaultMustacheFactory().compile("EDIFACT-Common/EDIFACT-Message.dfdl.xsd.mustache");
-        try (FileWriter fileWriter = new FileWriter(generatedSchema)) {
-            mustache.execute(fileWriter, new HashMap<String, Object>() {{
-                this.put("schemaLocation", "EDIFACT-Messages.dfdl.xsd");
-                this.put("messages", Arrays.asList("INVOIC", "PAXLST"));
-                this.put("version", "D03B");
-            }});
-        }
-
         Runner runner = new Runner(null, "", "parse.tdml", true, true, false, Runner.defaultRoundTripDefaultDefault(), Runner.defaultValidationDefaultDefault(), Runner.defaultImplementationsDefaultDefault());
         runner.runOneTest("PAXLST", Option.empty(), true);
         runner.runOneTest("INVOIC", Option.empty(), true);

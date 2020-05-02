@@ -38,9 +38,6 @@
         </xsd:annotation>
         <xsd:complexContent>
             <xsd:extension base="smooks-dfdl:parser">
-                <xsd:sequence>
-                    <xsd:element name="variables" type="smooks-dfdl:variables" minOccurs="0" maxOccurs="unbounded"/>
-                </xsd:sequence>
                 <xsd:attributeGroup ref="smooks-edi:parserUnparserAttributes"/>
             </xsd:extension>
         </xsd:complexContent>

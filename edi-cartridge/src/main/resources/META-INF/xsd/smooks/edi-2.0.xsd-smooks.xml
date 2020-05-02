@@ -2,6 +2,8 @@
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
                       default-selector-namespace="https://www.smooks.org/xsd/smooks/edi-2.0.xsd">
 
+    <import file="dfdl-1.0.xsd-smooks.xml"/>
+
     <resource-config selector="parser">
         <resource>org.smooks.cdr.extension.NewResourceConfig</resource>
         <param name="resource">org.smooks.cartridges.dfdl.parser.DfdlParser</param>
@@ -46,7 +48,15 @@
     </resource-config>
     <resource-config selector="parser,unparser">
         <resource>org.smooks.cdr.extension.MapToResourceConfigFromAttribute</resource>
-        <param name="attribute">validateDFDLSchemas</param>
+        <param name="attribute">cacheOnDisk</param>
+    </resource-config>
+    <resource-config selector="parser,unparser">
+        <resource>org.smooks.cdr.extension.MapToResourceConfigFromAttribute</resource>
+        <param name="attribute">debugging</param>
+    </resource-config>
+    <resource-config selector="parser,unparser">
+        <resource>org.smooks.cdr.extension.MapToResourceConfigFromAttribute</resource>
+        <param name="attribute">validationMode</param>
     </resource-config>
     <resource-config selector="parser,unparser">
         <resource>org.smooks.cdr.extension.MapToResourceConfigFromAttribute</resource>

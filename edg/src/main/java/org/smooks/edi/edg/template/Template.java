@@ -17,19 +17,22 @@ import java.util.Map;
 public abstract class Template {
     protected static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    private static final DefaultMustacheFactory MUSTACHE_FACTORY = new DefaultMustacheFactory() {
-        @Override
-        public void encode(String value, Writer writer) {
-            try {
-                writer.append(value);
-            } catch (IOException e) {
-                throw new MustacheException(e);
-            }
-        }
-    };
+    protected final String version;
+    protected final DefaultMustacheFactory mustacheFactory;
+    protected Map<String, Object> scope = new HashMap<>();
 
-    static {
-        MUSTACHE_FACTORY.setObjectHandler(new ReflectionObjectHandler() {
+    public Template(final String version) {
+        mustacheFactory = new DefaultMustacheFactory() {
+            @Override
+            public void encode(String value, Writer writer) {
+                try {
+                    writer.append(value);
+                } catch (IOException e) {
+                    throw new MustacheException(e);
+                }
+            }
+        };
+        mustacheFactory.setObjectHandler(new ReflectionObjectHandler() {
             @Override
             public Object coerce(Object object) {
                 if (object instanceof Collection) {
@@ -38,13 +41,6 @@ public abstract class Template {
                 return super.coerce(object);
             }
         });
-    }
-
-    protected final String version;
-
-    protected Map<String, Object> scope = new HashMap<>();
-
-    public Template(final String version) {
         this.version = version;
         scope.put("version", version);
     }
@@ -56,7 +52,7 @@ public abstract class Template {
     public abstract String getName();
 
     public String materialise() {
-        final Mustache segmentsMustache = MUSTACHE_FACTORY.compile(getName());
+        final Mustache segmentsMustache = mustacheFactory.compile(getName());
         final StringWriter stringWriter = new StringWriter();
         segmentsMustache.execute(stringWriter, getScope());
 

@@ -4,7 +4,6 @@
                       xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd">
 
     <edi:parser schemaURI="/edi-to-xml-mapping.dfdl.xsd" dataElementSeparator="*" segmentTerminator="%NL;"
-                compositeDataElementSeparator="^">
-    </edi:parser>
+                compositeDataElementSeparator="^"/>
 
 </smooks-resource-list>

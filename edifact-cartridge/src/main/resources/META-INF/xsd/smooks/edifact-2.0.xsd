@@ -39,7 +39,7 @@
         <xsd:complexContent>
             <xsd:extension base="smooks-edi:parser">
                 <xsd:sequence>
-                    <xsd:element name="messages" type="smooks-edifact:messages"/>
+                    <xsd:element name="messages" type="smooks-edifact:messages" minOccurs="0"/>
                 </xsd:sequence>
             </xsd:extension>
         </xsd:complexContent>
@@ -61,7 +61,7 @@
         <xsd:complexContent>
             <xsd:extension base="smooks-edi:unparserVisitor">
                 <xsd:sequence>
-                    <xsd:element name="messages" type="smooks-edifact:messages"/>
+                    <xsd:element name="messages" type="smooks-edifact:messages" minOccurs="0"/>
                 </xsd:sequence>
             </xsd:extension>
         </xsd:complexContent>

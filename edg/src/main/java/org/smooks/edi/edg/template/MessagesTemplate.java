@@ -17,10 +17,12 @@ public class MessagesTemplate extends Template {
     private static final String MESSAGE_SEGMENT_MUSTACHE_PARTIAL = "{{> MessageSegment.xsd.mustache}}\n";
     private static final String MESSAGE_SEGMENT_GROUP_MUSTACHE_PARTIAL = "{{> MessageSegmentGroup.xsd.mustache}}\n";
 
+    private final List<String> messageNames;
+
     public MessagesTemplate(final String version, final UnEdifactSpecificationReader unEdifactSpecificationReader) throws IOException {
         super(version);
         final List<Map<String, Object>> messages = new ArrayList<>();
-        final Set<String> messageNames = unEdifactSpecificationReader.getMessageNames().stream().filter(m -> !m.equals(EDIUtils.MODEL_SET_DEFINITIONS_DESCRIPTION.getName())).collect(Collectors.toSet());
+        messageNames = unEdifactSpecificationReader.getMessageNames().stream().filter(m -> !m.equals(EDIUtils.MODEL_SET_DEFINITIONS_DESCRIPTION.getName())).collect(Collectors.toList());
         for (String messageName : messageNames) {
             final Edimap edimap = unEdifactSpecificationReader.getMappingModel(messageName);
             final Map<String, Object> message = OBJECT_MAPPER.convertValue(edimap, Map.class);
@@ -92,5 +94,9 @@ public class MessagesTemplate extends Template {
     @Override
     public String getName() {
         return "EDIFACT-Templates/EDIFACT-Messages.dfdl.xsd.mustache";
+    }
+
+    public List<String> getMessageNames() {
+        return messageNames;
     }
 }
