@@ -16,8 +16,8 @@
     <xsd:element name="parser" type="smooks-edi:parser" substitutionGroup="smooks:abstract-reader">
         <xsd:annotation>
             <xsd:documentation xml:lang="en">
-                A EDI parser reads an EDI document by using grammar defined in a DFDL schema file and generates the
-                corresponding event stream that Smooks can process.
+                An EDI parser reads an EDI document according to the grammar defined in a DFDL schema and generates the
+                corresponding event stream for Smooks to process.
             </xsd:documentation>
         </xsd:annotation>
     </xsd:element>
@@ -26,8 +26,7 @@
                  type="smooks-edi:unparserVisitor">
         <xsd:annotation>
             <xsd:documentation xml:lang="en">
-                A visitor that uses grammar defined in a DFDL schema file to unparse a fragment selected by the
-                "unparseOnElement" attribute.
+                An EDI unparser visitor serialises a fragment into EDI according to the grammar defined in a DFDL schema.
             </xsd:documentation>
         </xsd:annotation>
     </xsd:element>
@@ -38,9 +37,6 @@
         </xsd:annotation>
         <xsd:complexContent>
             <xsd:extension base="smooks-dfdl:parser">
-                <xsd:sequence>
-                    <xsd:element name="variables" type="smooks-dfdl:variables" minOccurs="0" maxOccurs="unbounded"/>
-                </xsd:sequence>
                 <xsd:attributeGroup ref="smooks-edi:parserUnparserAttributes"/>
             </xsd:extension>
         </xsd:complexContent>

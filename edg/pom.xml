@@ -29,6 +29,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.smooks.cartridges.edi</groupId>
+            <artifactId>edi-schemas</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>commons-jxpath</groupId>
             <artifactId>commons-jxpath</artifactId>
             <version>1.3</version>
@@ -37,12 +42,6 @@
             <groupId>org.apache.daffodil</groupId>
             <artifactId>daffodil-tdml-processor_2.12</artifactId>
             <version>2.6.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.smooks.cartridges.edi</groupId>
-            <artifactId>edi-schemas</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

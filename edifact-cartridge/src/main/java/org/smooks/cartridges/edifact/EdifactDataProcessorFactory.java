@@ -2,7 +2,10 @@ package org.smooks.cartridges.edifact;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
+import org.apache.daffodil.japi.Daffodil;
 import org.apache.daffodil.japi.DataProcessor;
+import org.apache.daffodil.japi.InvalidParserException;
+import org.apache.daffodil.japi.ValidationMode;
 import org.apache.daffodil.util.Misc;
 import org.smooks.cartridges.dfdl.DfdlSchema;
 import org.smooks.cartridges.edi.EdiDataProcessorFactory;
@@ -20,9 +23,11 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.net.URI;
+import java.nio.channels.Channels;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +39,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
 
     static {
         try {
-            MUSTACHE = new DefaultMustacheFactory().compile("EDIFACT-Common/EDIFACT-Message.dfdl.xsd.mustache");
+            MUSTACHE = new DefaultMustacheFactory().compile("EDIFACT-Common/EDIFACT-Interchange.dfdl.xsd.mustache");
         } catch (Throwable t) {
             throw new SmooksConfigurationException(t);
         }
@@ -48,22 +53,30 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
         try {
             final Parameter schemaURIParameter = smooksResourceConfiguration.getParameter("schemaURI");
             final String version = readVersion(schemaURIParameter);
+            final URI schema;
 
-            final List<String> messages = smooksResourceConfiguration.getParameters("message").stream().map(m -> m.getValue()).collect(Collectors.toList());
+            final List<Parameter> messageTypeParameters = smooksResourceConfiguration.getParameters("messageType");
+            if (messageTypeParameters == null || messageTypeParameters.isEmpty()) {
+                schema = new URI(version.toLowerCase() + "/EDIFACT-Interchange.dfdl.xsd");
+            } else {
+                final List<String> messageTypes = messageTypeParameters.stream().map(m -> m.getValue()).collect(Collectors.toList());
 
-            final File generatedSchema = File.createTempFile("EDIFACT-Message", ".dfdl.xsd");
-            try (FileWriter fileWriter = new FileWriter(generatedSchema)) {
-                MUSTACHE.execute(fileWriter, new HashMap<String, Object>() {{
-                    this.put("schemaLocation", schemaURIParameter.getValue());
-                    this.put("messages", messages);
-                    this.put("version", version);
-                }});
+                final File generatedSchema = File.createTempFile("EDIFACT-Interchange", ".dfdl.xsd");
+                try (FileWriter fileWriter = new FileWriter(generatedSchema)) {
+                    MUSTACHE.execute(fileWriter, new HashMap<String, Object>() {{
+                        this.put("schemaLocation", schemaURIParameter.getValue());
+                        this.put("messageTypes", messageTypes);
+                        this.put("version", version);
+                    }});
+                }
+
+                schema = generatedSchema.toURI();
             }
 
-            final DfdlSchema dfdlSchema = new DfdlSchema(generatedSchema.toURI(), new HashMap<>(), smooksResourceConfiguration.getBoolParameter("validateDFDLSchemas", false)) {
+            final DfdlSchema dfdlSchema = new DfdlSchema(schema, variables, ValidationMode.valueOf(smooksResourceConfiguration.getStringParameter("validationMode", "Off")), smooksResourceConfiguration.getBoolParameter("cacheOnDisk", false), smooksResourceConfiguration.getBoolParameter("debugging", false)) {
                 @Override
                 public String getName() {
-                    return schemaURIParameter.getValue() + ":" + isValidateSchemas() + ":" + getVariables().toString();
+                    return schemaURIParameter.getValue() + ":" + getValidationMode() + ":" + isCacheOnDisk() + ":" + isDebugging() + ":" + variables.toString();
                 }
             };
 

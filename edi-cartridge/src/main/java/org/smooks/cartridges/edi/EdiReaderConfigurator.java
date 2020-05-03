@@ -1,9 +1,11 @@
 package org.smooks.cartridges.edi;
 
+import org.apache.daffodil.japi.ValidationMode;
 import org.smooks.GenericReaderConfigurator;
 import org.smooks.ReaderConfigurator;
 import org.smooks.assertion.AssertArgument;
 import org.smooks.cartridges.dfdl.parser.DfdlParser;
+import org.smooks.cartridges.dfdl.parser.DfdlReaderConfigurator;
 import org.smooks.cdr.Parameter;
 import org.smooks.cdr.SmooksResourceConfiguration;
 
@@ -11,13 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EdiReaderConfigurator implements ReaderConfigurator {
+public class EdiReaderConfigurator extends DfdlReaderConfigurator {
 
-    protected final String schemaUri;
-
-    protected Boolean validateDFDLSchemas = false;
-    protected Boolean indent = false;
-    protected String targetProfile;
     protected String segmentTerminator = "'%NL;%WSP*; '%WSP*;";
     protected String dataElementSeparator = "+";
     protected String compositeDataElementSeparator = ":";
@@ -25,35 +22,9 @@ public class EdiReaderConfigurator implements ReaderConfigurator {
     protected String repetitionSeparator ="*";
     protected String decimalSign = ".";
     protected String triadSeparator = ",";
-    protected Map<String, String> variables = new HashMap<>();
 
     public EdiReaderConfigurator(final String schemaUri) {
-        AssertArgument.isNotNullAndNotEmpty(schemaUri, "schemaUri");
-        this.schemaUri = schemaUri;
-    }
-
-    public EdiReaderConfigurator setTargetProfile(String targetProfile) {
-        AssertArgument.isNotNullAndNotEmpty(targetProfile, "targetProfile");
-        this.targetProfile = targetProfile;
-        return this;
-    }
-
-    public EdiReaderConfigurator setValidateDFDLSchemas(Boolean validateDFDLSchemas) {
-        AssertArgument.isNotNull(validateDFDLSchemas, "validateDFDLSchemas");
-        this.validateDFDLSchemas = validateDFDLSchemas;
-        return this;
-    }
-
-    public EdiReaderConfigurator setVariables(Map<String, String> variables) {
-        AssertArgument.isNotNull(variables, "variables");
-        this.variables = variables;
-        return this;
-    }
-
-    public EdiReaderConfigurator setIndent(Boolean indent) {
-        AssertArgument.isNotNull(indent, "indent");
-        this.indent = indent;
-        return this;
+        super(schemaUri);
     }
 
     public EdiReaderConfigurator setSegmentTerminator(String segmentTerminator) {
@@ -98,34 +69,24 @@ public class EdiReaderConfigurator implements ReaderConfigurator {
         return this;
     }
 
+    @Override
     protected String getDataProcessorFactory() {
         return "org.smooks.cartridges.edi.EdiDataProcessorFactory";
     }
 
     @Override
     public List<SmooksResourceConfiguration> toConfig() {
-        final GenericReaderConfigurator genericReaderConfigurator = new GenericReaderConfigurator(DfdlParser.class);
-
-        genericReaderConfigurator.getParameters().setProperty("schemaURI", schemaUri);
-        genericReaderConfigurator.getParameters().setProperty("validateDFDLSchemas", Boolean.toString(validateDFDLSchemas));
-        genericReaderConfigurator.getParameters().setProperty("indent", Boolean.toString(indent));
-        genericReaderConfigurator.getParameters().setProperty("dataProcessorFactory", getDataProcessorFactory());
-        genericReaderConfigurator.getParameters().setProperty("segmentTerminator", segmentTerminator);
-        genericReaderConfigurator.getParameters().setProperty("dataElementSeparator", dataElementSeparator);
-        genericReaderConfigurator.getParameters().setProperty("compositeDataElementSeparator", compositeDataElementSeparator);
-        genericReaderConfigurator.getParameters().setProperty("escapeCharacter", escapeCharacter);
-        genericReaderConfigurator.getParameters().setProperty("repetitionSeparator", repetitionSeparator);
-        genericReaderConfigurator.getParameters().setProperty("decimalSign", decimalSign);
-        genericReaderConfigurator.getParameters().setProperty("triadSeparator", triadSeparator);
-
-        final List<SmooksResourceConfiguration> smooksResourceConfigurations = genericReaderConfigurator.toConfig();
+        final List<SmooksResourceConfiguration> smooksResourceConfigurations = super.toConfig();
         final SmooksResourceConfiguration smooksResourceConfiguration = smooksResourceConfigurations.get(0);
 
-        for (Map.Entry<String, String> variable : variables.entrySet()) {
-            smooksResourceConfiguration.setParameter(new Parameter("variables", variable));
-        }
-
-        smooksResourceConfiguration.setTargetProfile(targetProfile);
+        smooksResourceConfiguration.setParameter(new Parameter("dataProcessorFactory", getDataProcessorFactory()));
+        smooksResourceConfiguration.setParameter(new Parameter("segmentTerminator", segmentTerminator));
+        smooksResourceConfiguration.setParameter(new Parameter("dataElementSeparator", dataElementSeparator));
+        smooksResourceConfiguration.setParameter(new Parameter("compositeDataElementSeparator", compositeDataElementSeparator));
+        smooksResourceConfiguration.setParameter(new Parameter("escapeCharacter", escapeCharacter));
+        smooksResourceConfiguration.setParameter(new Parameter("repetitionSeparator", repetitionSeparator));
+        smooksResourceConfiguration.setParameter(new Parameter("decimalSign", decimalSign));
+        smooksResourceConfiguration.setParameter(new Parameter("triadSeparator", triadSeparator));
 
         return smooksResourceConfigurations;
     }

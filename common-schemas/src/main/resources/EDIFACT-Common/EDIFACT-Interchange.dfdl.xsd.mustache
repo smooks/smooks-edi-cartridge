@@ -87,13 +87,13 @@
                                     <xsd:appinfo source="http://www.ogf.org/dfdl/"></xsd:appinfo>
                                 </xsd:annotation>
                             </xsd:element>
-                            {{#messages}}
+                            {{#messageTypes}}
                              <xsd:element ref="{{version}}:{{.}}" dfdl:choiceBranchKey="{{.}}">
                                  <xsd:annotation>
                                      <xsd:appinfo source="http://www.ogf.org/dfdl/"></xsd:appinfo>
                                  </xsd:annotation>
                              </xsd:element>
-                            {{/messages}}
+                            {{/messageTypes}}
                         </xsd:choice>
                         <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UNT" name="UNT" type="srv:UNT-MessageTrailer"/>
                     </xsd:sequence>

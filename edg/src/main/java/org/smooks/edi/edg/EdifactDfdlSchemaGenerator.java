@@ -1,6 +1,7 @@
 package org.smooks.edi.edg;
 
 import org.smooks.edi.ect.formats.unedifact.UnEdifactSpecificationReader;
+import org.smooks.edi.edg.template.InterchangeTemplate;
 import org.smooks.edi.edg.template.MessagesTemplate;
 import org.smooks.edi.edg.template.SegmentsTemplate;
 import org.slf4j.Logger;
@@ -62,8 +63,12 @@ public final class EdifactDfdlSchemaGenerator {
         final String segmentsSchema = new SegmentsTemplate(version, unEdifactSpecificationReader).materialise();
         write(segmentsSchema, versionOutputDirectory + "/EDIFACT-Segments.dfdl.xsd");
 
-        String messagesSchema = new MessagesTemplate(version, unEdifactSpecificationReader).materialise();
+        final MessagesTemplate messagesTemplate = new MessagesTemplate(version, unEdifactSpecificationReader);
+        String messagesSchema = messagesTemplate.materialise();
         write(messagesSchema, versionOutputDirectory + "/EDIFACT-Messages.dfdl.xsd");
+
+        String interchangeSchema = new InterchangeTemplate(version, messagesTemplate.getMessageTypes()).materialise();
+        write(interchangeSchema, versionOutputDirectory + "/EDIFACT-Interchange.dfdl.xsd");
     }
 
     private static void write(final String xml, final String fileName) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException, TransformerException {

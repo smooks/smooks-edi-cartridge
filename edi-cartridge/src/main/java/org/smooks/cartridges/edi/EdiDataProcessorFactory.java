@@ -1,6 +1,7 @@
 package org.smooks.cartridges.edi;
 
 import org.apache.daffodil.japi.DataProcessor;
+import org.apache.daffodil.japi.ValidationMode;
 import org.smooks.cartridges.dfdl.DataProcessorFactory;
 import org.smooks.cartridges.dfdl.DfdlSchema;
 import org.smooks.cdr.Parameter;
@@ -46,7 +47,7 @@ public class EdiDataProcessorFactory extends DataProcessorFactory {
     }
 
     protected DataProcessor doCreateDataProcessor(final Map<String, String> variables) throws URISyntaxException {
-        final DfdlSchema dfdlSchema = new DfdlSchema(new URI(schemaUri), variables, smooksResourceConfiguration.getBoolParameter("validateDFDLSchemas", false));
+        final DfdlSchema dfdlSchema = new DfdlSchema(new URI(schemaUri), variables, ValidationMode.valueOf(smooksResourceConfiguration.getStringParameter("validationMode", "Off")), smooksResourceConfiguration.getBoolParameter("cacheOnDisk", false), smooksResourceConfiguration.getBoolParameter("debugging", false));
         return compileOrGet(dfdlSchema);
     }
 
