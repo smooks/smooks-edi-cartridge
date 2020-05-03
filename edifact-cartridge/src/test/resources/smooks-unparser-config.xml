@@ -5,10 +5,10 @@
                       xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd">
 
     <edifact:unparser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnElement="/Interchange">
-        <edifact:messages>
-            <edifact:message>ORDERS</edifact:message>
-            <edifact:message>INVOIC</edifact:message>
-        </edifact:messages>
+        <edifact:messageTypes>
+            <edifact:messageType>ORDERS</edifact:messageType>
+            <edifact:messageType>INVOIC</edifact:messageType>
+        </edifact:messageTypes>
     </edifact:unparser>
 
 </smooks-resource-list>

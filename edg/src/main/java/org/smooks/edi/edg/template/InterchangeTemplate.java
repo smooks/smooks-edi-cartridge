@@ -7,11 +7,11 @@ import java.util.Set;
 
 public class InterchangeTemplate extends Template {
 
-    public InterchangeTemplate(String version, List<String> messageNames) {
+    public InterchangeTemplate(String version, List<String> messageTypes) {
         super(version);
         mustacheFactory.setObjectHandler(new ReflectionObjectHandler());
         scope.put("schemaLocation", "EDIFACT-Messages.dfdl.xsd");
-        scope.put("messages", messageNames);
+        scope.put("messageTypes", messageTypes);
     }
 
     @Override

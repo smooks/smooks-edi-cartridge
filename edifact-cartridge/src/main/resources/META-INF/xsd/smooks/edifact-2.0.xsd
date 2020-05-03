@@ -16,8 +16,8 @@
     <xsd:element name="parser" type="smooks-edifact:parser" substitutionGroup="smooks:abstract-reader">
         <xsd:annotation>
             <xsd:documentation xml:lang="en">
-                A EDIFACT parser reads an EDIFACT document by using grammar defined in a DFDL schema file and generates the
-                corresponding event stream that Smooks can process.
+                A EDIFACT parser reads an EDIFACT document by using grammar defined in a DFDL schema and generates the
+                corresponding event stream for Smooks to process.
             </xsd:documentation>
         </xsd:annotation>
     </xsd:element>
@@ -26,8 +26,7 @@
                  type="smooks-edifact:unparserVisitor">
         <xsd:annotation>
             <xsd:documentation xml:lang="en">
-                A visitor that uses grammar defined in a DFDL schema file to unparse a fragment selected by the
-                "unparseOnElement" attribute.
+                An EDIFACT unparser visitor serialises a fragment into EDI according to the grammar defined in a DFDL schema.
             </xsd:documentation>
         </xsd:annotation>
     </xsd:element>
@@ -39,15 +38,26 @@
         <xsd:complexContent>
             <xsd:extension base="smooks-edi:parser">
                 <xsd:sequence>
-                    <xsd:element name="messages" type="smooks-edifact:messages" minOccurs="0"/>
+                    <xsd:element name="messageTypes" type="smooks-edifact:messageTypes" minOccurs="0"/>
                 </xsd:sequence>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
 
-    <xsd:complexType name="messages">
+    <xsd:complexType name="messageTypes">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">
+                The message types the parser can process: the parser will reject messages that do not belong to a type in
+                the list. Schema compilation time is directly proportional to the number of declared messages types.
+            </xsd:documentation>
+        </xsd:annotation>
         <xsd:sequence>
-            <xsd:element name="message" maxOccurs="unbounded">
+            <xsd:element name="messageType" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+                        A message type the parser can process.
+                    </xsd:documentation>
+                </xsd:annotation>
                 <xsd:complexType>
                     <xsd:simpleContent>
                         <xsd:extension base="xsd:string"/>
@@ -61,7 +71,7 @@
         <xsd:complexContent>
             <xsd:extension base="smooks-edi:unparserVisitor">
                 <xsd:sequence>
-                    <xsd:element name="messages" type="smooks-edifact:messages" minOccurs="0"/>
+                    <xsd:element name="messageTypes" type="smooks-edifact:messageTypes" minOccurs="0"/>
                 </xsd:sequence>
             </xsd:extension>
         </xsd:complexContent>

@@ -67,7 +67,7 @@ public final class EdifactDfdlSchemaGenerator {
         String messagesSchema = messagesTemplate.materialise();
         write(messagesSchema, versionOutputDirectory + "/EDIFACT-Messages.dfdl.xsd");
 
-        String interchangeSchema = new InterchangeTemplate(version, messagesTemplate.getMessageNames()).materialise();
+        String interchangeSchema = new InterchangeTemplate(version, messagesTemplate.getMessageTypes()).materialise();
         write(interchangeSchema, versionOutputDirectory + "/EDIFACT-Interchange.dfdl.xsd");
     }
 

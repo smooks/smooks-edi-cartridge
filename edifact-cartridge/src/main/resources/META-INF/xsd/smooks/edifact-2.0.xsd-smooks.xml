@@ -58,9 +58,9 @@
         <resource>org.smooks.cdr.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">debugging</param>
     </resource-config>
-    <resource-config selector="messages/message">
+    <resource-config selector="messageTypes/messageType">
         <resource>org.smooks.cdr.extension.MapToResourceConfigFromText</resource>
-        <param name="mapTo">message</param>
+        <param name="mapTo">messageType</param>
     </resource-config>
 
 </smooks-resource-list>

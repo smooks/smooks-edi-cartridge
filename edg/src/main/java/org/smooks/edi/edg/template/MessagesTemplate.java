@@ -17,21 +17,21 @@ public class MessagesTemplate extends Template {
     private static final String MESSAGE_SEGMENT_MUSTACHE_PARTIAL = "{{> MessageSegment.xsd.mustache}}\n";
     private static final String MESSAGE_SEGMENT_GROUP_MUSTACHE_PARTIAL = "{{> MessageSegmentGroup.xsd.mustache}}\n";
 
-    private final List<String> messageNames;
+    private final List<String> messageTypes;
 
     public MessagesTemplate(final String version, final UnEdifactSpecificationReader unEdifactSpecificationReader) throws IOException {
         super(version);
-        final List<Map<String, Object>> messages = new ArrayList<>();
-        messageNames = unEdifactSpecificationReader.getMessageNames().stream().filter(m -> !m.equals(EDIUtils.MODEL_SET_DEFINITIONS_DESCRIPTION.getName())).collect(Collectors.toList());
-        for (String messageName : messageNames) {
-            final Edimap edimap = unEdifactSpecificationReader.getMappingModel(messageName);
-            final Map<String, Object> message = OBJECT_MAPPER.convertValue(edimap, Map.class);
-            final List<Map<String, Object>> segments = (List<Map<String, Object>>) JXPathContext.newContext(message).getValue("/segments/segments", List.class);
+        final List<Map<String, Object>> messageDefinitions = new ArrayList<>();
+        messageTypes = unEdifactSpecificationReader.getMessageNames().stream().filter(m -> !m.equals(EDIUtils.MODEL_SET_DEFINITIONS_DESCRIPTION.getName())).collect(Collectors.toList());
+        for (String messageType : messageTypes) {
+            final Edimap edimap = unEdifactSpecificationReader.getMappingModel(messageType);
+            final Map<String, Object> messageDefinition = OBJECT_MAPPER.convertValue(edimap, Map.class);
+            final List<Map<String, Object>> segments = (List<Map<String, Object>>) JXPathContext.newContext(messageDefinition).getValue("/segments/segments", List.class);
             templatizeSegments(segments);
 
-            messages.add(message);
+            messageDefinitions.add(messageDefinition);
         }
-        scope.put("messages", messages);
+        scope.put("messages", messageDefinitions);
     }
 
     private void templatizeSegments(final List<Map<String, Object>> segments) {
@@ -96,7 +96,7 @@ public class MessagesTemplate extends Template {
         return "EDIFACT-Templates/EDIFACT-Messages.dfdl.xsd.mustache";
     }
 
-    public List<String> getMessageNames() {
-        return messageNames;
+    public List<String> getMessageTypes() {
+        return messageTypes;
     }
 }

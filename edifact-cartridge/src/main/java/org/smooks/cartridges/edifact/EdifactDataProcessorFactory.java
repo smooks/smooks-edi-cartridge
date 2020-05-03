@@ -55,17 +55,17 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
             final String version = readVersion(schemaURIParameter);
             final URI schema;
 
-            final List<Parameter> messageParameters = smooksResourceConfiguration.getParameters("message");
-            if (messageParameters == null || messageParameters.isEmpty()) {
+            final List<Parameter> messageTypeParameters = smooksResourceConfiguration.getParameters("messageType");
+            if (messageTypeParameters == null || messageTypeParameters.isEmpty()) {
                 schema = new URI(version.toLowerCase() + "/EDIFACT-Interchange.dfdl.xsd");
             } else {
-                final List<String> messages = messageParameters.stream().map(m -> m.getValue()).collect(Collectors.toList());
+                final List<String> messageTypes = messageTypeParameters.stream().map(m -> m.getValue()).collect(Collectors.toList());
 
                 final File generatedSchema = File.createTempFile("EDIFACT-Interchange", ".dfdl.xsd");
                 try (FileWriter fileWriter = new FileWriter(generatedSchema)) {
                     MUSTACHE.execute(fileWriter, new HashMap<String, Object>() {{
                         this.put("schemaLocation", schemaURIParameter.getValue());
-                        this.put("messages", messages);
+                        this.put("messageTypes", messageTypes);
                         this.put("version", version);
                     }});
                 }
