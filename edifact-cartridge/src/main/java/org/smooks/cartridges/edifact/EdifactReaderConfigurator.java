@@ -5,21 +5,30 @@ import org.smooks.cartridges.edi.EdiReaderConfigurator;
 import org.smooks.cdr.Parameter;
 import org.smooks.cdr.SmooksResourceConfiguration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EdifactReaderConfigurator extends EdiReaderConfigurator {
 
-    protected final List<String> messageTypes;
+    protected List<String> messageTypes = new ArrayList<>();
 
-    public EdifactReaderConfigurator(final String schemaUri, final List<String> messageTypes) {
+    public EdifactReaderConfigurator(final String schemaUri) {
         super(schemaUri);
-        AssertArgument.isNotNull(variables, "messageTypes");
-
-        this.messageTypes = messageTypes;
     }
 
     protected String getDataProcessorFactory() {
         return "org.smooks.cartridges.edifact.EdifactDataProcessorFactory";
+    }
+
+    public List<String> getMessageTypes() {
+        return messageTypes;
+    }
+
+    public EdifactReaderConfigurator setMessageTypes(List<String> messageTypes) {
+        AssertArgument.isNotNull(variables, "messageTypes");
+        this.messageTypes = messageTypes;
+
+        return this;
     }
 
     @Override

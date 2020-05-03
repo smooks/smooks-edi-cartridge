@@ -14,7 +14,7 @@ public class EdifactReaderConfiguratorTestCase {
 
     @Test
     public void testToConfig() throws IOException {
-        EdifactReaderConfigurator edifactReaderConfigurator = new EdifactReaderConfigurator("/d03b/EDIFACT-Messages.dfdl.xsd", Arrays.asList("INVOIC"));
+        EdifactReaderConfigurator edifactReaderConfigurator = new EdifactReaderConfigurator("/d03b/EDIFACT-Messages.dfdl.xsd").setMessageTypes(Arrays.asList("INVOIC"));
 
         Smooks smooks = new Smooks();
         smooks.setReaderConfig(edifactReaderConfigurator);
