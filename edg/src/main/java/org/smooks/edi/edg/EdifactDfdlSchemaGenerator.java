@@ -1,5 +1,8 @@
 package org.smooks.edi.edg;
 
+import org.apache.daffodil.japi.Daffodil;
+import org.apache.daffodil.japi.Diagnostic;
+import org.apache.daffodil.japi.ProcessorFactory;
 import org.smooks.edi.ect.formats.unedifact.UnEdifactSpecificationReader;
 import org.smooks.edi.edg.template.InterchangeTemplate;
 import org.smooks.edi.edg.template.MessagesTemplate;
@@ -42,15 +45,15 @@ public final class EdifactDfdlSchemaGenerator {
     public static void main(final String[] args) {
         Arrays.stream(Arrays.copyOfRange(args, 0, args.length - 1)).parallel().forEach(s -> {
             try {
-                LOGGER.info("Generating schemas from {}...", s);
-                generateDFDLSchemas(s, args[args.length - 1]);
-            } catch (Exception e) {
+                LOGGER.info("Generating schema from {}...", s);
+                generateDfdlSchemas(s, args[args.length - 1]);
+            } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         });
     }
 
-    private static void generateDFDLSchemas(String spec, String outputDirectory) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException, TransformerException {
+    private static void generateDfdlSchemas(String spec, String outputDirectory) throws Throwable {
         final InputStream resourceAsStream = EdifactDfdlSchemaGenerator.class.getResourceAsStream(spec);
         final UnEdifactSpecificationReader unEdifactSpecificationReader = new UnEdifactSpecificationReader(new ZipInputStream(resourceAsStream), true, true);
 
@@ -61,17 +64,28 @@ public final class EdifactDfdlSchemaGenerator {
         new File(versionOutputDirectory).mkdirs();
 
         final String segmentsSchema = new SegmentsTemplate(version, unEdifactSpecificationReader).materialise();
-        write(segmentsSchema, versionOutputDirectory + "/EDIFACT-Segments.dfdl.xsd");
+        final File segmentSchemaFile = new File(versionOutputDirectory + "/EDIFACT-Segments.dfdl.xsd");
+        write(segmentsSchema, segmentSchemaFile);
 
         final MessagesTemplate messagesTemplate = new MessagesTemplate(version, unEdifactSpecificationReader);
         String messagesSchema = messagesTemplate.materialise();
-        write(messagesSchema, versionOutputDirectory + "/EDIFACT-Messages.dfdl.xsd");
+        final File messageSchemaFile = new File(versionOutputDirectory + "/EDIFACT-Messages.dfdl.xsd");
+        write(messagesSchema, messageSchemaFile);
 
+        final File interchangeSchemaFile = new File(versionOutputDirectory + "/EDIFACT-Interchange.dfdl.xsd");
         String interchangeSchema = new InterchangeTemplate(version, messagesTemplate.getMessageTypes()).materialise();
-        write(interchangeSchema, versionOutputDirectory + "/EDIFACT-Interchange.dfdl.xsd");
+        write(interchangeSchema, interchangeSchemaFile);
+
+        LOGGER.info("Validating schema {}...", messageSchemaFile.getPath());
+        final ProcessorFactory processorFactory = Daffodil.compiler().compileFile(messageSchemaFile);
+        for (Diagnostic diagnostic : processorFactory.getDiagnostics()) {
+            if (diagnostic.isError()) {
+                throw diagnostic.getSomeCause();
+            }
+        }
     }
 
-    private static void write(final String xml, final String fileName) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException, TransformerException {
+    private static void write(final String xml, final File file) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException, TransformerException {
         final DocumentBuilder documentBuilder = DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
         final Document document = documentBuilder.parse(new ByteArrayInputStream(xml.getBytes()));
         stripWhitespaceTextNodes(document);
@@ -80,7 +94,7 @@ public final class EdifactDfdlSchemaGenerator {
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "4");
 
-        final FileWriter fileWriter = new FileWriter(fileName);
+        final FileWriter fileWriter = new FileWriter(file);
         transformer.transform(new DOMSource(document), new StreamResult(fileWriter));
     }
 

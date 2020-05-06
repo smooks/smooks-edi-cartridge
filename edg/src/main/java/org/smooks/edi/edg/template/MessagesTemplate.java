@@ -35,17 +35,20 @@ public class MessagesTemplate extends Template {
     }
 
     private void templatizeSegments(final List<Map<String, Object>> segments) {
-        templatizeSegments(segments.get(0), tail(segments), true);
+        templatizeSegments(segments.get(0), tail(segments), true, 0);
     }
 
-    private void templatizeSegments(final Map<String, Object> headSegment, final List<Map<String, Object>> tailSegments, final boolean isFirstSegment) {
+    private int templatizeSegments(final Map<String, Object> headSegment, final List<Map<String, Object>> tailSegments, final boolean isFirstSegment, final int segmentGroupCounter) {
+        final int segmentGroupIndex;
         final StringWriter stringWriter = new StringWriter();
         final List<Map<String, Object>> nestedSegments = (List<Map<String, Object>>) headSegment.get("segments");
         if (isEmpty(nestedSegments)) {
+            segmentGroupIndex = segmentGroupCounter;
             writeSegment(tailSegments, stringWriter, isFirstSegment);
         } else {
-            writeSegmentGroup(headSegment, tailSegments, stringWriter);
-            templatizeSegments(nestedSegments.get(0), tail(nestedSegments), true);
+            final int nestedSegmentGroupIndex = segmentGroupCounter + 1;
+            writeSegmentGroup(headSegment, tailSegments, stringWriter, nestedSegmentGroupIndex);
+            segmentGroupIndex = templatizeSegments(nestedSegments.get(0), tail(nestedSegments), true, nestedSegmentGroupIndex);
         }
 
         if (headSegment.get("segcode").equals("UNS") || headSegment.get("segcode").equals("UGH") || headSegment.get("segcode").equals("UGT")) {
@@ -56,7 +59,9 @@ public class MessagesTemplate extends Template {
         headSegment.put("render", (TemplateFunction) s -> stringWriter.toString());
 
         if (!tailSegments.isEmpty()) {
-            templatizeSegments(tailSegments.get(0), tail(tailSegments), false);
+            return templatizeSegments(tailSegments.get(0), tail(tailSegments), false, segmentGroupIndex);
+        } else {
+            return segmentGroupIndex;
         }
     }
 
@@ -70,9 +75,8 @@ public class MessagesTemplate extends Template {
         }
     }
 
-    private void writeSegmentGroup(final Map<String, Object> headSegment, final List<Map<String, Object>> tailSegments, final StringWriter stringWriter) {
-        final String xmltag = (String) headSegment.get("xmltag");
-        headSegment.put("xmltag", "SegGrp-" + xmltag.substring(xmltag.lastIndexOf("_") + 1));
+    private void writeSegmentGroup(final Map<String, Object> headSegment, final List<Map<String, Object>> tailSegments, final StringWriter stringWriter, final int segmentGroupIndex) {
+        headSegment.put("xmltag", "SegGrp-" + segmentGroupIndex);
         stringWriter.write(MESSAGE_SEGMENT_GROUP_MUSTACHE_PARTIAL);
         if (!tailSegments.isEmpty() && isEmpty((Collection) tailSegments.get(0).get("segments"))) {
             stringWriter.write(SEQUENCE_XML_START_TAG);
