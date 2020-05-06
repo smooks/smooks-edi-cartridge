@@ -77,7 +77,7 @@ public class UnEdifactMessage {
      * Group4 = isMandatory
      * Group5 = max occurance
      */                  
-    private static String SEGMENT_REGULAR = "(\\d{4,5})*[-\\+\\* XS]*(\\w{3}) *(.*)(M|C|m|c) *(\\d+)[ \\|]*";
+    private static String SEGMENT_REGULAR = "(\\d{4,5})*[-\\+\\* XS]*(\\w{3}) *(.*) +(M|C|m|c) *(\\d+)[ \\|]*";
 
     /**
      * Extracts information from Regular segment definition.
