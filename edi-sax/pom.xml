@@ -20,8 +20,7 @@
                 <configuration>
                     <excludes>
                         <exclude>test/java/org/smooks/edi/edisax/edimap_writer/edimap-01.xml</exclude>
-                        <exclude>test/java/org/smooks/edi/edisax/test_MILYN_602/expected_all_optional.xml</exclude>
-                        <exclude>test/**/*expected*.xml</exclude>
+                        <exclude>test/java/org/smooks/edi/edisax/**/*expected*.xml</exclude>
                     </excludes>
                 </configuration>
             </plugin>
