@@ -1,6 +1,4 @@
-<D03B:Interchange
-        xmlns:D03B="http://www.ibm.com/dfdl/edi/un/edifact/D03B"
->
+<D03B:Interchange xmlns:D03B="http://www.ibm.com/dfdl/edi/un/edifact/D03B">
     <UNA>
         <CompositeSeparator>:</CompositeSeparator>
         <FieldSeparator>+</FieldSeparator>

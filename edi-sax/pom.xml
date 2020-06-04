@@ -13,6 +13,18 @@
     <artifactId>smooks-edi-sax</artifactId>
 
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>test/java/org/smooks/edi/edisax/edimap_writer/edimap-01.xml</exclude>
+                        <exclude>test/java/org/smooks/edi/edisax/**/*expected*.xml</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
         <resources>
             <resource>
                 <directory>src/main/java</directory>
