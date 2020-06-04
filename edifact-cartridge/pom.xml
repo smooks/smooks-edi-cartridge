@@ -12,6 +12,21 @@
 
     <artifactId>smooks-edifact-cartridge</artifactId>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>test/resources/data/INVOIC_D.03B_Interchange_with_UNA.xml</exclude>
+                        <exclude>test/resources/data/ORDERS_D.03B_Interchange.xml</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>com.github.spullara.mustache.java</groupId>
