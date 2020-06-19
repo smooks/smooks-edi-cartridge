@@ -58,7 +58,9 @@
     {{#numericTypes}}
         <xsd:simpleType dfdl:textNumberPattern="{{value.value.textNumberPattern}}" name="{{value.key}}">
             <xsd:restriction base="xsd:decimal">
+                {{#value.value.totalDigits}}
                 <xsd:totalDigits value="{{value.value.totalDigits}}"/>
+                {{/value.value.totalDigits}}
             </xsd:restriction>
         </xsd:simpleType>
     {{/numericTypes}}
