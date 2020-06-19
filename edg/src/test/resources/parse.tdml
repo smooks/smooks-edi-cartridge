@@ -8,7 +8,7 @@
         xsi:schemaLocation="http://www.ibm.com/xmlns/dfdl/testData"
         defaultRoundTrip="none">
 
-    <tdml:parserTestCase name="PAXLST" root="Interchange" model="target/generated-test-resources/d03b/EDIFACT-Interchange.dfdl.xsd">
+    <tdml:parserTestCase name="PAXLST" validation="on" root="Interchange" model="target/generated-test-resources/d03b/EDIFACT-Interchange.dfdl.xsd">
         <tdml:document>
             <tdml:documentPart type="file">paxlst/paxlst.txt</tdml:documentPart>
         </tdml:document>
@@ -18,7 +18,7 @@
         </tdml:infoset>
     </tdml:parserTestCase>
 
-    <tdml:parserTestCase name="INVOIC" root="Interchange" model="target/generated-test-resources/d03b/EDIFACT-Interchange.dfdl.xsd">
+    <tdml:parserTestCase name="INVOIC" validation="on" root="Interchange" model="target/generated-test-resources/d03b/EDIFACT-Interchange.dfdl.xsd">
         <tdml:document>
             <tdml:documentPart type="file">invoic/invoic.txt</tdml:documentPart>
         </tdml:document>
