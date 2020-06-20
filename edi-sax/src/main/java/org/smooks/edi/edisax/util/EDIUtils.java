@@ -315,7 +315,7 @@ public class EDIUtils {
         for(URL urnFile : urnFiles) {
             InputStream urnStream = urnFile.openStream();
             try {
-                String archiveURN = StreamUtils.readStreamAsString(urnStream);
+                String archiveURN = StreamUtils.readStreamAsString(urnStream, "UTF-8");
                 if (ignoreVersion) {
                 	// Cut the version out
                 	archiveURN = archiveURN.substring(0, archiveURN.lastIndexOf(':'));

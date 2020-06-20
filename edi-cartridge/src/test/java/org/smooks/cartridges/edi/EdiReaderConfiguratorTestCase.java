@@ -61,6 +61,6 @@ public class EdiReaderConfiguratorTestCase {
         smooks.setReaderConfig(ediReaderConfigurator);
 
         String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream("/data/edi-input.txt"), smooks);
-        assertTrue(StreamUtils.compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/expected.xml")), result));
+        assertTrue(StreamUtils.compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/expected.xml"), "UTF-8"), result));
     }
 }
