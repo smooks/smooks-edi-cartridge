@@ -83,6 +83,6 @@ public class EdifactFunctionalTestCase {
         smooks.addConfigurations("/smooks-unparser-config.xml");
         String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream(fileName), smooks);
 
-        assertEquals(StreamUtils.readStreamAsString(getClass().getResourceAsStream(expectedResult)).replaceAll("\\n", "\r\n"), result);
+        assertEquals(StreamUtils.readStreamAsString(getClass().getResourceAsStream(expectedResult), "UTF-8").replaceAll("\\n", "\r\n"), result);
     }
 }

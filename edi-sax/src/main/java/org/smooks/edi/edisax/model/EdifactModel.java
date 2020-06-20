@@ -102,7 +102,7 @@ public class EdifactModel {
 		this.importBaseURI = URIResourceLocator.getSystemBaseURI();
         modelURI = UNSPECIFIED;
 		try {
-            this.mappingConfig = StreamUtils.readStreamAsString(mappingModelStream);
+            this.mappingConfig = StreamUtils.readStreamAsString(mappingModelStream, "UTF-8");
         } finally {
             mappingModelStream.close();
         }
@@ -121,7 +121,7 @@ public class EdifactModel {
 		this.modelURI = modelURI;
 		this.importBaseURI = importBaseURI;
         try {
-            this.mappingConfig = StreamUtils.readStreamAsString(mappingModelStream);
+            this.mappingConfig = StreamUtils.readStreamAsString(mappingModelStream, "UTF-8");
         } finally {
             mappingModelStream.close();
         }

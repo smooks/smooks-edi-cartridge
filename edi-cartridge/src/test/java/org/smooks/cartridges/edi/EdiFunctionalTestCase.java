@@ -70,7 +70,7 @@ public class EdiFunctionalTestCase {
         smooks.addConfigurations("/smooks-parser-config.xml");
         String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream("/data/edi-input.txt"), smooks);
 
-        assertTrue(StreamUtils.compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/expected.xml")), result));
+        assertTrue(StreamUtils.compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/expected.xml"), "UTF-8"), result));
         smooks.close();
     }
 
@@ -79,6 +79,6 @@ public class EdiFunctionalTestCase {
         smooks.addConfigurations("/smooks-unparser-config.xml");
         String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream("/data/expected.xml"), smooks);
 
-        assertTrue(StreamUtils.compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/edi-input.txt")), result));
+        assertTrue(StreamUtils.compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/edi-input.txt"), "UTF-8"), result));
     }
 }
