@@ -113,7 +113,18 @@
                 <version>3.2.0</version>
                 <executions>
                     <execution>
-                        <id>default-jar</id>
+                        <id>javadoc-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classesDirectory>${project.build.directory}/classes/apidocs</classesDirectory>
+                            <classifier>javadoc</classifier>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>d00a-schemas-jar</id>
                         <phase>package</phase>
                         <configuration>
                             <classesDirectory>${project.build.directory}/classes</classesDirectory>
