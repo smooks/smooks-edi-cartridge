@@ -40,19 +40,17 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * =========================LICENSE_END==================================
  */
-package org.smooks.javabean.decoders;
+package org.smooks.javabean.converter;
 
 import org.smooks.container.ExecutionContext;
+import org.smooks.converter.factory.system.NumberTypeConverter;
 import org.smooks.delivery.Filter;
 import org.smooks.edi.edisax.model.internal.Delimiters;
-import org.smooks.javabean.DataDecodeException;
-import org.smooks.javabean.DecodeType;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.text.ParseException;
 
 /**
  * {@link BigDecimal} Decoder, which is EDI delimiters aware for parsing decimal.
@@ -60,37 +58,13 @@ import java.text.ParseException;
  * @author <a href="mailto:sinfomicien@gmail.com">sinfomicien@gmail.com</a>
  * @author <a href="mailto:michael@krueske.net">michael@krueske.net</a> (patched to ensure that always a {@link BigDecimal} value is decoded)
  */
-@DecodeType(BigDecimal.class)
-public class DABigDecimalDecoder extends BigDecimalDecoder {
+public abstract class DABigDecimalTypeConverter<S, T> extends NumberTypeConverter<S, T> {
 
-    public Object decode(String data) throws DataDecodeException {
-        DecimalFormat decimalFormat = getDecimalFormat();
-        setDecimalPointFormat(decimalFormat, getContextDelimiters());
+    public DABigDecimalTypeConverter() {
         
-        final Number number;
-        try {
-            number = decimalFormat.parse(data.trim());
-        } catch (final ParseException e) {
-            throw new DataDecodeException("Failed to decode BigDecimal value '" + data
-                    + "' using NumberFormat instance " + decimalFormat + ".", e);
-        }
-        
-        return (BigDecimal) number;
     }
-
-    public String encode(Object object) throws DataDecodeException {
-        DecimalFormat decimalFormat = getDecimalFormat();
-        return decimalFormat.format(object);
-    }
-
-    //Thread safe function to encode with delimiters awareness
-    public String encode(Object object, Delimiters interchangeDelimiters) throws DataDecodeException {
-        DecimalFormat decimalFormat = getDecimalFormat();
-        setDecimalPointFormat(decimalFormat, interchangeDelimiters);
-        return decimalFormat.format(object);
-    }
-
-    private synchronized DecimalFormat getDecimalFormat() {
+    
+    protected synchronized DecimalFormat getDecimalFormat() {
         //Check to see if we can use the parent default format
         NumberFormat parentNumberFormat = getNumberFormat();
         
@@ -102,7 +76,7 @@ public class DABigDecimalDecoder extends BigDecimalDecoder {
         }
     }
 
-    private synchronized void setDecimalPointFormat(DecimalFormat decimalFormat, Delimiters interchangeDelimiters) {
+    protected synchronized void setDecimalPointFormat(DecimalFormat decimalFormat, Delimiters interchangeDelimiters) {
         DecimalFormatSymbols dfs = decimalFormat.getDecimalFormatSymbols();
 
         decimalFormat.applyPattern("#0.0#");

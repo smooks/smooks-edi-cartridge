@@ -42,11 +42,19 @@
  */
 package org.smooks.edi.edisax;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
+import org.smooks.assertion.AssertArgument;
+import org.smooks.converter.TypeConverterException;
+import org.smooks.edi.edisax.model.EdifactModel;
+import org.smooks.edi.edisax.model.internal.*;
+import org.smooks.edi.edisax.util.EDIUtils;
+import org.smooks.lang.MutableInt;
+import org.smooks.namespace.NamespaceDeclarationStack;
+import org.smooks.resource.URIResourceLocator;
+import org.xml.sax.*;
+import org.xml.sax.helpers.AttributesImpl;
+
+import javax.xml.XMLConstants;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -54,36 +62,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.smooks.assertion.AssertArgument;
-import org.smooks.edi.edisax.model.EdifactModel;
-import org.smooks.edi.edisax.util.EDIUtils;
-import org.smooks.edi.edisax.model.internal.Component;
-import org.smooks.edi.edisax.model.internal.Delimiters;
-import org.smooks.edi.edisax.model.internal.Description;
-import org.smooks.edi.edisax.model.internal.Field;
-import org.smooks.edi.edisax.model.internal.MappingNode;
-import org.smooks.edi.edisax.model.internal.Segment;
-import org.smooks.edi.edisax.model.internal.SegmentGroup;
-import org.smooks.edi.edisax.model.internal.SubComponent;
-import org.smooks.edi.edisax.model.internal.ValueNode;
-import org.smooks.javabean.DataDecodeException;
-import org.smooks.lang.MutableInt;
-import org.smooks.namespace.NamespaceDeclarationStack;
-import org.smooks.resource.URIResourceLocator;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.DTDHandler;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.AttributesImpl;
-
-import javax.xml.XMLConstants;
 
 /**
  * EDI Parser.
@@ -858,7 +836,7 @@ public class EDIParser implements XMLReader {
         if (valueNode.getDataType() != null && !valueNode.getDataType().equals("")) {
             try {
                 valueNode.isValidForType(value);
-            } catch (DataDecodeException e) {
+            } catch (TypeConverterException e) {
                 throw new EDIParseException(edifactModel.getEdimap(), "Validation of expected type [" + valueNode.getDataType() + "] failed for value [" + value + "]. Currently at segment number " + segmentReader.getCurrentSegmentNumber() + ".", e, valueNode, segmentReader.getCurrentSegmentNumber(), segmentReader.getCurrentSegmentFields());
             }
         }

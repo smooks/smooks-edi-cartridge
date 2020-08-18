@@ -1,6 +1,6 @@
 /*-
  * ========================LICENSE_START=================================
- * smooks-edi-sax
+ * smooks-ect
  * %%
  * Copyright (C) 2020 Smooks
  * %%
@@ -40,46 +40,42 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * =========================LICENSE_END==================================
  */
-package org.smooks.edi.edisax;
+package org.smooks.javabean.converter;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import org.smooks.converter.TypeConverter;
+import org.smooks.converter.TypeConverterException;
+import org.smooks.converter.factory.TypeConverterFactory;
 
-public enum EDITypeEnum {
-    String("String", String.class),
-	Numeric("Double", String.class),
-	Decimal("Double", Double.class),
-	Date("Date", Date.class),
-	Time("Date", Date.class),
-	Binary("Binary", String.class),
-    Custom(null, null);
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 
-    public final static String CUSTOM_NAME = "Custom";
+/**
+ * {@link BigDecimal} Decoder, which is EDI delimiters aware for parsing decimal.
+ * 
+ * @author <a href="mailto:sinfomicien@gmail.com">sinfomicien@gmail.com</a>
+ * @author <a href="mailto:michael@krueske.net">michael@krueske.net</a> (patched to ensure that always a {@link BigDecimal} value is decoded)
+ */
 
-    private String typeAlias;
-    private Class javaClass;
-
-    EDITypeEnum(String typeAlias, Class javaClass) {
-        this.typeAlias = typeAlias;
-        this.javaClass = javaClass;
+public class StringToDABigDecimalTypeConverterFactory implements TypeConverterFactory<String, BigDecimal> {
+    
+    @Override
+    public TypeConverter<String, BigDecimal> createTypeConverter() {
+        return new DABigDecimalTypeConverter<String, BigDecimal>() {
+            @Override
+            protected BigDecimal doConvert(String value) {
+                DecimalFormat decimalFormat = getDecimalFormat();
+                setDecimalPointFormat(decimalFormat, getContextDelimiters());
+                final Number number;
+                try {
+                    number = decimalFormat.parse(value.trim());
+                } catch (final ParseException e) {
+                    throw new TypeConverterException("Failed to decode BigDecimal value '" + value
+                            + "' using NumberFormat instance " + decimalFormat + ".", e);
+                }
+                
+                return (BigDecimal) number;
+            }
+        };
     }
-
-    public String getTypeAlias() {
-        return typeAlias;
-    }
-
-    public Class getJavaClass() {
-        return javaClass;
-    }
-
-    private Properties getProperties(List<Map.Entry<String, String>> parameters) {
-        Properties properties = new Properties();
-        for (Map.Entry<String,String> entry : parameters) {
-            properties.setProperty(entry.getKey(), entry.getValue());
-        }
-        return properties;
-    }
-
 }

@@ -42,14 +42,18 @@
  */
 package org.smooks.edi.edisax.model.internal;
 
-import org.smooks.javabean.DataDecoder;
-import org.smooks.javabean.DecodeType;
-import org.smooks.javabean.DataDecodeException;
 import org.smooks.config.Configurable;
+import org.smooks.converter.TypeConverter;
+import org.smooks.converter.TypeConverterDescriptor;
+import org.smooks.converter.TypeConverterException;
+import org.smooks.converter.TypeConverterFactoryLoader;
+import org.smooks.converter.factory.TypeConverterFactory;
+import org.smooks.converter.factory.system.StringConverterFactory;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * ValueNode.
@@ -58,13 +62,15 @@ import java.util.Properties;
  */
 public class ValueNode extends MappingNode {
 
+    private static final Map<TypeConverterDescriptor<?, ?>, TypeConverterFactory<?, ?>> TYPE_CONVERTER_FACTORIES = new TypeConverterFactoryLoader().load();
+
     private String dataType;
     private List<Map.Entry<String,String>> parameters;
     private Integer minLength;
     private Integer maxLength;
-    private DataDecoder decoder;
     private Class<?> typeClass;
     private Properties decodeParams;
+    private TypeConverter<String, ?> typeConverter;
 
     public ValueNode() {
 	}
@@ -81,18 +87,24 @@ public class ValueNode extends MappingNode {
     
     public void setDataType(String dataType) {
         this.dataType = dataType;
-        if(dataType != null) {
-            decoder = DataDecoder.Factory.create(dataType);
-
-            DecodeType decodeType = decoder.getClass().getAnnotation(DecodeType.class);
-            if(decodeType != null) {
-                typeClass = decodeType.value()[0];
+        if (dataType != null) {
+            if (dataType.equals("Custom")) {
+                typeConverter = new CustomTypeConverter();
+            } else {
+                Map<? extends TypeConverterDescriptor<?, ?>, ? extends TypeConverterFactory<?, ?>> typeConverterFactories = TYPE_CONVERTER_FACTORIES.entrySet().stream().filter(e -> dataType.equals(e.getKey().getName())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                if (typeConverterFactories.isEmpty()) {
+                    typeConverter = new StringConverterFactory().createTypeConverter();
+                    typeClass = String.class;
+                } else {
+                    typeConverter = (TypeConverter<String, ?>) typeConverterFactories.values().toArray(new TypeConverterFactory[]{})[0].createTypeConverter();
+                    typeClass = (Class<?>) typeConverterFactories.keySet().toArray(new TypeConverterDescriptor[]{})[0].getTargetType();
+                }
             }
         }
     }
 
-    public DataDecoder getDecoder() {
-        return decoder;
+    public TypeConverter<String, ?> getTypeConverter() {
+        return typeConverter;
     }
 
     public Class<?> getTypeClass() {
@@ -106,8 +118,8 @@ public class ValueNode extends MappingNode {
     public void setDataTypeParameters(List<Map.Entry<String,String>> parameters) {
         this.parameters = parameters;
 
-        if(decoder instanceof Configurable) {
-            if(decoder == null) {
+        if (typeConverter instanceof Configurable) {
+            if(typeConverter  == null) {
                 throw new IllegalStateException("Illegal call to set parameters before 'dataType' has been configured on the " + getClass().getName());
             }
 
@@ -117,7 +129,7 @@ public class ValueNode extends MappingNode {
                     decodeParams.setProperty(entry.getKey(), entry.getValue());
                 }
             }
-            ((Configurable)decoder).setConfiguration(decodeParams);
+            ((Configurable) typeConverter).setConfiguration(decodeParams);
         }
     }
 
@@ -156,7 +168,7 @@ public class ValueNode extends MappingNode {
         this.maxLength = maxLength;
     }
 
-    public void isValidForType(String value) throws DataDecodeException {
-        decoder.decode(value);
+    public void isValidForType(String value) throws TypeConverterException {
+        typeConverter.convert(value);
     }
 }
