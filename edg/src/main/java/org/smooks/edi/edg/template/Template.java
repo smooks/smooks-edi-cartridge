@@ -43,6 +43,7 @@
 package org.smooks.edi.edg.template;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
@@ -57,7 +58,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Template {
-    protected static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    protected static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
     protected final String version;
     protected final DefaultMustacheFactory mustacheFactory;

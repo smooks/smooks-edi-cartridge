@@ -365,11 +365,11 @@ public class ECoreConversionUtils {
 		annotate(element, "datatype", valueNode.getDataType());
 		annotate(element, "maxLength", String.valueOf(valueNode.getMaxLength()));
 		annotate(element, "minLength", String.valueOf(valueNode.getMinLength()));
-		if (valueNode.getDecoder() != null) {
-			annotate(element, "decoder", valueNode.getDecoder().getClass()
+		if (valueNode.getTypeClass() != null) {
+			annotate(element, "typeConverter", valueNode.getTypeConverter().getClass()
 					.getCanonicalName());
 		} else {
-			annotate(element, "decoder", "");
+			annotate(element, "typeConverter", "");
 		}
 	}
 

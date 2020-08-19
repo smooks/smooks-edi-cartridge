@@ -48,9 +48,9 @@ import org.smooks.cartridges.dfdl.DataProcessorFactory;
 import org.smooks.cartridges.dfdl.DfdlSchema;
 import org.smooks.cdr.Parameter;
 import org.smooks.cdr.SmooksConfigurationException;
-import org.smooks.cdr.annotation.AppContext;
 import org.smooks.container.ApplicationContext;
 
+import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -59,25 +59,25 @@ import java.util.Map;
 
 public class EdiDataProcessorFactory extends DataProcessorFactory {
 
-    @AppContext
+    @Inject
     protected ApplicationContext applicationContext;
 
     @Override
     public DataProcessor createDataProcessor() {
         try {
             final Map<String, String> variables = new HashMap<>();
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}SegmentTerm", smooksResourceConfiguration.getStringParameter("segmentTerminator", "'%NL;%WSP*; '%WSP*;"));
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}FieldSep", smooksResourceConfiguration.getStringParameter("dataElementSeparator", "+"));
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}CompositeSep", smooksResourceConfiguration.getStringParameter("compositeDataElementSeparator", ":"));
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}EscapeChar", smooksResourceConfiguration.getStringParameter("escapeCharacter", "?"));
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}RepeatSep", smooksResourceConfiguration.getStringParameter("repetitionSeparator", "*"));
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}DecimalSep", smooksResourceConfiguration.getStringParameter("decimalSign", "."));
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}GroupingSep", smooksResourceConfiguration.getStringParameter("triadSeparator", ","));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}SegmentTerm", smooksResourceConfiguration.getParameterValue("segmentTerminator", String.class, "'%NL;%WSP*; '%WSP*;"));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}FieldSep", smooksResourceConfiguration.getParameterValue("dataElementSeparator", String.class, "+"));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}CompositeSep", smooksResourceConfiguration.getParameterValue("compositeDataElementSeparator", String.class, ":"));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}EscapeChar", smooksResourceConfiguration.getParameterValue("escapeCharacter", String.class, "?"));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}RepeatSep", smooksResourceConfiguration.getParameterValue("repetitionSeparator", String.class, "*"));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}DecimalSep", smooksResourceConfiguration.getParameterValue("decimalSign", String.class, "."));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}GroupingSep", smooksResourceConfiguration.getParameterValue("triadSeparator", String.class, ","));
 
             final List<Parameter> variableParameters = smooksResourceConfiguration.getParameters("variables");
             if (variableParameters != null) {
                 for (Parameter variableParameter : variableParameters) {
-                    final Map.Entry<String, String> variable = (Map.Entry<String, String>) variableParameter.getObjValue();
+                    final Map.Entry<String, String> variable = (Map.Entry<String, String>) variableParameter.getValue();
                     variables.put(variable.getKey(), variable.getValue());
                 }
             }
@@ -89,7 +89,7 @@ public class EdiDataProcessorFactory extends DataProcessorFactory {
     }
 
     protected DataProcessor doCreateDataProcessor(final Map<String, String> variables) throws URISyntaxException {
-        final DfdlSchema dfdlSchema = new DfdlSchema(new URI(schemaUri), variables, ValidationMode.valueOf(smooksResourceConfiguration.getStringParameter("validationMode", "Off")), smooksResourceConfiguration.getBoolParameter("cacheOnDisk", false), smooksResourceConfiguration.getBoolParameter("debugging", false));
+        final DfdlSchema dfdlSchema = new DfdlSchema(new URI(schemaUri), variables, ValidationMode.valueOf(smooksResourceConfiguration.getParameterValue("validationMode", String.class, "Off")), Boolean.parseBoolean(smooksResourceConfiguration.getParameterValue("cacheOnDisk", String.class, "false")), Boolean.parseBoolean(smooksResourceConfiguration.getParameterValue("debugging", String.class, "false")));
         return compileOrGet(dfdlSchema);
     }
 

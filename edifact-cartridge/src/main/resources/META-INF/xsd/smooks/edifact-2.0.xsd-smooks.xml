@@ -72,7 +72,7 @@
     <resource-config selector="unparser">
         <resource>org.smooks.cdr.extension.SetOnResourceConfig</resource>
         <param name="setOn">resourceType</param>
-        <param name="value">dfdl-unparser</param>
+        <param name="value">dfdl</param>
     </resource-config>
     <resource-config selector="unparser">
         <resource>org.smooks.cdr.extension.SetOnResourceConfig</resource>

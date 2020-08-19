@@ -42,22 +42,21 @@
  */
 package org.smooks.edi.edisax.v1_2.model;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.smooks.io.StreamUtils.readStream;
-
 import org.junit.jupiter.api.Test;
+import org.smooks.cdr.SmooksConfigurationException;
+import org.smooks.converter.factory.system.StringToDateConverterFactory;
 import org.smooks.edi.edisax.EDIConfigurationException;
 import org.smooks.edi.edisax.model.EDIConfigDigester;
 import org.smooks.edi.edisax.model.internal.*;
-import org.smooks.javabean.decoders.DateDecoder;
-import org.smooks.cdr.SmooksConfigurationException;
-import org.smooks.edi.edisax.model.internal.*;
 import org.xml.sax.SAXException;
 
-import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.smooks.io.StreamUtils.readStream;
 
 /**
  * This testcase tests that all new elements introduced in version 1.2 is digested from
@@ -236,7 +235,7 @@ public class EDIConfigDigesterTest {
 
         String expected = "CustomClass";
         String value = field.getTypeParameters().get(0).getValue();
-        assertEquals(DateDecoder.class.getName(), value, "Value in parameters [" + value + "] doesn't match expected value [" + expected + "].");
+        assertEquals(StringToDateConverterFactory.class.getName(), value, "Value in parameters [" + value + "] doesn't match expected value [" + expected + "].");
 
         expected = "param1";
         value = field.getTypeParameters().get(1).getKey();
@@ -256,7 +255,7 @@ public class EDIConfigDigesterTest {
             EDIConfigDigester.digestConfig(input);
             fail("Expected SmooksConfigurationException");
         } catch (SmooksConfigurationException e) {
-            assertEquals("Mandatory property 'decoderClass' not specified.", e.getMessage());
+            assertEquals("Mandatory property 'typeConverterClass' not specified.", e.getMessage());
         }
     }
 }

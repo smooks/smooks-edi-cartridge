@@ -42,6 +42,18 @@
  */
 package org.smooks.edi.edisax.model;
 
+import org.smooks.assertion.AssertArgument;
+import org.smooks.edi.edisax.EDIConfigurationException;
+import org.smooks.edi.edisax.EDITypeEnum;
+import org.smooks.edi.edisax.model.internal.*;
+import org.smooks.resource.URIResourceLocator;
+import org.smooks.xml.XmlUtil;
+import org.smooks.xml.XsdDOMValidator;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+
+import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -49,35 +61,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.XMLConstants;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.smooks.assertion.AssertArgument;
-import org.smooks.edi.edisax.EDIConfigurationException;
-import org.smooks.edi.edisax.EDITypeEnum;
-import org.smooks.edi.edisax.model.internal.Component;
-import org.smooks.edi.edisax.model.internal.Delimiters;
-import org.smooks.edi.edisax.model.internal.Description;
-import org.smooks.edi.edisax.model.internal.Edimap;
-import org.smooks.edi.edisax.model.internal.Field;
-import org.smooks.edi.edisax.model.internal.Import;
-import org.smooks.edi.edisax.model.internal.MappingNode;
-import org.smooks.edi.edisax.model.internal.ParamEntry;
-import org.smooks.edi.edisax.model.internal.Segment;
-import org.smooks.edi.edisax.model.internal.SegmentGroup;
-import org.smooks.edi.edisax.model.internal.SubComponent;
-import org.smooks.edi.edisax.model.internal.ValueNode;
-import org.smooks.javabean.decoders.CustomDecoder;
-import org.smooks.resource.URIResourceLocator;
-import org.smooks.xml.XmlUtil;
-import org.smooks.xml.XsdDOMValidator;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 
 /**
@@ -534,7 +517,7 @@ public class EDIConfigDigester {
                 if (entry.length == 1) {
                     if (i == 0) {
                         customClass = entry[0];
-                        result.add(new ParamEntry<String, String>(CustomDecoder.CLASS_PROPERTY_NAME, entry[0]));
+                        result.add(new ParamEntry<String, String>(CustomTypeConverter.CLASS_PROPERTY_NAME, entry[0]));
                     } else {
                         throw new EDIConfigurationException("Invalid use of paramaters in ValueNode. A parameter-entry should consist of a key-value-pair separated with the '='-character. Example: [parameters=\"key1=value1;key2=value2\"]");
                     }
