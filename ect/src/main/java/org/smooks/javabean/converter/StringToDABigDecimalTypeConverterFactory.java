@@ -43,6 +43,7 @@
 package org.smooks.javabean.converter;
 
 import org.smooks.converter.TypeConverter;
+import org.smooks.converter.TypeConverterDescriptor;
 import org.smooks.converter.TypeConverterException;
 import org.smooks.converter.factory.TypeConverterFactory;
 
@@ -77,5 +78,10 @@ public class StringToDABigDecimalTypeConverterFactory implements TypeConverterFa
                 return (BigDecimal) number;
             }
         };
+    }
+
+    @Override
+    public TypeConverterDescriptor<Class<String>, Class<BigDecimal>> getTypeConverterDescriptor() {
+        return new TypeConverterDescriptor<>(String.class, BigDecimal.class);
     }
 }
