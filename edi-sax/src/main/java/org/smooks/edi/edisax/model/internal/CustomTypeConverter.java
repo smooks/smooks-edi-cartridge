@@ -45,16 +45,12 @@ package org.smooks.edi.edisax.model.internal;
 import org.smooks.cdr.SmooksConfigurationException;
 import org.smooks.config.Configurable;
 import org.smooks.converter.TypeConverter;
-import org.smooks.converter.TypeConverterDescriptor;
-import org.smooks.converter.TypeConverterFactoryLoader;
 import org.smooks.converter.factory.TypeConverterFactory;
 
-import java.util.Map;
 import java.util.Properties;
 
 public class CustomTypeConverter implements TypeConverter<String, Object>, Configurable {
     public static final String CLASS_PROPERTY_NAME = "typeConverterClass";
-    private static final Map<TypeConverterDescriptor<?, ?>, TypeConverterFactory<?, ?>> TYPE_CONVERTER_FACTORIES = new TypeConverterFactoryLoader().load();
 
     private Properties properties;
     private TypeConverter<String, Object> delegateTypeConverter;

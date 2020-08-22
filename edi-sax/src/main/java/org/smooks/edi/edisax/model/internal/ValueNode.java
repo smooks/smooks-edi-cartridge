@@ -44,15 +44,16 @@ package org.smooks.edi.edisax.model.internal;
 
 import org.smooks.config.Configurable;
 import org.smooks.converter.TypeConverter;
-import org.smooks.converter.TypeConverterDescriptor;
 import org.smooks.converter.TypeConverterException;
 import org.smooks.converter.TypeConverterFactoryLoader;
 import org.smooks.converter.factory.TypeConverterFactory;
 import org.smooks.converter.factory.system.StringConverterFactory;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -62,7 +63,7 @@ import java.util.stream.Collectors;
  */
 public class ValueNode extends MappingNode {
 
-    private static final Map<TypeConverterDescriptor<?, ?>, TypeConverterFactory<?, ?>> TYPE_CONVERTER_FACTORIES = new TypeConverterFactoryLoader().load();
+    private static final Set<TypeConverterFactory<?, ?>> TYPE_CONVERTER_FACTORIES = new TypeConverterFactoryLoader().load();
 
     private String dataType;
     private List<Map.Entry<String,String>> parameters;
@@ -91,13 +92,14 @@ public class ValueNode extends MappingNode {
             if (dataType.equals("Custom")) {
                 typeConverter = new CustomTypeConverter();
             } else {
-                Map<? extends TypeConverterDescriptor<?, ?>, ? extends TypeConverterFactory<?, ?>> typeConverterFactories = TYPE_CONVERTER_FACTORIES.entrySet().stream().filter(e -> dataType.equals(e.getKey().getName())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                Set<TypeConverterFactory<?, ?>> typeConverterFactories = TYPE_CONVERTER_FACTORIES.stream().filter(i -> i.getClass().isAnnotationPresent(Resource.class) && dataType.equals(i.getClass().getAnnotation(Resource.class).name())).collect(Collectors.toSet());
                 if (typeConverterFactories.isEmpty()) {
                     typeConverter = new StringConverterFactory().createTypeConverter();
                     typeClass = String.class;
                 } else {
-                    typeConverter = (TypeConverter<String, ?>) typeConverterFactories.values().toArray(new TypeConverterFactory[]{})[0].createTypeConverter();
-                    typeClass = (Class<?>) typeConverterFactories.keySet().toArray(new TypeConverterDescriptor[]{})[0].getTargetType();
+                    TypeConverterFactory typeConverterFactory = typeConverterFactories.toArray(new TypeConverterFactory[]{})[0];
+                    typeConverter = (TypeConverter<String, ?>) typeConverterFactory.createTypeConverter();
+                    typeClass = (Class<?>) typeConverterFactory.getTypeConverterDescriptor().getTargetType();
                 }
             }
         }
