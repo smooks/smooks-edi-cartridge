@@ -53,7 +53,7 @@ public class CustomTypeConverter implements TypeConverter<String, Object>, Confi
     public static final String CLASS_PROPERTY_NAME = "typeConverterClass";
 
     private Properties properties;
-    private TypeConverter<String, Object> delegateTypeConverter;
+    private TypeConverter<? super String, ?> delegateTypeConverter;
 
     @Override
     public Object convert(String value) {
