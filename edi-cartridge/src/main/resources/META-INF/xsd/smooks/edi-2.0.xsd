@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns:smooks="https://www.smooks.org/xsd/smooks-1.2.xsd"
-            xmlns:smooks-edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
-            xmlns:smooks-dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"
+            xmlns:smooks="https://www.smooks.org/xsd/smooks-2.0.xsd"
+            xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
+            xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd" 
             targetNamespace="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
             elementFormDefault="qualified">
 
-    <xsd:import namespace="https://www.smooks.org/xsd/smooks-1.2.xsd"/>
+    <xsd:import namespace="https://www.smooks.org/xsd/smooks-2.0.xsd"/>
     <xsd:import namespace="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"/>
 
     <xsd:annotation>
         <xsd:documentation xml:lang="en">Smooks EDI Resource Configuration</xsd:documentation>
     </xsd:annotation>
 
-    <xsd:element name="parser" type="smooks-edi:parser" substitutionGroup="smooks:abstract-reader">
+    <xsd:element name="parser" type="edi:parser" substitutionGroup="smooks:abstract-reader">
         <xsd:annotation>
             <xsd:documentation xml:lang="en">
                 An EDI parser reads an EDI document according to the grammar defined in a DFDL schema and generates the
@@ -23,7 +23,7 @@
     </xsd:element>
 
     <xsd:element name="unparser" substitutionGroup="smooks:abstract-resource-config"
-                 type="smooks-edi:unparserVisitor">
+                 type="edi:unparserVisitor">
         <xsd:annotation>
             <xsd:documentation xml:lang="en">
                 An EDI unparser visitor serialises a fragment into EDI according to the grammar defined in a DFDL schema.
@@ -36,16 +36,16 @@
             <xsd:documentation xml:lang="en">EDI Parser</xsd:documentation>
         </xsd:annotation>
         <xsd:complexContent>
-            <xsd:extension base="smooks-dfdl:parser">
-                <xsd:attributeGroup ref="smooks-edi:parserUnparserAttributes"/>
+            <xsd:extension base="dfdl:parser">
+                <xsd:attributeGroup ref="edi:parserUnparserAttributes"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
 
     <xsd:complexType name="unparserVisitor">
         <xsd:complexContent>
-            <xsd:extension base="smooks-dfdl:unparserVisitor">
-                <xsd:attributeGroup ref="smooks-edi:parserUnparserAttributes"/>
+            <xsd:extension base="dfdl:unparserVisitor">
+                <xsd:attributeGroup ref="edi:parserUnparserAttributes"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
