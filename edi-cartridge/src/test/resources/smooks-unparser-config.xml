@@ -42,9 +42,8 @@
   =========================LICENSE_END==================================
   -->
 
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
-                      xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
-                      xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd">
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
+                      xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd">
 
     <edi:unparser schemaURI="/edi-to-xml-mapping.dfdl.xsd" unparseOnElement="/test-message" dataElementSeparator="*"
                   segmentTerminator="%NL;" compositeDataElementSeparator="^"/>
