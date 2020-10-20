@@ -42,9 +42,28 @@
  */
 package org.smooks.cartridges.edifact;
 
-import com.ctc.wstx.util.StringUtil;
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.apache.daffodil.japi.DataProcessor;
 import org.apache.daffodil.japi.ValidationMode;
 import org.apache.daffodil.util.Misc;
@@ -56,25 +75,8 @@ import org.smooks.container.ApplicationContext;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import javax.inject.Inject;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
 
 public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
 
@@ -105,15 +107,19 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
                 final List<String> messageTypes = (List) messageTypeParameters.stream().map(m -> m.getValue()).collect(Collectors.toList());
                 
                 StringBuilder aSB = new StringBuilder ();
-                for (String s : messageTypes)
+                // Each message type once, and sorted set
+                for (final String s : new TreeSet<> (messageTypes))
                   aSB.append (s);
+                // Create MD5 digest
                 final byte[] md = MessageDigest.getInstance ("MD5").digest (aSB.toString ().getBytes (StandardCharsets.UTF_8));
+                // Create Base16 string
                 aSB = new StringBuilder (md.length * 2);
-                for (byte b : md)
+                for (final byte b : md)
                   aSB.append (Character.forDigit ((b & 0xf0) >> 4, 16)).append (Character.forDigit (b & 0x0f, 16));
                 
-                // TODO find correct directory
+                // TODO find correct directory...
                 final File generatedSchema = new File (version.toLowerCase() + "/EDIFACT-Interchange-"+aSB.toString ().toLowerCase (Locale.ROOT)+".dfdl.xsd");
+                // Ensure base directory is present
                 generatedSchema.getParentFile ().mkdirs ();
 
                 try (FileWriter fileWriter = new FileWriter(generatedSchema)) {
