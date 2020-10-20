@@ -42,6 +42,7 @@
  */
 package org.smooks.cartridges.edifact;
 
+import com.ctc.wstx.util.StringUtil;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import org.apache.daffodil.japi.DataProcessor;
@@ -66,8 +67,11 @@ import javax.xml.xpath.XPathFactory;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -98,8 +102,20 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
                 schema = new URI(version.toLowerCase() + "/EDIFACT-Interchange.dfdl.xsd");
             } else {
                 final List<String> messageTypes = (List) messageTypeParameters.stream().map(m -> m.getValue()).collect(Collectors.toList());
+                
+                StringBuilder aSB = new StringBuilder ();
+                for (String s : messageTypes)
+                  aSB.append (s);
+                
+                final byte[] md = MessageDigest.getInstance ("MD5").digest (aSB.toString ().getBytes (StandardCharsets.UTF_8));
+                aSB = new StringBuilder (md.length * 2);
+                for (byte b : md)
+                  aSB.append (Character.forDigit ((b & 0xf0) >> 4, 16)).append (Character.forDigit (b & 0x0f, 16));
+                
+                // TODO find correct directory
+                final File generatedSchema = new File (version.toLowerCase() + "/EDIFACT-Interchange-"+aSB.toString ().toLowerCase (Locale.ROOT)+".dfdl.xsd");
+                generatedSchema.getParentFile ().mkdirs ();
 
-                final File generatedSchema = File.createTempFile("EDIFACT-Interchange", ".dfdl.xsd");
                 try (Writer fileWriter = new OutputStreamWriter(new FileOutputStream(generatedSchema), StandardCharsets.UTF_8)) {
                     MUSTACHE.execute(fileWriter, new HashMap<String, Object>() {{
                         this.put("schemaLocation", schemaURIParameter.getValue());
