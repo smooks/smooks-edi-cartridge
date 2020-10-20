@@ -116,7 +116,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
                 final File generatedSchema = new File (version.toLowerCase() + "/EDIFACT-Interchange-"+aSB.toString ().toLowerCase (Locale.ROOT)+".dfdl.xsd");
                 generatedSchema.getParentFile ().mkdirs ();
 
-                try (Writer fileWriter = new OutputStreamWriter(new FileOutputStream(generatedSchema), StandardCharsets.UTF_8)) {
+                try (FileWriter fileWriter = new FileWriter(generatedSchema)) {
                     MUSTACHE.execute(fileWriter, new HashMap<String, Object>() {{
                         this.put("schemaLocation", schemaURIParameter.getValue());
                         this.put("messageTypes", messageTypes);
