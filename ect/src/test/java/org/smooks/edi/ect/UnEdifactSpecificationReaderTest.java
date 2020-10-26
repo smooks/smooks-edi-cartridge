@@ -204,10 +204,8 @@ public class UnEdifactSpecificationReaderTest {
 
         String expected = new String(StreamUtils.readStream(getClass().getResourceAsStream("testfiles/" + packageName + "/expected-result.xml"))).trim();
         String actual = contentHandler.xmlMapping.toString();
-
-//        System.out.println(actual);
-
-        assertFalse(DiffBuilder.compare(new StringReader(expected)).withTest(new StringReader(actual)).ignoreWhitespace().build().hasDifferences());
+        
+        assertFalse(DiffBuilder.compare(expected).withTest(actual).ignoreComments().ignoreWhitespace().build().hasDifferences());
     }
 
     private String getEdiMessageAsString(EdiSpecificationReader ediSpecificationReader, String messageType) throws IOException {
@@ -223,10 +221,8 @@ public class UnEdifactSpecificationReaderTest {
         lookup.addNamespace("medi", "http://www.milyn.org/schema/edi-message-mapping-1.5.xsd");
         Element node = (Element) lookup.selectSingleNode(doc);
         assertNotNull(node, "Node with segment code " + segmentCode + " wasn't found");
-
-//        System.out.println(out.outputString(node));
-
-        assertFalse(DiffBuilder.compare(new StringReader(expected)).withTest(new StringReader(out.outputString(node))).ignoreWhitespace().build().hasDifferences(), "Failed to compare XMLs for " + segmentCode);
+        
+        assertFalse(DiffBuilder.compare(expected).withTest(out.outputString(node)).ignoreComments().ignoreWhitespace().build().hasDifferences(), "Failed to compare XMLs for " + segmentCode);
     }
 
     private void test(String messageName, EdiSpecificationReader ediSpecificationReader) throws IOException {
@@ -249,9 +245,7 @@ public class UnEdifactSpecificationReaderTest {
         edimap.write(result);
         String expected = new String(StreamUtils.readStream(getClass().getResourceAsStream("d08a/message/expected-" + messageName.toLowerCase() + ".xml"))).trim();
 
-
-//        System.out.println(result);
-        assertFalse(DiffBuilder.compare(new StringReader(expected)).withTest(new StringReader(result.toString())).ignoreWhitespace().build().hasDifferences());
+        assertFalse(DiffBuilder.compare(expected).withTest(result.toString()).ignoreWhitespace().build().hasDifferences());
     }
 
     /************************************************************************
