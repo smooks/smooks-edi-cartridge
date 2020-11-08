@@ -63,10 +63,9 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +100,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
                 final List<String> messageTypes = (List) messageTypeParameters.stream().map(m -> m.getValue()).collect(Collectors.toList());
 
                 final File generatedSchema = File.createTempFile("EDIFACT-Interchange", ".dfdl.xsd");
-                try (FileWriter fileWriter = new FileWriter(generatedSchema)) {
+                try (Writer fileWriter = new OutputStreamWriter(new FileOutputStream(generatedSchema), StandardCharsets.UTF_8)) {
                     MUSTACHE.execute(fileWriter, new HashMap<String, Object>() {{
                         this.put("schemaLocation", schemaURIParameter.getValue());
                         this.put("messageTypes", messageTypes);
