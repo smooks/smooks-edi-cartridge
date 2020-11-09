@@ -88,10 +88,7 @@ public class SegmentsTemplate extends Template {
                     textNumberPattern = "";
                 }
                 numericTypes.put(base, new HashMap<String, String>() {{
-                    //FIXME: https://github.com/smooks/smooks-edi-cartridge/issues/37
-                    if ((int) de.get("maxLength") < 10) {
-                        this.put("totalDigits", String.valueOf(de.get("maxLength")));
-                    }
+                    this.put("totalDigits", String.valueOf(de.get("maxLength")));
                     this.put("textNumberPattern", textNumberPattern);
                 }});
             } else {

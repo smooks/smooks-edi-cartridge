@@ -3694,15 +3694,13 @@
 
     <xsd:simpleType dfdl:textNumberPattern="#.#" name="numeric1-10">
         <xsd:restriction base="xsd:decimal">
-            <!-- FIXME: https://github.com/smooks/smooks-edi-cartridge/issues/37 -->
-            <!--<xsd:totalDigits value="10"/>-->
+            <xsd:totalDigits value="10"/>
         </xsd:restriction>
     </xsd:simpleType>
 
     <xsd:simpleType dfdl:textNumberPattern="#.#" name="numeric1-18">
         <xsd:restriction base="xsd:decimal">
-            <!-- FIXME: https://github.com/smooks/smooks-edi-cartridge/issues/37 -->
-            <!--<xsd:totalDigits value="18"/>-->
+            <xsd:totalDigits value="18"/>
         </xsd:restriction>
     </xsd:simpleType>
 
