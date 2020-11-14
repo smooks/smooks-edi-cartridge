@@ -45,6 +45,7 @@
         <module>edg</module>
         <module>edi-cartridge</module>
         <module>edifact-schemas</module>
+        <module>edifact-jaxb-bindings</module>
         <module>edifact-cartridge</module>
     </modules>
 
@@ -54,9 +55,19 @@
         <mustache.version>0.9.6</mustache.version>
         <xmlunit.core.version>2.7.0</xmlunit.core.version>
         <junit.version>5.6.2</junit.version>
+        <log4j-slf4j-imp.version>2.13.3</log4j-slf4j-imp.version>
     </properties>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.1.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
@@ -90,7 +101,7 @@
                         <goals>
                             <goal>update-file-header</goal>
                         </goals>
-                        <phase>process-sources</phase>
+                        <phase>process-classes</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -170,6 +181,11 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -192,7 +208,7 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.13.3</version>
+            <version>${log4j-slf4j-imp.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

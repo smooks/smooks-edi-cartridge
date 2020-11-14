@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>edifact-jaxb-bindings</artifactId>
+        <groupId>org.smooks.cartridges.edi</groupId>
+        <version>2.0.0-M2-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+        <artifactId>service-edifact-binding</artifactId>
+
+    <properties>
+        <schema.pack.classifier>service-edifact</schema.pack.classifier>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>EDIFACT-Common</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <configuration>
+                    <artifactItems combine.self="override">
+                        <artifactItem>
+                            <groupId>org.smooks.cartridges.edi</groupId>
+                            <artifactId>edi-schemas</artifactId>
+                        </artifactItem>
+                    </artifactItems>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-xjc-plugin</artifactId>
+                <configuration>
+                    <xsdOptions combine.self="override">
+                        <xsdOption>
+                            <catalog>${project.parent.basedir}/src/main/resources/catalog.xml</catalog>
+                            <packagename>org.smooks.edifact.binding.service</packagename>
+                            <xsd>${project.build.directory}/classes/EDIFACT-Common/EDIFACT-Service-Segments-4.1.dfdl.xsd</xsd>
+                            <extensionArgs>
+                                <extensionArg>-Xfluent-api</extensionArg>
+                            </extensionArgs>
+                        </xsdOption>
+                    </xsdOptions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.smooks.cartridges.edi</groupId>
+            <artifactId>edi-schemas</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -15,7 +15,7 @@
     <build>
         <resources>
             <resource>
-                <directory>${basedir}/src/main/resources</directory>
+                <directory>${project.basedir}/src/main/resources</directory>
             </resource>
             <resource>
                 <directory>${project.build.directory}/generated-resources</directory>
@@ -105,12 +105,16 @@
                         <artifactId>smooks-edg</artifactId>
                         <version>${project.version}</version>
                     </dependency>
+                    <dependency>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-slf4j-impl</artifactId>
+                        <version>${log4j-slf4j-imp.version}</version>
+                    </dependency>
                 </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>javadoc-jar</id>
@@ -126,6 +130,9 @@
                     <execution>
                         <id>d00a-schemas-jar</id>
                         <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
                         <configuration>
                             <classesDirectory>${project.build.directory}/classes</classesDirectory>
                             <includes>
@@ -345,6 +352,20 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>d07b-schemas-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
+                            <includes>
+                                <include>d07b/**</include>
+                            </includes>
+                            <classifier>d07b</classifier>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>d08a-schemas-jar</id>
                         <phase>package</phase>
                         <goals>
@@ -412,6 +433,20 @@
                                 <include>d10a/**</include>
                             </includes>
                             <classifier>d10a</classifier>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>d10b-schemas-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
+                            <includes>
+                                <include>d10b/**</include>
+                            </includes>
+                            <classifier>d10b</classifier>
                         </configuration>
                     </execution>
                     <execution>
