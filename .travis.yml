@@ -10,8 +10,15 @@ before_install:
 jdk:
   - openjdk8
 
+script:
+  - mvn test -B -U
+
 deploy:
   provider: script
   script: bash deploy.sh
   on:
     branch: master
+    
+cache:
+  directories:
+    - $HOME/.m2
