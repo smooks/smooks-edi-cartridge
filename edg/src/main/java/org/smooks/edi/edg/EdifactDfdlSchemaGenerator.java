@@ -95,7 +95,7 @@ public final class EdifactDfdlSchemaGenerator {
         });
     }
 
-    private static void generateDfdlSchemas(String spec, String outputDirectory) throws Throwable {
+    private static void generateDfdlSchemas(final String spec, final String outputDirectory) throws Throwable {
         final InputStream resourceAsStream = EdifactDfdlSchemaGenerator.class.getResourceAsStream(spec);
         final UnEdifactSpecificationReader unEdifactSpecificationReader = new UnEdifactSpecificationReader(new ZipInputStream(resourceAsStream), true, true);
 
@@ -105,25 +105,37 @@ public final class EdifactDfdlSchemaGenerator {
 
         new File(versionOutputDirectory).mkdirs();
 
-        final String segmentsSchema = new SegmentsTemplate(version, unEdifactSpecificationReader).materialise();
         final File segmentSchemaFile = new File(versionOutputDirectory + "/EDIFACT-Segments.dfdl.xsd");
-        write(segmentsSchema, segmentSchemaFile);
+        if (segmentSchemaFile.exists()) {
+            LOGGER.info("Skipping existing schema " + segmentSchemaFile.getAbsolutePath());
+        } else {
+            final String segmentsSchema = new SegmentsTemplate(version, unEdifactSpecificationReader).materialise();
+            write(segmentsSchema, segmentSchemaFile);
+        }
 
         final MessagesTemplate messagesTemplate = new MessagesTemplate(version, unEdifactSpecificationReader);
-        String messagesSchema = messagesTemplate.materialise();
         final File messageSchemaFile = new File(versionOutputDirectory + "/EDIFACT-Messages.dfdl.xsd");
-        write(messagesSchema, messageSchemaFile);
+        if (messageSchemaFile.exists()) {
+            LOGGER.info("Skipping existing schema " + messageSchemaFile.getAbsolutePath());
+        } else {
+            final String messagesSchema = messagesTemplate.materialise();
+            write(messagesSchema, messageSchemaFile);
+
+            LOGGER.info("Validating schema {}...", messageSchemaFile.getPath());
+            final ProcessorFactory processorFactory = Daffodil.compiler().compileFile(messageSchemaFile);
+            for (Diagnostic diagnostic : processorFactory.getDiagnostics()) {
+                if (diagnostic.isError()) {
+                    throw diagnostic.getSomeCause();
+                }
+            }
+        }
 
         final File interchangeSchemaFile = new File(versionOutputDirectory + "/EDIFACT-Interchange.dfdl.xsd");
-        String interchangeSchema = new InterchangeTemplate(version, messagesTemplate.getMessageTypes()).materialise();
-        write(interchangeSchema, interchangeSchemaFile);
-
-        LOGGER.info("Validating schema {}...", messageSchemaFile.getPath());
-        final ProcessorFactory processorFactory = Daffodil.compiler().compileFile(messageSchemaFile);
-        for (Diagnostic diagnostic : processorFactory.getDiagnostics()) {
-            if (diagnostic.isError()) {
-                throw diagnostic.getSomeCause();
-            }
+        if (interchangeSchemaFile.exists()) {
+            LOGGER.info("Skipping existing schema " + interchangeSchemaFile.getAbsolutePath());
+        } else {
+            String interchangeSchema = new InterchangeTemplate(version, messagesTemplate.getMessageTypes()).materialise();
+            write(interchangeSchema, interchangeSchemaFile);
         }
     }
 
