@@ -11,9 +11,10 @@ jdk:
   - openjdk8
 
 script:
-  - mvn test -T 1C -B -U
+  - mvn test -B -U
 
 deploy:
+  skip_cleanup: true
   provider: script
   script: bash deploy.sh
   on:

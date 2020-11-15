@@ -97,11 +97,10 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>update-file-header</id>
                         <goals>
                             <goal>update-file-header</goal>
                         </goals>
-                        <phase>process-classes</phase>
+                        <phase>process-sources</phase>
                     </execution>
                 </executions>
             </plugin>
