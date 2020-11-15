@@ -11,7 +11,7 @@ jdk:
   - openjdk8
 
 script:
-  - mvn test -B -U
+  - mvn test -T 1C -B -U
 
 deploy:
   provider: script
