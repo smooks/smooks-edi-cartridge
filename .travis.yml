@@ -18,16 +18,11 @@ stages:
     
 jobs:
   include:
-    - stage: Test
+    - stage: test
       script: mvn install -T 1C -B -U -Dmaven.javadoc.skip=true
-    - stage: Deploy
+    - stage: deploy
       if: (branch = master) AND (type != pull_request)
-      deploy:
-        skip_cleanup: true
-        provider: script
-        script: bash deploy.sh
-        on:
-          branch: master
+      script: mvn deploy -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
       
 cache:
   directories:
