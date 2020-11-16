@@ -1,5 +1,5 @@
 language: java
-
+      
 before_install:
   - wget https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
   - tar xzvf apache-maven-3.6.3-bin.tar.gz
@@ -12,16 +12,23 @@ install: skip
 jdk:
   - openjdk8
 
-script:
-  - mvn install -T 1C -B -U -Dmaven.javadoc.skip=true
-
-deploy:
-  skip_cleanup: true
-  provider: script
-  script: bash deploy.sh
-  on:
-    branch: master
+stages:
+  - test
+  - deploy
     
+jobs:
+  include:
+    - stage: Test
+      script: mvn install -T 1C -B -U -Dmaven.javadoc.skip=true
+    - stage: Deploy
+      if: (branch = master) AND (type != pull_request)
+      deploy:
+        skip_cleanup: true
+        provider: script
+        script: bash deploy.sh
+        on:
+          branch: master
+      
 cache:
   directories:
     - $HOME/.m2
