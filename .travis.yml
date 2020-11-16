@@ -1,5 +1,5 @@
 language: java
-      
+
 before_install:
   - wget https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
   - tar xzvf apache-maven-3.6.3-bin.tar.gz
@@ -12,17 +12,13 @@ install: skip
 jdk:
   - openjdk8
 
-stages:
-  - test
-  - deploy
-    
 jobs:
   include:
-    - stage: test
-      script: mvn install -T 1C -B -U -Dmaven.javadoc.skip=true
-    - stage: deploy
-      if: (branch = master) AND (type != pull_request)
-      script: mvn deploy -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
+    - script: mvn install -B -U -Dmaven.javadoc.skip=true
+    - if: (branch = master) AND (type != pull_request)
+      script: mvn deploy -pl '!edifact-jaxb-bindings' --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
+    - if: (branch = master) AND (type != pull_request)
+      script: mvn deploy -pl 'edifact-jaxb-bindings' -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
       
 cache:
   directories:
