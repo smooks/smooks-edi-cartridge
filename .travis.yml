@@ -14,12 +14,15 @@ jdk:
 
 jobs:
   include:
-    - script: mvn install -B -U -Dmaven.javadoc.skip=true
-    - if: (branch = master) AND (type != pull_request)
+    - stage: test
+      script: mvn install -B -U -Dmaven.javadoc.skip=true
+    - stage: deploy      
+      if: (branch = master) AND (type != pull_request)
       script: mvn deploy -pl '!edifact-jaxb-bindings' --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
-    - if: (branch = master) AND (type != pull_request)
+    - stage: deploy
+      if: (branch = master) AND (type != pull_request)
       script: mvn deploy -pl 'edifact-jaxb-bindings' -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
-      
+
 cache:
   directories:
     - $HOME/.m2
