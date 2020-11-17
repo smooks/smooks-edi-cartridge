@@ -14,14 +14,14 @@ jdk:
 
 jobs:
   include:
-    - stage: test
+    - stage: "Test"
       script: mvn install -B -U -Dmaven.javadoc.skip=true
-    - stage: deploy      
+    - stage: "Deploy Schemas & Cartridges"
       if: (branch = master) AND (type != pull_request)
-      script: mvn deploy -pl '!edifact-jaxb-bindings' --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
-    - stage: deploy
+      script: mvn deploy -pl edi-sax,ect,common-schemas,edg,edi-cartridge,edifact-schemas,edifact-cartridge --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
+    - stage: "Deploy Bindings"
       if: (branch = master) AND (type != pull_request)
-      script: mvn deploy -pl 'edifact-jaxb-bindings' -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
+      script: mvn deploy -pl 'edifact-jaxb-bindings' -amd -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
 
 cache:
   directories:
