@@ -19,7 +19,7 @@ jobs:
     - stage: "Deploy Schemas & Cartridges"
       if: (branch = master) AND (type != pull_request)
       script: mvn deploy -pl edi-sax,ect,common-schemas,edg,edi-cartridge,edifact-schemas,edifact-cartridge --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
-    - stage: "Deploy Bindings"
+    - stage: "Deploy EDIFACT Bindings"
       if: (branch = master) AND (type != pull_request)
       script: mvn deploy -pl 'edifact-jaxb-bindings' -amd -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
 
