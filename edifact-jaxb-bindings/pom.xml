@@ -81,14 +81,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <configuration>
-                    <!-- FIXME: Travis times out without this because license-maven-plugin execution takes too long -->
-                    <skipUpdateLicense>true</skipUpdateLicense>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
@@ -101,6 +93,26 @@
         </plugins>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <executions>
+                        <execution>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                <resources>
+                                    <resource>
+                                        <directory>${project.basedir}/src/main/resources</directory>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
@@ -149,7 +161,7 @@
                     </configuration>
                     <executions>
                         <execution>
-                            <phase>process-resources</phase>
+                            <phase>process-sources</phase>
                             <goals>
                                 <goal>xsdtojava</goal>
                             </goals>

@@ -100,7 +100,7 @@
                         <goals>
                             <goal>update-file-header</goal>
                         </goals>
-                        <phase>process-sources</phase>
+                        <phase>process-resources</phase>
                     </execution>
                 </executions>
             </plugin>

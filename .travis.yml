@@ -12,16 +12,31 @@ install: skip
 jdk:
   - openjdk8
 
+stages:
+  - "Test"
+  - name: "Deploy"
+    if: (branch = master) AND (type != pull_request)
+  - name: "Deploy EDIFACT Bindings"
+    if: (branch = master) AND (type != pull_request)
+
 jobs:
   include:
     - stage: "Test"
-      script: mvn install -B -U -Dmaven.javadoc.skip=true
-    - stage: "Deploy Schemas & Cartridges"
-      if: (branch = master) AND (type != pull_request)
-      script: mvn deploy -pl edi-sax,ect,common-schemas,edg,edi-cartridge,edifact-schemas,edifact-cartridge --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
+      script: mvn install -B -U -Dmaven.javadoc.skip=true -Dlicense.skipUpdateLicense=true
+    - stage: "Deploy"
+      script: mvn deploy -pl edi-sax,ect,common-schemas,edg,edi-cartridge,edifact-schemas,edifact-cartridge,org.smooks.cartridges.edi:service-edifact-binding --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
     - stage: "Deploy EDIFACT Bindings"
-      if: (branch = master) AND (type != pull_request)
-      script: mvn deploy -pl 'edifact-jaxb-bindings' -amd -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
+      script: cd edifact-jaxb-bindings; mvn deploy -pl d00b,d01a,d01b,d01c,d02a,d02b,d03a,d03b,d04a,d04b -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
+    - stage: "Deploy EDIFACT Bindings"
+      script: cd edifact-jaxb-bindings; mvn deploy -pl d05a,d05b,d06a,d06b,d07a,d07b,d08a,d08b,d09a,d09b -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B  
+    - stage: "Deploy EDIFACT Bindings"
+      script: cd edifact-jaxb-bindings; mvn deploy -pl d10a,d10b,d11a,d11b,d12a,d12b,d13a,d13b,d14a,d14a -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
+    - stage: "Deploy EDIFACT Bindings"
+      script: cd edifact-jaxb-bindings; mvn deploy -pl d15a,d15b,d16a,d16b,d17a,d17b,d18a,d18b,d19a,d19b -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B  
+    - stage: "Deploy EDIFACT Bindings"
+      script: cd edifact-jaxb-bindings; mvn deploy -pl d93a,d94a,d94b,d95a,d95b,d96a,d96b,d97a,d97b,d98a -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
+    - stage: "Deploy EDIFACT Bindings"
+      script: cd edifact-jaxb-bindings; mvn deploy -pl d98b,d99a,d99b -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B    
 
 cache:
   directories:
