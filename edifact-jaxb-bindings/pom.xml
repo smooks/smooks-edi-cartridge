@@ -76,7 +76,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
+                <configuration combine.children="append">
                     <show>public</show>
                 </configuration>
             </plugin>
