@@ -66,9 +66,11 @@ import javax.xml.xpath.XPathFactory;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
@@ -89,32 +91,22 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
     @Override
     public DataProcessor doCreateDataProcessor(final Map<String, String> variables) {
         try {
-            final Parameter<String> schemaURIParameter = smooksResourceConfiguration.getParameter("schemaURI", String.class);
-            final String version = readVersion(schemaURIParameter);
-            final URI schema;
+            final Parameter<String> schemaUriParameter = smooksResourceConfiguration.getParameter("schemaURI", String.class);
+            final String version = readVersion(schemaUriParameter);
+            final URI entrySchemaUri;
 
             final List<Parameter> messageTypeParameters = smooksResourceConfiguration.getParameters("messageType");
             if (messageTypeParameters == null || messageTypeParameters.isEmpty()) {
-                schema = new URI(version.toLowerCase() + "/EDIFACT-Interchange.dfdl.xsd");
+                entrySchemaUri = new URI(version.toLowerCase() + "/EDIFACT-Interchange.dfdl.xsd");
             } else {
-                final List<String> messageTypes = (List) messageTypeParameters.stream().map(m -> m.getValue()).collect(Collectors.toList());
-
-                final File generatedSchema = File.createTempFile("EDIFACT-Interchange", ".dfdl.xsd");
-                try (Writer fileWriter = new OutputStreamWriter(new FileOutputStream(generatedSchema), StandardCharsets.UTF_8)) {
-                    MUSTACHE.execute(fileWriter, new HashMap<String, Object>() {{
-                        this.put("schemaLocation", schemaURIParameter.getValue());
-                        this.put("messageTypes", messageTypes);
-                        this.put("version", version);
-                    }});
-                }
-
-                schema = generatedSchema.toURI();
+                final List<String> messageTypes = (List) messageTypeParameters.stream().map(Parameter::getValue).collect(Collectors.toList());
+                entrySchemaUri = materialiseEntrySchema(schemaUriParameter.getValue(), messageTypes, version);
             }
 
-            final DfdlSchema dfdlSchema = new DfdlSchema(schema, variables, ValidationMode.valueOf(smooksResourceConfiguration.getParameterValue("validationMode", String.class, "Off")), Boolean.parseBoolean(smooksResourceConfiguration.getParameterValue("cacheOnDisk", String.class, "false")), Boolean.parseBoolean(smooksResourceConfiguration.getParameterValue("debugging", String.class, "false"))) {
+            final DfdlSchema dfdlSchema = new DfdlSchema(entrySchemaUri, variables, ValidationMode.valueOf(smooksResourceConfiguration.getParameterValue("validationMode", String.class, "Off")), Boolean.parseBoolean(smooksResourceConfiguration.getParameterValue("cacheOnDisk", String.class, "false")), Boolean.parseBoolean(smooksResourceConfiguration.getParameterValue("debugging", String.class, "false"))) {
                 @Override
                 public String getName() {
-                    return schemaURIParameter.getValue() + ":" + getValidationMode() + ":" + isCacheOnDisk() + ":" + isDebugging() + ":" + variables.toString();
+                    return schemaUriParameter.getValue() + ":" + getValidationMode() + ":" + isCacheOnDisk() + ":" + isDebugging() + ":" + variables.toString();
                 }
             };
 
@@ -122,6 +114,21 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
         } catch (Throwable t) {
             throw new SmooksConfigurationException(t);
         }
+    }
+    
+    protected URI materialiseEntrySchema(final String schemaUri, final List<String> messageTypes, final String version) throws IOException {
+        final File generatedEntrySchemaDir = Files.createTempDirectory(null).toFile();
+        generatedEntrySchemaDir.deleteOnExit();
+        final File generatedEntrySchema = new File(generatedEntrySchemaDir.toString() + "/EDIFACT-Interchange-" + UUID.nameUUIDFromBytes(String.join(":", messageTypes).getBytes()) + "-.dfdl.xsd");
+        try (Writer fileWriter = new OutputStreamWriter(new FileOutputStream(generatedEntrySchema), StandardCharsets.UTF_8)) {
+            MUSTACHE.execute(fileWriter, new HashMap<String, Object>() {{
+                this.put("schemaLocation", schemaUri);
+                this.put("messageTypes", messageTypes);
+                this.put("version", version);
+            }});
+        }
+        
+        return generatedEntrySchema.toURI();
     }
 
     protected String readVersion(final Parameter<String> schemaURIParameter) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
