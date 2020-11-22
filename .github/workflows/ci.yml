@@ -30,10 +30,12 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
       - name: Build
-        run: mvn install -T 1 -B -U -Dmaven.javadoc.skip=true
+        run: mvn install -T 1C -B -U -Dmaven.javadoc.skip=true
       - name: Deploy
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
+          sudo swapoff /swapfile
+          sudo rm -rf /swapfile
           echo $GPG_SECRET_KEYS | base64 --decode | gpg --import --no-tty --batch --yes
           echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
-          mvn deploy --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
+          mvn deploy -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
