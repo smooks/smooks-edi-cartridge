@@ -34,8 +34,8 @@ jobs:
       - name: Deploy
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-          sudo swapoff /swapfile
-          sudo rm -rf /swapfile
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
           echo $GPG_SECRET_KEYS | base64 --decode | gpg --import --no-tty --batch --yes
           echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
           mvn deploy -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
