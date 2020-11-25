@@ -66,15 +66,15 @@ public class EdiDataProcessorFactory extends DataProcessorFactory {
     public DataProcessor createDataProcessor() {
         try {
             final Map<String, String> variables = new HashMap<>();
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}SegmentTerm", smooksResourceConfiguration.getParameterValue("segmentTerminator", String.class, "'%NL;%WSP*; '%WSP*;"));
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}FieldSep", smooksResourceConfiguration.getParameterValue("dataElementSeparator", String.class, "+"));
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}CompositeSep", smooksResourceConfiguration.getParameterValue("compositeDataElementSeparator", String.class, ":"));
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}EscapeChar", smooksResourceConfiguration.getParameterValue("escapeCharacter", String.class, "?"));
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}RepeatSep", smooksResourceConfiguration.getParameterValue("repetitionSeparator", String.class, "*"));
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}DecimalSep", smooksResourceConfiguration.getParameterValue("decimalSign", String.class, "."));
-            variables.put("{http://www.ibm.com/dfdl/EDI/Format}GroupingSep", smooksResourceConfiguration.getParameterValue("triadSeparator", String.class, ","));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}SegmentTerm", resourceConfig.getParameterValue("segmentTerminator", String.class, "'%NL;%WSP*; '%WSP*;"));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}FieldSep", resourceConfig.getParameterValue("dataElementSeparator", String.class, "+"));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}CompositeSep", resourceConfig.getParameterValue("compositeDataElementSeparator", String.class, ":"));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}EscapeChar", resourceConfig.getParameterValue("escapeCharacter", String.class, "?"));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}RepeatSep", resourceConfig.getParameterValue("repetitionSeparator", String.class, "*"));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}DecimalSep", resourceConfig.getParameterValue("decimalSign", String.class, "."));
+            variables.put("{http://www.ibm.com/dfdl/EDI/Format}GroupingSep", resourceConfig.getParameterValue("triadSeparator", String.class, ","));
 
-            final List<Parameter> variableParameters = smooksResourceConfiguration.getParameters("variables");
+            final List<Parameter> variableParameters = resourceConfig.getParameters("variables");
             if (variableParameters != null) {
                 for (Parameter variableParameter : variableParameters) {
                     final Map.Entry<String, String> variable = (Map.Entry<String, String>) variableParameter.getValue();
@@ -89,7 +89,7 @@ public class EdiDataProcessorFactory extends DataProcessorFactory {
     }
 
     protected DataProcessor doCreateDataProcessor(final Map<String, String> variables) throws URISyntaxException {
-        final DfdlSchema dfdlSchema = new DfdlSchema(new URI(schemaUri), variables, ValidationMode.valueOf(smooksResourceConfiguration.getParameterValue("validationMode", String.class, "Off")), Boolean.parseBoolean(smooksResourceConfiguration.getParameterValue("cacheOnDisk", String.class, "false")), Boolean.parseBoolean(smooksResourceConfiguration.getParameterValue("debugging", String.class, "false")));
+        final DfdlSchema dfdlSchema = new DfdlSchema(new URI(schemaUri), variables, ValidationMode.valueOf(resourceConfig.getParameterValue("validationMode", String.class, "Off")), Boolean.parseBoolean(resourceConfig.getParameterValue("cacheOnDisk", String.class, "false")), Boolean.parseBoolean(resourceConfig.getParameterValue("debugging", String.class, "false")));
         return compileOrGet(dfdlSchema);
     }
 
