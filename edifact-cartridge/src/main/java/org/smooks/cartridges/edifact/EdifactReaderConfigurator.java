@@ -45,7 +45,7 @@ package org.smooks.cartridges.edifact;
 import org.smooks.assertion.AssertArgument;
 import org.smooks.cartridges.edi.EdiReaderConfigurator;
 import org.smooks.cdr.Parameter;
-import org.smooks.cdr.SmooksResourceConfiguration;
+import org.smooks.cdr.ResourceConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,14 +74,14 @@ public class EdifactReaderConfigurator extends EdiReaderConfigurator {
     }
 
     @Override
-    public List<SmooksResourceConfiguration> toConfig() {
-        final List<SmooksResourceConfiguration> smooksResourceConfigurations = super.toConfig();
-        final SmooksResourceConfiguration smooksResourceConfiguration = smooksResourceConfigurations.get(0);
+    public List<ResourceConfig> toConfig() {
+        final List<ResourceConfig> resourceConfigs = super.toConfig();
+        final ResourceConfig resourceConfig = resourceConfigs.get(0);
 
         for (String messageType : messageTypes) {
-            smooksResourceConfiguration.setParameter(new Parameter("messageType", messageType));
+            resourceConfig.setParameter(new Parameter("messageType", messageType));
         }
 
-        return smooksResourceConfigurations;
+        return resourceConfigs;
     }
 }

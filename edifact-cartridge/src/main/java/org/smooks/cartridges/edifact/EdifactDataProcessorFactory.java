@@ -91,11 +91,11 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
     @Override
     public DataProcessor doCreateDataProcessor(final Map<String, String> variables) {
         try {
-            final Parameter<String> schemaUriParameter = smooksResourceConfiguration.getParameter("schemaURI", String.class);
+            final Parameter<String> schemaUriParameter = resourceConfig.getParameter("schemaURI", String.class);
             final String version = readVersion(schemaUriParameter);
             final URI entrySchemaUri;
 
-            final List<Parameter> messageTypeParameters = smooksResourceConfiguration.getParameters("messageType");
+            final List<Parameter> messageTypeParameters = resourceConfig.getParameters("messageType");
             if (messageTypeParameters == null || messageTypeParameters.isEmpty()) {
                 entrySchemaUri = new URI(version.toLowerCase() + "/EDIFACT-Interchange.dfdl.xsd");
             } else {
@@ -103,7 +103,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
                 entrySchemaUri = materialiseEntrySchema(schemaUriParameter.getValue(), messageTypes, version);
             }
 
-            final DfdlSchema dfdlSchema = new DfdlSchema(entrySchemaUri, variables, ValidationMode.valueOf(smooksResourceConfiguration.getParameterValue("validationMode", String.class, "Off")), Boolean.parseBoolean(smooksResourceConfiguration.getParameterValue("cacheOnDisk", String.class, "false")), Boolean.parseBoolean(smooksResourceConfiguration.getParameterValue("debugging", String.class, "false"))) {
+            final DfdlSchema dfdlSchema = new DfdlSchema(entrySchemaUri, variables, ValidationMode.valueOf(resourceConfig.getParameterValue("validationMode", String.class, "Off")), Boolean.parseBoolean(resourceConfig.getParameterValue("cacheOnDisk", String.class, "false")), Boolean.parseBoolean(resourceConfig.getParameterValue("debugging", String.class, "false"))) {
                 @Override
                 public String getName() {
                     return schemaUriParameter.getValue() + ":" + getValidationMode() + ":" + isCacheOnDisk() + ":" + isDebugging() + ":" + variables.toString();

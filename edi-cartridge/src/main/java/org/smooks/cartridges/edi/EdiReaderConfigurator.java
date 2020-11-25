@@ -42,18 +42,12 @@
  */
 package org.smooks.cartridges.edi;
 
-import org.apache.daffodil.japi.ValidationMode;
-import org.smooks.GenericReaderConfigurator;
-import org.smooks.ReaderConfigurator;
 import org.smooks.assertion.AssertArgument;
-import org.smooks.cartridges.dfdl.parser.DfdlParser;
 import org.smooks.cartridges.dfdl.parser.DfdlReaderConfigurator;
 import org.smooks.cdr.Parameter;
-import org.smooks.cdr.SmooksResourceConfiguration;
+import org.smooks.cdr.ResourceConfig;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class EdiReaderConfigurator extends DfdlReaderConfigurator {
 
@@ -117,19 +111,19 @@ public class EdiReaderConfigurator extends DfdlReaderConfigurator {
     }
 
     @Override
-    public List<SmooksResourceConfiguration> toConfig() {
-        final List<SmooksResourceConfiguration> smooksResourceConfigurations = super.toConfig();
-        final SmooksResourceConfiguration smooksResourceConfiguration = smooksResourceConfigurations.get(0);
+    public List<ResourceConfig> toConfig() {
+        final List<ResourceConfig> resourceConfigs = super.toConfig();
+        final ResourceConfig resourceConfig = resourceConfigs.get(0);
 
-        smooksResourceConfiguration.setParameter(new Parameter("dataProcessorFactory", getDataProcessorFactory()));
-        smooksResourceConfiguration.setParameter(new Parameter("segmentTerminator", segmentTerminator));
-        smooksResourceConfiguration.setParameter(new Parameter("dataElementSeparator", dataElementSeparator));
-        smooksResourceConfiguration.setParameter(new Parameter("compositeDataElementSeparator", compositeDataElementSeparator));
-        smooksResourceConfiguration.setParameter(new Parameter("escapeCharacter", escapeCharacter));
-        smooksResourceConfiguration.setParameter(new Parameter("repetitionSeparator", repetitionSeparator));
-        smooksResourceConfiguration.setParameter(new Parameter("decimalSign", decimalSign));
-        smooksResourceConfiguration.setParameter(new Parameter("triadSeparator", triadSeparator));
+        resourceConfig.setParameter(new Parameter("dataProcessorFactory", getDataProcessorFactory()));
+        resourceConfig.setParameter(new Parameter("segmentTerminator", segmentTerminator));
+        resourceConfig.setParameter(new Parameter("dataElementSeparator", dataElementSeparator));
+        resourceConfig.setParameter(new Parameter("compositeDataElementSeparator", compositeDataElementSeparator));
+        resourceConfig.setParameter(new Parameter("escapeCharacter", escapeCharacter));
+        resourceConfig.setParameter(new Parameter("repetitionSeparator", repetitionSeparator));
+        resourceConfig.setParameter(new Parameter("decimalSign", decimalSign));
+        resourceConfig.setParameter(new Parameter("triadSeparator", triadSeparator));
 
-        return smooksResourceConfigurations;
+        return resourceConfigs;
     }
 }
