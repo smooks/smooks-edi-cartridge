@@ -9,8 +9,8 @@
         <version>2.0.0-M3-SNAPSHOT</version>
     </parent>
 
-    <artifactId>edifact-jaxb-bindings</artifactId>
     <modelVersion>4.0.0</modelVersion>
+    <artifactId>edifact-jaxb-bindings</artifactId>
     <packaging>pom</packaging>
     
     <modules>
