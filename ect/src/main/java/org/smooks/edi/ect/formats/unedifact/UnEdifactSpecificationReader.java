@@ -102,8 +102,8 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
         this.useImport = useImport;
         this.useShortName = useShortName;
 
-        definitionFiles = new HashMap<String, byte[]>();
-        messageFiles = new HashMap<String, byte[]>();
+        definitionFiles = new HashMap<>();
+        messageFiles = new HashMap<>();
         readDefinitionEntries(specificationInStream, new ZipDirectoryEntry("eded.", definitionFiles), new ZipDirectoryEntry("edcd.", definitionFiles), new ZipDirectoryEntry("edsd.", definitionFiles), new ZipDirectoryEntry("uncl.", definitionFiles), new ZipDirectoryEntry("edmd.", "*", messageFiles));
 
         if (versions.size() != 1) {
@@ -223,32 +223,25 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
         byte[] message = messageFiles.get(messageName);
 
         if (message != null) {
-            InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(message));
-            try {
+            try (InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(message))) {
                 return new UnEdifactMessage(reader, useImport, useShortName, definitionModel);
-            } finally {
-                reader.close();
             }
         }
         return null;
     }
 
-    public Edimap getDefinitionModel() throws IOException {
+    public Edimap getDefinitionModel() {
         return definitionModel;
     }
 
     private Edimap parseEDIDefinitionFiles() throws IOException, EdiParseException {
-
         Edimap edifactModel;
-        Reader dataISR = null;
-        Reader compositeISR = null;
-        Reader segmentISR = null;
         Reader codeISR = null;
 
-        try {
-            dataISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("eded.")));
-            compositeISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("edcd.")));
-            segmentISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("edsd.")));
+        try (Reader dataISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("eded.")));
+             Reader compositeISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("edcd.")));
+             Reader segmentISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("edsd.")))) {
+
             if (definitionFiles.get("uncl.") != null) {
                 codeISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("uncl.")));
             }
@@ -258,21 +251,12 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
             edifactModel.getSegments().setXmltag("DefinitionMap");
             edifactModel.setDelimiters(UNEdifactInterchangeParser.defaultUNEdifactDelimiters);
         } finally {
-            if (dataISR != null) {
-                dataISR.close();
-            }
-            if (compositeISR != null) {
-                compositeISR.close();
-            }
-            if (segmentISR != null) {
-                segmentISR.close();
-            }
             if (codeISR != null) {
                 codeISR.close();
             }
         }
-        return edifactModel;
 
+        return edifactModel;
     }
 
     private void readDefinitionEntries(ZipInputStream folderZip, ZipDirectoryEntry... entries) throws IOException {
