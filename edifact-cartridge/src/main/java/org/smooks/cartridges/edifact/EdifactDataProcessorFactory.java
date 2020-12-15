@@ -95,7 +95,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
             final String version = readVersion(schemaUriParameter);
             final URI entrySchemaUri;
 
-            final List<Parameter> messageTypeParameters = resourceConfig.getParameters("messageType");
+            final List<Parameter<?>> messageTypeParameters = resourceConfig.getParameters("messageType");
             if (messageTypeParameters == null || messageTypeParameters.isEmpty()) {
                 entrySchemaUri = new URI(version.toLowerCase() + "/EDIFACT-Interchange.dfdl.xsd");
             } else {

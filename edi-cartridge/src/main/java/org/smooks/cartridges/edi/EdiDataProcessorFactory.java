@@ -74,9 +74,9 @@ public class EdiDataProcessorFactory extends DataProcessorFactory {
             variables.put("{http://www.ibm.com/dfdl/EDI/Format}DecimalSep", resourceConfig.getParameterValue("decimalSign", String.class, "."));
             variables.put("{http://www.ibm.com/dfdl/EDI/Format}GroupingSep", resourceConfig.getParameterValue("triadSeparator", String.class, ","));
 
-            final List<Parameter> variableParameters = resourceConfig.getParameters("variables");
+            final List<Parameter<?>> variableParameters = resourceConfig.getParameters("variables");
             if (variableParameters != null) {
-                for (Parameter variableParameter : variableParameters) {
+                for (Parameter<?> variableParameter : variableParameters) {
                     final Map.Entry<String, String> variable = (Map.Entry<String, String>) variableParameter.getValue();
                     variables.put(variable.getKey(), variable.getValue());
                 }
