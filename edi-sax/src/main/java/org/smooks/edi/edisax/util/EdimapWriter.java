@@ -94,7 +94,7 @@ public class EdimapWriter {
 
             edimapWriter.write(edimap);
 
-            XmlUtil.serialize(edimapWriter.doc, true, writer);
+            XmlUtil.serialize(edimapWriter.doc, true, writer, true);
             writer.flush();
         } catch (ParserConfigurationException e) {
             IOException ioE = new IOException("Error constructing EDI Mapping Model");
