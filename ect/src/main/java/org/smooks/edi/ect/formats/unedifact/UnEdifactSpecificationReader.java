@@ -104,7 +104,12 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
 
         definitionFiles = new HashMap<>();
         messageFiles = new HashMap<>();
-        readDefinitionEntries(specificationInStream, new ZipDirectoryEntry("eded.", definitionFiles), new ZipDirectoryEntry("edcd.", definitionFiles), new ZipDirectoryEntry("edsd.", definitionFiles), new ZipDirectoryEntry("uncl.", definitionFiles), new ZipDirectoryEntry("edmd.", "*", messageFiles));
+        readDefinitionEntries(specificationInStream,
+                              new ZipDirectoryEntry("eded.", definitionFiles),
+                              new ZipDirectoryEntry("edcd.", definitionFiles),
+                              new ZipDirectoryEntry("edsd.", definitionFiles),
+                              new ZipDirectoryEntry("uncl.", "uncl", definitionFiles),
+                              new ZipDirectoryEntry("edmd.", "*", messageFiles));
 
         if (versions.size() != 1) {
             if (versions.size() == 0) {
@@ -242,8 +247,8 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
              Reader compositeISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("edcd.")));
              Reader segmentISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("edsd.")))) {
 
-            if (definitionFiles.get("uncl.") != null) {
-                codeISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("uncl.")));
+            if (definitionFiles.get("uncl") != null) {
+                codeISR = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("uncl")));
             }
 
             edifactModel = UnEdifactDefinitionReader.parse(dataISR, compositeISR, segmentISR, codeISR, useShortName);
@@ -263,9 +268,9 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
 
         ZipEntry fileEntry = folderZip.getNextEntry();
         while (fileEntry != null) {
-            String fName = new File(fileEntry.getName().toLowerCase()).getName().replaceFirst("tr", "ed");
+            String fName = new File(fileEntry.getName().toLowerCase()).getName().replaceFirst("tr", "ed").toLowerCase();
             for (ZipDirectoryEntry entry : entries) {
-                if (fName.startsWith(entry.getDirectory())) {
+                if (fName.startsWith(entry.getDirectory().toLowerCase())) {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
                     byte[] bytes = new byte[BUFFER];
@@ -311,12 +316,11 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
 					Matcher match = entryFileName.matcher(messageName);
 					if (match.matches()) {
                         String entryName = match.group(1);
-						files.put(entryName, baos.toByteArray());
+						addEntry(entryName, baos.toByteArray(), files);
 						versions.add((match.group(2) + match.group(3)).toLowerCase());
                     }
                 } else {
-                    files.put(entry, baos.toByteArray());
-                    break;
+                    addEntry(entry, baos.toByteArray(), files);
                 }
             }
             folderZip.closeEntry();
@@ -324,6 +328,18 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
         }
 
         return result;
+    }
+
+    private void addEntry(final String entry, final byte[] bytes, final Map<String, byte[]> files) {
+        if (files.containsKey(entry)) {
+            final byte[] available = files.get(entry);
+            final byte[] combined = new byte[available.length + bytes.length];
+            System.arraycopy(available, 0, combined, 0, available.length);
+            System.arraycopy(bytes, 0, combined, available.length, bytes.length);
+            files.put(entry, combined);
+        } else {
+            files.put(entry, bytes);
+        }
     }
 
     private static void translatePseudoGraph(byte[] bytes)
