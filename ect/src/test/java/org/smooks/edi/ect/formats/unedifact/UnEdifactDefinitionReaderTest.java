@@ -69,7 +69,10 @@ public class UnEdifactDefinitionReaderTest {
 
   @Test
   public void checkThatCodeListValuesForComponent1049AreReadCorrectly() throws Exception {
-    // While checking for
+    // During parsing of the code list entries, the algorithm used looked for the next line
+    // separator. As we already stopped at that line separator before, it skipped the whole
+    // subsequent code list entry, i.e. 1049. If this test is run with the original code a NPE will
+    // be thrown as there is no available code list entry here
     final Edimap edimap = UnEdifactDefinitionReader.parse(dataReader, compositeReader, segmentReader, codeReader, true);
 
     List<SegmentGroup> segments = edimap.getSegments().getSegments();
