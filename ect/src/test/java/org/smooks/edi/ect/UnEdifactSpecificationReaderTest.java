@@ -88,7 +88,7 @@ public class UnEdifactSpecificationReaderTest {
     private static UnEdifactSpecificationReader d08AReader_shortnames;
     private XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
 
-    //@BeforeAll
+    @BeforeAll
     public static void parseD08A() throws Exception {
         InputStream inputStream = UnEdifactSpecificationReaderTest.class.getResourceAsStream("D08A.zip");
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
