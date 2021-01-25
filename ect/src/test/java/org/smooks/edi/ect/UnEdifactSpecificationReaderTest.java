@@ -55,6 +55,7 @@ import org.smooks.edi.ect.formats.unedifact.UnEdifactSpecificationReader;
 import org.smooks.edi.edisax.EDIConfigurationException;
 import org.smooks.edi.edisax.EDIParser;
 import org.smooks.edi.edisax.model.internal.Edimap;
+import org.smooks.edi.edisax.model.internal.Field;
 import org.smooks.io.StreamUtils;
 import org.smooks.util.ClassUtil;
 import org.xml.sax.Attributes;
@@ -191,6 +192,28 @@ public class UnEdifactSpecificationReaderTest {
         //Test INVOIC
         String mappingModel = getEdiMessageAsString(ediSpecificationReader, "INVOIC");
         testPackage("d93a-invoic-shortname", mappingModel);
+    }
+
+    @Test
+    public void checkThatD96AComponentsAreCorrectlyParsed() throws Exception {
+        InputStream inputStream =
+            UnEdifactSpecificationReaderTest.class.getResourceAsStream("d96a.zip");
+        ZipInputStream zipInputStream = new ZipInputStream(inputStream);
+        UnEdifactSpecificationReader d96AReader =
+            new UnEdifactSpecificationReader(zipInputStream, false, false);
+
+        final Field component = getComplexElement(d96AReader, "C770");
+        assertEquals("9424", component.getComponents().get(0).getNodeTypeRef());
+    }
+
+    private Field getComplexElement(final UnEdifactSpecificationReader reader, final String componentName) {
+        Edimap edimap = reader.getDefinitionModel();
+        for (final Field field : edimap.getCompositeDataElements()) {
+            if (componentName.equals(field.getNodeTypeRef())) {
+                return field;
+            }
+        }
+        return null;
     }
 
     public void testPackage(String packageName, String mappingModel) throws IOException, SAXException, EDIConfigurationException {
