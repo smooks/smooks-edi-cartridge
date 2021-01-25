@@ -312,7 +312,6 @@ public class UnEdifactDefinitionReader {
         String id = populateField(_reader, components, field, useShortName);
         while (id != null) {
             fields.put(id, field);
-            moveToNextPart(_reader);
             field = new Field();
             id = populateField(_reader, components, field, useShortName);
         }
@@ -330,7 +329,6 @@ public class UnEdifactDefinitionReader {
         String id = populateCodeList(_reader, codeList);
         while (id != null) {
             codeLists.put(id, codeList);
-            moveToNextPart(_reader);
             codeList = new CodeList();
             id = populateCodeList(_reader, codeList);
         }
@@ -401,7 +399,7 @@ public class UnEdifactDefinitionReader {
 
         line = readUntilValue(reader);
         LinePart linePart;
-        while (line != null && line.length() != 0) {
+        while (line != null && !line.matches(ELEMENT_SEPARATOR)) {
             linePart = getLinePart(reader, line);
             if (linePart != null) {
                 Component component = new Component();
@@ -424,6 +422,7 @@ public class UnEdifactDefinitionReader {
         toComponent.setDataTypeParameters(fromComponent.getTypeParameters());
         toComponent.setXmltag(XmlTagEncoder.encode(fromComponent.getXmltag()));
         toComponent.setName(fromComponent.getName());
+        toComponent.setNodeTypeRef(fromComponent.getNodeTypeRef());
     }
 
     private static Map<String, Component> readComponents(Reader reader, Map<String, CodeList> codeLists, boolean useShortName) throws IOException, EdiParseException {
@@ -577,6 +576,11 @@ public class UnEdifactDefinitionReader {
                     part.setType(matcher.group(3));
                     part.setMinOccurance(matcher.group(4), matcher.group(5));
                     part.setMaxOccurance(matcher.group(5));
+                } else {
+                    // we know that the second line doesn't contain anything useful and the first
+                    // line didn't contain the whole data necessary, thus we can be sure that the
+                    // lines do not form a valid definition
+                    return null;
                 }
             }
         }

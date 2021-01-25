@@ -43,22 +43,22 @@
 <medi:segment xmlns:medi="http://www.milyn.org/schema/edi-message-mapping-1.5.xsd" description=" To specify price information." ignoreUnmappedFields="false" maxOccurs="1" minOccurs="1" name="PRICE DETAILS" segcode="PRI" truncatable="true" xmltag="PRI">
   <medi:field name="PRICE INFORMATION" nodeTypeRef="C509" required="false" truncatable="true" xmltag="C509">
     <medi:documentation>Identification of price type, price and relateddetails.</medi:documentation>
-    <medi:component dataType="String" maxLength="3" minLength="0" name="Price code qualifier" required="true" truncatable="true" xmltag="e5125">
+    <medi:component dataType="String" maxLength="3" minLength="0" name="Price code qualifier" nodeTypeRef="5125" required="true" truncatable="true" xmltag="e5125">
       <medi:documentation>Code qualifying a price.</medi:documentation>
     </medi:component>
-    <medi:component dataType="DABigDecimal" maxLength="15" minLength="0" name="Price amount" required="false" truncatable="true" xmltag="e5118">
+    <medi:component dataType="DABigDecimal" maxLength="15" minLength="0" name="Price amount" nodeTypeRef="5118" required="false" truncatable="true" xmltag="e5118">
       <medi:documentation>To specify a price.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="3" minLength="0" name="Price type code" required="false" truncatable="true" xmltag="e5375">
+    <medi:component dataType="String" maxLength="3" minLength="0" name="Price type code" nodeTypeRef="5375" required="false" truncatable="true" xmltag="e5375">
       <medi:documentation>Code specifying the type of price.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="3" minLength="0" name="Price specification code" required="false" truncatable="true" xmltag="e5387">
+    <medi:component dataType="String" maxLength="3" minLength="0" name="Price specification code" nodeTypeRef="5387" required="false" truncatable="true" xmltag="e5387">
       <medi:documentation>Code identifying pricing specification.</medi:documentation>
     </medi:component>
-    <medi:component dataType="DABigDecimal" maxLength="9" minLength="0" name="Unit price basis quantity" required="false" truncatable="true" xmltag="e5284">
+    <medi:component dataType="DABigDecimal" maxLength="9" minLength="0" name="Unit price basis quantity" nodeTypeRef="5284" required="false" truncatable="true" xmltag="e5284">
       <medi:documentation>To specify the basis for a unit price.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="8" minLength="0" name="Measurement unit code" required="false" truncatable="true" xmltag="e6411">
+    <medi:component dataType="String" maxLength="8" minLength="0" name="Measurement unit code" nodeTypeRef="6411" required="false" truncatable="true" xmltag="e6411">
       <medi:documentation>Code specifying the unit of measurement.</medi:documentation>
     </medi:component>
   </medi:field>
