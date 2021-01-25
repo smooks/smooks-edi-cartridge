@@ -330,7 +330,6 @@ public class UnEdifactDefinitionReader {
         String id = populateCodeList(_reader, codeList);
         while (id != null) {
             codeLists.put(id, codeList);
-            moveToNextPart(_reader);
             codeList = new CodeList();
             id = populateCodeList(_reader, codeList);
         }
@@ -424,6 +423,7 @@ public class UnEdifactDefinitionReader {
         toComponent.setDataTypeParameters(fromComponent.getTypeParameters());
         toComponent.setXmltag(XmlTagEncoder.encode(fromComponent.getXmltag()));
         toComponent.setName(fromComponent.getName());
+        toComponent.setCodeList(fromComponent.getCodeList());
     }
 
     private static Map<String, Component> readComponents(Reader reader, Map<String, CodeList> codeLists, boolean useShortName) throws IOException, EdiParseException {
