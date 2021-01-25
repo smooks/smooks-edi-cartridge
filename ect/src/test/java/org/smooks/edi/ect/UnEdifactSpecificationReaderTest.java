@@ -67,6 +67,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipInputStream;
 
@@ -84,7 +88,7 @@ public class UnEdifactSpecificationReaderTest {
     private static UnEdifactSpecificationReader d08AReader_shortnames;
     private XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
 
-    @BeforeAll
+    //@BeforeAll
     public static void parseD08A() throws Exception {
         InputStream inputStream = UnEdifactSpecificationReaderTest.class.getResourceAsStream("D08A.zip");
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
@@ -193,6 +197,28 @@ public class UnEdifactSpecificationReaderTest {
         testPackage("d93a-invoic-shortname", mappingModel);
     }
 
+    @Test
+    public void checkThatD96ACodeListsAreReadCorrectlyForLegacyD96A() throws Exception {
+        InputStream inputStream = UnEdifactSpecificationReaderTest.class.getResourceAsStream("d96a.zip");
+        ZipInputStream zipInputStream = new ZipInputStream(inputStream);
+        UnEdifactSpecificationReader d96AReader = new UnEdifactSpecificationReader(zipInputStream, false, false);
+
+        Field definitionFilesField =
+            UnEdifactSpecificationReader.class.getDeclaredField("definitionFiles");
+        definitionFilesField.setAccessible(true);
+        MethodHandle mhDefinitionFiles = MethodHandles.lookup().unreflectGetter(definitionFilesField);
+
+        Map<String, byte[]> definitionFiles = null;
+        try {
+            @SuppressWarnings("unchecked")
+            Map<String, byte[]> _definitionFiles = (Map<String, byte[]>) mhDefinitionFiles.invoke(d96AReader);
+            definitionFiles = _definitionFiles;
+        } catch (Throwable t) {
+            fail("Should not have thrown a failure: " + t.getMessage());
+        }
+        assertFalse(definitionFiles.get("uncl") == null || definitionFiles.get("uncl").length == 0);
+    }
+
     public void testPackage(String packageName, String mappingModel) throws IOException, SAXException, EDIConfigurationException {
         InputStream testFileInputStream = getClass().getResourceAsStream("testfiles/" + packageName + "/input.edi");
 
@@ -204,7 +230,7 @@ public class UnEdifactSpecificationReaderTest {
 
         String expected = new String(StreamUtils.readStream(getClass().getResourceAsStream("testfiles/" + packageName + "/expected-result.xml"))).trim();
         String actual = contentHandler.xmlMapping.toString();
-        
+
         assertFalse(DiffBuilder.compare(expected).withTest(actual).ignoreComments().ignoreWhitespace().build().hasDifferences());
     }
 
