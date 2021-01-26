@@ -46,13 +46,13 @@
                       xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"
                       xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd">
 
-    <core:smooks filterSourceOn="/Interchange" maxNodeDepth="0">
+    <core:smooks filterSourceOn="/Interchange">
         <core:action>
             <core:inline directive="REPLACE"/>
         </core:action>
         <core:config>
             <smooks-resource-list>
-                <edifact:unparser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnElement="/Interchange">
+                <edifact:unparser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnElement="*">
                     <edifact:messageTypes>
                         <edifact:messageType>ORDERS</edifact:messageType>
                         <edifact:messageType>INVOIC</edifact:messageType>
