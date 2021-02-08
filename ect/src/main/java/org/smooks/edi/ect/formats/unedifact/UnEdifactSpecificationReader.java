@@ -166,7 +166,7 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
     public EdiDirectory getEdiDirectory(String... includeMessages) throws IOException {
         if(ediDirectory == null) {
             Set<String> includeMessageSet = null;
-            String commonMessageName = getCommmonMessageName();
+            String commonMessageName = getCommonMessageName();
             Set<String> messages = getMessageNames();
             Edimap commonModel = null;
             List<Edimap> models = new ArrayList<Edimap>();
@@ -204,7 +204,7 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
         return ediDirectory;
     }
 
-    private String getCommmonMessageName() {
+    private String getCommonMessageName() {
         return EDIUtils.MODEL_SET_DEFINITIONS_DESCRIPTION.getName();
     }
 
@@ -340,6 +340,10 @@ public class UnEdifactSpecificationReader implements EdiSpecificationReader {
         } else {
             files.put(entry, bytes);
         }
+    }
+
+    public Map<String, byte[]> getDefinitionFiles() {
+        return this.definitionFiles;
     }
 
     private static void translatePseudoGraph(byte[] bytes)
