@@ -6,132 +6,132 @@
   %%
   Licensed under the terms of the Apache License Version 2.0, or
   the GNU Lesser General Public License version 3.0 or later.
-  
+
   SPDX-License-Identifier: Apache-2.0 OR LGPL-3.0-or-later
-  
+
   ======================================================================
-  
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-  
+
   ======================================================================
-  
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
   version 3 of the License, or (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public License
   along with this program; if not, write to the Free Software Foundation,
   Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
   =========================LICENSE_END==================================
   -->
-<medi:segment xmlns:medi="http://www.milyn.org/schema/edi-message-mapping-1.5.xsd" description=" To specify the name/address and their relatedfunction, either by C082 only and/orunstructured by C058 or structured by C080 thru3207." ignoreUnmappedFields="false" maxOccurs="1" minOccurs="1" name="NAME AND ADDRESS" segcode="NAD" truncatable="true" xmltag="NAD">
+<medi:segment xmlns:medi="http://www.milyn.org/schema/edi-message-mapping-1.5.xsd" description="To specify the name/address and their related function, either by C082 only and/or unstructured by C058 or structured by C080 thru 3207." ignoreUnmappedFields="false" maxOccurs="1" minOccurs="1" name="NAME AND ADDRESS" segcode="NAD" truncatable="true" xmltag="NAD">
   <medi:field dataType="String" maxLength="3" minLength="0" name="Party function code qualifier" nodeTypeRef="3035" required="true" truncatable="true" xmltag="e3035">
     <medi:documentation>Code giving specific meaning to a party.</medi:documentation>
   </medi:field>
   <medi:field name="PARTY IDENTIFICATION DETAILS" nodeTypeRef="C082" required="false" truncatable="true" xmltag="C082">
     <medi:documentation>Identification of a transaction party by code.</medi:documentation>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Party identifier" required="true" truncatable="true" xmltag="e3039">
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Party identifier" nodeTypeRef="3039" required="true" truncatable="true" xmltag="e3039">
       <medi:documentation>Code specifying the identity of a party.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="17" minLength="0" name="Code list identification code" required="false" truncatable="true" xmltag="e1131">
-      <medi:documentation>Code identifying a user or association maintained codelist.</medi:documentation>
+    <medi:component dataType="String" maxLength="17" minLength="0" name="Code list identification code" nodeTypeRef="1131" required="false" truncatable="true" xmltag="e1131">
+      <medi:documentation>Code identifying a user or association maintained code list.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="3" minLength="0" name="Code list responsible agency code" required="false" truncatable="true" xmltag="e3055">
-      <medi:documentation>Code specifying the agency responsible for a codelist.</medi:documentation>
+    <medi:component dataType="String" maxLength="3" minLength="0" name="Code list responsible agency code" nodeTypeRef="3055" required="false" truncatable="true" xmltag="e3055">
+      <medi:documentation>Code specifying the agency responsible for a code list.</medi:documentation>
     </medi:component>
   </medi:field>
   <medi:field name="NAME AND ADDRESS" nodeTypeRef="C058" required="false" truncatable="true" xmltag="C058">
     <medi:documentation>Unstructured name and address: one to five lines.</medi:documentation>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Name and address description" required="true" truncatable="true" xmltag="e3124">
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Name and address description" nodeTypeRef="3124" required="true" truncatable="true" xmltag="e3124">
       <medi:documentation>Free form description of a name and address line.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Name and address description" required="false" truncatable="true" xmltag="e3124">
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Name and address description" nodeTypeRef="3124" required="false" truncatable="true" xmltag="e3124">
       <medi:documentation>Free form description of a name and address line.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Name and address description" required="false" truncatable="true" xmltag="e3124">
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Name and address description" nodeTypeRef="3124" required="false" truncatable="true" xmltag="e3124">
       <medi:documentation>Free form description of a name and address line.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Name and address description" required="false" truncatable="true" xmltag="e3124">
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Name and address description" nodeTypeRef="3124" required="false" truncatable="true" xmltag="e3124">
       <medi:documentation>Free form description of a name and address line.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Name and address description" required="false" truncatable="true" xmltag="e3124">
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Name and address description" nodeTypeRef="3124" required="false" truncatable="true" xmltag="e3124">
       <medi:documentation>Free form description of a name and address line.</medi:documentation>
     </medi:component>
   </medi:field>
   <medi:field name="PARTY NAME" nodeTypeRef="C080" required="false" truncatable="true" xmltag="C080">
-    <medi:documentation>Identification of a transaction party by name, oneto five lines. Party name may be formatted.</medi:documentation>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Party name" required="true" truncatable="true" xmltag="e3036">
+    <medi:documentation>Identification of a transaction party by name, one to five lines. Party name may be formatted.</medi:documentation>
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Party name" nodeTypeRef="3036" required="true" truncatable="true" xmltag="e3036">
       <medi:documentation>Name of a party.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Party name" required="false" truncatable="true" xmltag="e3036">
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Party name" nodeTypeRef="3036" required="false" truncatable="true" xmltag="e3036">
       <medi:documentation>Name of a party.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Party name" required="false" truncatable="true" xmltag="e3036">
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Party name" nodeTypeRef="3036" required="false" truncatable="true" xmltag="e3036">
       <medi:documentation>Name of a party.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Party name" required="false" truncatable="true" xmltag="e3036">
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Party name" nodeTypeRef="3036" required="false" truncatable="true" xmltag="e3036">
       <medi:documentation>Name of a party.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Party name" required="false" truncatable="true" xmltag="e3036">
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Party name" nodeTypeRef="3036" required="false" truncatable="true" xmltag="e3036">
       <medi:documentation>Name of a party.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="3" minLength="0" name="Party name format code" required="false" truncatable="true" xmltag="e3045">
+    <medi:component dataType="String" maxLength="3" minLength="0" name="Party name format code" nodeTypeRef="3045" required="false" truncatable="true" xmltag="e3045">
       <medi:documentation>Code specifying the representation of a party name.</medi:documentation>
     </medi:component>
   </medi:field>
   <medi:field name="STREET" nodeTypeRef="C059" required="false" truncatable="true" xmltag="C059">
-    <medi:documentation>Street address and/or PO Box number in a structuredaddress: one to four lines.</medi:documentation>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Street and number or post office box identifier" required="true" truncatable="true" xmltag="e3042">
-      <medi:documentation>To identify a street and number and/or Post Office boxnumber.</medi:documentation>
+    <medi:documentation>Street address and/or PO Box number in a structured address: one to four lines.</medi:documentation>
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Street and number or post office box identifier" nodeTypeRef="3042" required="true" truncatable="true" xmltag="e3042">
+      <medi:documentation>To identify a street and number and/or Post Office box number.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Street and number or post office box identifier" required="false" truncatable="true" xmltag="e3042">
-      <medi:documentation>To identify a street and number and/or Post Office boxnumber.</medi:documentation>
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Street and number or post office box identifier" nodeTypeRef="3042" required="false" truncatable="true" xmltag="e3042">
+      <medi:documentation>To identify a street and number and/or Post Office box number.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Street and number or post office box identifier" required="false" truncatable="true" xmltag="e3042">
-      <medi:documentation>To identify a street and number and/or Post Office boxnumber.</medi:documentation>
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Street and number or post office box identifier" nodeTypeRef="3042" required="false" truncatable="true" xmltag="e3042">
+      <medi:documentation>To identify a street and number and/or Post Office box number.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="35" minLength="0" name="Street and number or post office box identifier" required="false" truncatable="true" xmltag="e3042">
-      <medi:documentation>To identify a street and number and/or Post Office boxnumber.</medi:documentation>
+    <medi:component dataType="String" maxLength="35" minLength="0" name="Street and number or post office box identifier" nodeTypeRef="3042" required="false" truncatable="true" xmltag="e3042">
+      <medi:documentation>To identify a street and number and/or Post Office box number.</medi:documentation>
     </medi:component>
   </medi:field>
   <medi:field dataType="String" maxLength="35" minLength="0" name="City name" nodeTypeRef="3164" required="false" truncatable="true" xmltag="e3164">
     <medi:documentation>Name of a city.</medi:documentation>
   </medi:field>
   <medi:field name="COUNTRY SUBDIVISION DETAILS" nodeTypeRef="C819" required="false" truncatable="true" xmltag="C819">
-    <medi:documentation>To specify a country subdivision, such as state,canton, county, prefecture.</medi:documentation>
-    <medi:component dataType="String" maxLength="9" minLength="0" name="Country subdivision identifier" required="false" truncatable="true" xmltag="e3229">
-      <medi:documentation>To identify a country subdivision, such as state,canton, county, prefecture.</medi:documentation>
+    <medi:documentation>To specify a country subdivision, such as state, canton, county, prefecture.</medi:documentation>
+    <medi:component dataType="String" maxLength="9" minLength="0" name="Country subdivision identifier" nodeTypeRef="3229" required="false" truncatable="true" xmltag="e3229">
+      <medi:documentation>To identify a country subdivision, such as state, canton, county, prefecture.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="17" minLength="0" name="Code list identification code" required="false" truncatable="true" xmltag="e1131">
-      <medi:documentation>Code identifying a user or association maintained codelist.</medi:documentation>
+    <medi:component dataType="String" maxLength="17" minLength="0" name="Code list identification code" nodeTypeRef="1131" required="false" truncatable="true" xmltag="e1131">
+      <medi:documentation>Code identifying a user or association maintained code list.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="3" minLength="0" name="Code list responsible agency code" required="false" truncatable="true" xmltag="e3055">
-      <medi:documentation>Code specifying the agency responsible for a codelist.</medi:documentation>
+    <medi:component dataType="String" maxLength="3" minLength="0" name="Code list responsible agency code" nodeTypeRef="3055" required="false" truncatable="true" xmltag="e3055">
+      <medi:documentation>Code specifying the agency responsible for a code list.</medi:documentation>
     </medi:component>
-    <medi:component dataType="String" maxLength="70" minLength="0" name="Country subdivision name" required="false" truncatable="true" xmltag="e3228">
-      <medi:documentation>Name of a country subdivision, such as state, canton,county, prefecture.</medi:documentation>
+    <medi:component dataType="String" maxLength="70" minLength="0" name="Country subdivision name" nodeTypeRef="3228" required="false" truncatable="true" xmltag="e3228">
+      <medi:documentation>Name of a country subdivision, such as state, canton, county, prefecture.</medi:documentation>
     </medi:component>
   </medi:field>
   <medi:field dataType="String" maxLength="17" minLength="0" name="Postal identification code" nodeTypeRef="3251" required="false" truncatable="true" xmltag="e3251">
     <medi:documentation>Code specifying the postal zone or address.</medi:documentation>
   </medi:field>
   <medi:field dataType="String" maxLength="3" minLength="0" name="Country identifier" nodeTypeRef="3207" required="false" truncatable="true" xmltag="e3207">
-    <medi:documentation>Identification of the name of the country or othergeographical entity as defined in ISO 3166-1 andUN/ECE Recommendation 3.</medi:documentation>
+    <medi:documentation>Identification of the name of the country or other geographical entity as defined in ISO 3166-1 and UN/ECE Recommendation 3.</medi:documentation>
   </medi:field>
 </medi:segment>
