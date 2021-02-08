@@ -47,7 +47,6 @@ import com.github.mustachejava.Mustache;
 import org.apache.commons.io.FileUtils;
 import org.apache.daffodil.tdml.Runner;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import scala.Option;
 
@@ -81,6 +80,24 @@ public class EdifactDfdlSchemaGeneratorTestCase {
     }
 
     @Test
+    public void testD00ADfdlFilesGeneration() {
+        // Added because D00A had some code list entries that both changed names and description
+        // values and therefore were not captured by the RegEx properly and led to the addition of
+        // a false value that was added multiple times and thus raised a failure in the DFDL schema
+        // validation
+
+        assertFalse(new File("target/generated-test-resources/d00a/EDIFACT-Interchange.dfdl.xsd").exists());
+        assertFalse(new File("target/generated-test-resources/d00a/EDIFACT-Messages.dfdl.xsd").exists());
+        assertFalse(new File("target/generated-test-resources/d00a/EDIFACT-Segments.dfdl.xsd").exists());
+
+        EdifactDfdlSchemaGenerator.main(new String[]{"/d00a.zip", "target/generated-test-resources"});
+
+        assertTrue(new File("target/generated-test-resources/d00a/EDIFACT-Interchange.dfdl.xsd").exists());
+        assertTrue(new File("target/generated-test-resources/d00a/EDIFACT-Messages.dfdl.xsd").exists());
+        assertTrue(new File("target/generated-test-resources/d00a/EDIFACT-Segments.dfdl.xsd").exists());
+    }
+
+    @Test
     public void testDfdlSchema() throws Throwable {
         EdifactDfdlSchemaGenerator.main(new String[]{"/d03b.zip", "target/generated-test-resources"});
 
@@ -95,6 +112,9 @@ public class EdifactDfdlSchemaGeneratorTestCase {
         }
 
         Runner runner = new Runner(null, "", "parse.tdml", true, true, false, Runner.defaultRoundTripDefaultDefault(), Runner.defaultValidationDefaultDefault(), Runner.defaultImplementationsDefaultDefault());
+        // original paxlst sample had an EMP definition of "EMP+4+++1++8'" where the last elements
+        // (9035) code list values only range from 1-7, hence the test here failed and I changed
+        // this value to 7
         runner.runOneTest("PAXLST", Option.empty(), true);
         runner.runOneTest("INVOIC", Option.empty(), true);
     }

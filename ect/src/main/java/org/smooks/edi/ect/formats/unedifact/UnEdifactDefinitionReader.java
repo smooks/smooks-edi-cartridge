@@ -69,7 +69,7 @@ public class UnEdifactDefinitionReader {
     /**
      * Matches the line of '-' characters separating the data-, composite- or segment-definitions.
      */
-    private static final String ELEMENT_SEPARATOR = "^-+$";
+    private static final String ELEMENT_SEPARATOR = "^[-|�]+$";
 
     /**
      * Matches the string "..".
@@ -177,7 +177,7 @@ public class UnEdifactDefinitionReader {
      * Group1 = change indicator
      * Group2 = code
      */
-    private static final Pattern CODE = Pattern.compile("^(\\+|\\*|#|\\||X)? +([A-Z0-9]+) +.+");
+    private static final Pattern CODE = Pattern.compile("^(\\+|\\*|#|\\||X){0,2} +([A-Z0-9]+) +.+");
 
     private static List<Segment> readSegments(Reader reader, Map<String, Field> composites, Map<String, Component> datas, boolean useShortName) throws IOException, EdiParseException {
         List<Segment> segments = new ArrayList<Segment>();
@@ -312,7 +312,6 @@ public class UnEdifactDefinitionReader {
         String id = populateField(_reader, components, field, useShortName);
         while (id != null) {
             fields.put(id, field);
-            moveToNextPart(_reader);
             field = new Field();
             id = populateField(_reader, components, field, useShortName);
         }
@@ -330,7 +329,6 @@ public class UnEdifactDefinitionReader {
         String id = populateCodeList(_reader, codeList);
         while (id != null) {
             codeLists.put(id, codeList);
-            moveToNextPart(_reader);
             codeList = new CodeList();
             id = populateCodeList(_reader, codeList);
         }
@@ -357,12 +355,21 @@ public class UnEdifactDefinitionReader {
         codeList.setDocumentation(description);
 
         line = readUntilValue(reader);
+        boolean activeNote = false;
         while (line != null && !line.matches(ELEMENT_SEPARATOR)) {
-            Matcher codeMatcher = CODE.matcher(line);
-            if (codeMatcher.matches()){
-                codeList.getCodes().add(codeMatcher.group(2));
-                while (line != null && line.length() > 0) {
-                    line = reader.readLine();
+            if (line.trim().startsWith("Note: ")) {
+                activeNote = true;
+            } else if (activeNote) {
+                if ("".equals(line.trim())) {
+                    activeNote = false;
+                }
+            } else {
+                Matcher codeMatcher = CODE.matcher(line);
+                if (codeMatcher.matches()) {
+                    codeList.getCodes().add(codeMatcher.group(2));
+                    while (line != null && line.length() > 0) {
+                        line = reader.readLine();
+                    }
                 }
             }
             line = reader.readLine();
@@ -401,7 +408,7 @@ public class UnEdifactDefinitionReader {
 
         line = readUntilValue(reader);
         LinePart linePart;
-        while (line != null && line.length() != 0) {
+        while (line != null && !line.matches(ELEMENT_SEPARATOR)) {
             linePart = getLinePart(reader, line);
             if (linePart != null) {
                 Component component = new Component();
@@ -424,6 +431,8 @@ public class UnEdifactDefinitionReader {
         toComponent.setDataTypeParameters(fromComponent.getTypeParameters());
         toComponent.setXmltag(XmlTagEncoder.encode(fromComponent.getXmltag()));
         toComponent.setName(fromComponent.getName());
+        toComponent.setCodeList(fromComponent.getCodeList());
+        toComponent.setNodeTypeRef(fromComponent.getNodeTypeRef());
     }
 
     private static Map<String, Component> readComponents(Reader reader, Map<String, CodeList> codeLists, boolean useShortName) throws IOException, EdiParseException {
@@ -489,32 +498,32 @@ public class UnEdifactDefinitionReader {
         return id;
     }
 
-    private static int getMinLength(String[] typeAndOccurance) {
-        if (typeAndOccurance.length == 0) {
+    private static int getMinLength(String[] typeAndOccurrence) {
+        if (typeAndOccurrence.length == 0) {
             return 0;
-        } else if (typeAndOccurance.length == 1) {
-            return Integer.valueOf(typeAndOccurance[0].trim().replace("a", "").replace("n", ""));
+        } else if (typeAndOccurrence.length == 1) {
+            return Integer.valueOf(typeAndOccurrence[0].trim().replace("a", "").replace("n", ""));
         } else { // .. is considered to be from 0.
             return 0;
         }
     }
 
-    private static int getMaxLength(String[] typeAndOccurance) {
-        if (typeAndOccurance.length == 0) {
+    private static int getMaxLength(String[] typeAndOccurrence) {
+        if (typeAndOccurrence.length == 0) {
             return 0;
-        } else if (typeAndOccurance.length == 1) {
-            return Integer.valueOf(typeAndOccurance[0].trim().replace("a", "").replace("n", ""));
+        } else if (typeAndOccurrence.length == 1) {
+            return Integer.valueOf(typeAndOccurrence[0].trim().replace("a", "").replace("n", ""));
         } else { // .. is considered to be from 0.
-            return Integer.valueOf(typeAndOccurance[1].trim());
+            return Integer.valueOf(typeAndOccurrence[1].trim());
         }
     }
 
-    private static String getType(String[] typeAndOccurance) {
-        if (typeAndOccurance.length == 0) {
+    private static String getType(String[] typeAndOccurrence) {
+        if (typeAndOccurrence.length == 0) {
             return "String";
         }
 
-        if (typeAndOccurance[0].trim().startsWith("n")) {
+        if (typeAndOccurrence[0].trim().startsWith("n")) {
             return "DABigDecimal";
         } else {
             return "String";
@@ -530,13 +539,13 @@ public class UnEdifactDefinitionReader {
                 result.append(line.replace(prefix, ""));
                 line = reader.readLine();
                 while (line != null && line.trim().length() != 0) {
-                    result.append(line.trim());
+                    result.append(" ").append(line.trim());
                     line = reader.readLine();
                 }
                 break;
             }
         }
-        return result.toString();
+        return result.toString().trim();
     }
 
     private static String readUntilValue(BufferedReader reader) throws IOException {
@@ -577,6 +586,11 @@ public class UnEdifactDefinitionReader {
                     part.setType(matcher.group(3));
                     part.setMinOccurance(matcher.group(4), matcher.group(5));
                     part.setMaxOccurance(matcher.group(5));
+                } else {
+                    // we know that the second line doesn't contain anything useful and the first
+                    // line didn't contain the whole data necessary, thus we can be sure that the
+                    // lines do not form a valid definition
+                    return null;
                 }
             }
         }
