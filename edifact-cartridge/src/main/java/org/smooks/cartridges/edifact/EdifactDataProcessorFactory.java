@@ -103,7 +103,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
                 entrySchemaUri = materialiseEntrySchema(schemaUriParameter.getValue(), messageTypes, version);
             }
 
-            final DfdlSchema dfdlSchema = new DfdlSchema(entrySchemaUri, variables, ValidationMode.valueOf(resourceConfig.getParameterValue("validationMode", String.class, "Off")), Boolean.parseBoolean(resourceConfig.getParameterValue("cacheOnDisk", String.class, "false")), Boolean.parseBoolean(resourceConfig.getParameterValue("debugging", String.class, "false"))) {
+            final DfdlSchema dfdlSchema = new DfdlSchema(entrySchemaUri, variables, ValidationMode.valueOf(resourceConfig.getParameterValue("validationMode", String.class, "Off")), Boolean.parseBoolean(resourceConfig.getParameterValue("cacheOnDisk", String.class, "false")), Boolean.parseBoolean(resourceConfig.getParameterValue("debugging", String.class, "false")), null) {
                 @Override
                 public String getName() {
                     return schemaUriParameter.getValue() + ":" + getValidationMode() + ":" + isCacheOnDisk() + ":" + isDebugging() + ":" + variables.toString();

@@ -29,7 +29,6 @@
     *                  schemaLocation="EDIFACT-Service-Segments-4.1.xsd"/>
     *********************************************************************** -->
 <xsd:schema xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/"
-            xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions"
             xmlns:ibmEdiFmt="http://www.ibm.com/dfdl/EDI/Format"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:fn="http://www.w3.org/2005/xpath-functions"
@@ -141,7 +140,7 @@
     </xsd:complexType>
 
 
-    <xsd:element ibmSchExtn:docRoot="true" name="AUTACK" type="srv:AUTACK">
+    <xsd:element name="AUTACK" type="srv:AUTACK">
     </xsd:element>
     <xsd:complexType name="AUTACK">
         <xsd:sequence>
@@ -223,7 +222,7 @@
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:element ibmSchExtn:docRoot="true" name="CONTRL" type="srv:CONTRL">
+    <xsd:element name="CONTRL" type="srv:CONTRL">
     </xsd:element>
     <xsd:complexType name="CONTRL">
         <xsd:sequence>
@@ -307,7 +306,7 @@
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:element ibmSchExtn:docRoot="true" name="KEYMAN" type="srv:KEYMAN">
+    <xsd:element name="KEYMAN" type="srv:KEYMAN">
     </xsd:element>
     <xsd:complexType name="KEYMAN">
         <xsd:sequence>

@@ -43,7 +43,6 @@
   -->
 
 <xsd:schema xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/"
-            xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions"
             xmlns:ibmEdiFmt="http://www.ibm.com/dfdl/EDI/Format"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:srv="http://www.ibm.com/dfdl/edi/un/service/4.1"
@@ -68,8 +67,7 @@
     </xsd:annotation>
 
     {{#messages}}
-        <xsd:element ibmSchExtn:docRoot="true" name="{{value.segments.xmlName}}" type="{{version}}:{{value.segments.xmlName}}">
-        </xsd:element>
+        <xsd:element name="{{value.segments.xmlName}}" type="{{version}}:{{value.segments.xmlName}}"/>
         <xsd:complexType name="{{value.segments.xmlName}}">
             <xsd:sequence>
                 {{#value.segments.segments}}
@@ -79,7 +77,7 @@
         </xsd:complexType>
     {{/messages}}
 
-    <xsd:element ibmSchExtn:docRoot="true" name="BadMessage">
+    <xsd:element name="BadMessage">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" name="Segment" minOccurs="0" maxOccurs="unbounded">

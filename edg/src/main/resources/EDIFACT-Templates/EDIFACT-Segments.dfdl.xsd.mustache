@@ -58,7 +58,8 @@
     </xsd:annotation>
 
    {{#segments}}
-        <xsd:complexType name="{{value.xmlName}}">
+       <xsd:element name="{{value.xmlName}}" type="{{version}}:{{value.xmlName}}"/>
+       <xsd:complexType name="{{value.xmlName}}">
             <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat">
                 {{#value.fields}}
                     {{value.render}}

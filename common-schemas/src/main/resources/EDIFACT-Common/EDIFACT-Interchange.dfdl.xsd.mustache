@@ -18,7 +18,6 @@
 	*********************************************************************** -->
 <xsd:schema
         xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/"
-        xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions"
         xmlns:ibmEdiFmt="http://www.ibm.com/dfdl/EDI/Format"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:srv="http://www.ibm.com/dfdl/edi/un/service/4.1"
@@ -35,7 +34,7 @@
         </xsd:appinfo>
     </xsd:annotation>
 
-    <xsd:element ibmSchExtn:docRoot="true" name="Interchange" dfdl:lengthKind="implicit">
+    <xsd:element name="Interchange" dfdl:lengthKind="implicit">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element dfdl:terminator="%NL;%WSP*; %WSP*;" dfdl:initiator="UNA" dfdl:length="6" dfdl:lengthKind="explicit" name="UNA" type="srv:UNA" minOccurs="0"/>
@@ -65,7 +64,7 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element ibmSchExtn:docRoot="true" name="Message">
+    <xsd:element name="Message">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" dfdl:initiator="UNH" name="UNH" type="srv:UNH-MessageHeader"/>
