@@ -48,7 +48,9 @@
 
     <core:smooks filterSourceOn="/Interchange">
         <core:action>
-            <core:inline directive="REPLACE"/>
+            <core:inline>
+                <core:replace/>
+            </core:inline>
         </core:action>
         <core:config>
             <smooks-resource-list>
