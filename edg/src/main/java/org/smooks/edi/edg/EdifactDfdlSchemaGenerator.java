@@ -45,12 +45,14 @@ package org.smooks.edi.edg;
 import org.apache.daffodil.japi.Daffodil;
 import org.apache.daffodil.japi.Diagnostic;
 import org.apache.daffodil.japi.ProcessorFactory;
-import org.smooks.edi.ect.formats.unedifact.UnEdifactSpecificationReader;
+import org.smooks.edi.ect.DirectoryParser;
+import org.smooks.edi.ect.formats.unedifact.UnEdifactDefinitionReader;
 import org.smooks.edi.edg.template.InterchangeTemplate;
 import org.smooks.edi.edg.template.MessagesTemplate;
 import org.smooks.edi.edg.template.SegmentsTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smooks.edi.edisax.model.internal.Edimap;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -70,6 +72,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.*;
+import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.zip.ZipInputStream;
 
@@ -85,21 +88,27 @@ public final class EdifactDfdlSchemaGenerator {
     }
 
     public static void main(final String[] args) {
-        Arrays.stream(Arrays.copyOfRange(args, 0, args.length - 1)).parallel().forEach(s -> {
+        Arrays.stream(Arrays.copyOfRange(args, 0, args.length - 1)).parallel().forEach(a -> {
+            final String[] argAsArray = a.split(",");
+            final String directoryPath = argAsArray[0];
+            final String directoryParserImpl = argAsArray[1];
+            
+            LOGGER.info("Generating schema from {}...", directoryPath);
             try {
-                LOGGER.info("Generating schema from {}...", s);
-                generateDfdlSchemas(s, args[args.length - 1]);
+                generateDfdlSchemas(directoryPath, directoryParserImpl, args[args.length - 1]);
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
         });
     }
 
-    private static void generateDfdlSchemas(final String spec, final String outputDirectory) throws Throwable {
-        final InputStream resourceAsStream = EdifactDfdlSchemaGenerator.class.getResourceAsStream(spec);
-        final UnEdifactSpecificationReader unEdifactSpecificationReader = new UnEdifactSpecificationReader(new ZipInputStream(resourceAsStream), true, true);
+    private static void generateDfdlSchemas(final String directoryPath, final String directoryParserImpl, final String outputDirectory) throws Throwable {
+        final InputStream resourceAsStream = EdifactDfdlSchemaGenerator.class.getResourceAsStream(directoryPath);
+        final Constructor<?> directoryParserClassConstructor = Class.forName(directoryParserImpl).getConstructor(ZipInputStream.class, boolean.class, boolean.class);
+        final DirectoryParser directoryParser = (DirectoryParser) directoryParserClassConstructor.newInstance(new ZipInputStream(resourceAsStream), true, true);
 
-        final String[] namespace = unEdifactSpecificationReader.getDefinitionModel().getDescription().getNamespace().split(":");
+        final Edimap edimap = UnEdifactDefinitionReader.parse(directoryParser);
+        final String[] namespace = edimap.getDescription().getNamespace().split(":");
         final String version = namespace[3].replace("-", "").toUpperCase();
         final String versionOutputDirectory = outputDirectory + "/" + version.toLowerCase();
 
@@ -109,11 +118,11 @@ public final class EdifactDfdlSchemaGenerator {
         if (segmentSchemaFile.exists()) {
             LOGGER.info("Skipping existing schema " + segmentSchemaFile.getAbsolutePath());
         } else {
-            final String segmentsSchema = new SegmentsTemplate(version, unEdifactSpecificationReader).materialise();
+            final String segmentsSchema = new SegmentsTemplate(version, edimap).materialise();
             write(segmentsSchema, segmentSchemaFile);
         }
 
-        final MessagesTemplate messagesTemplate = new MessagesTemplate(version, unEdifactSpecificationReader);
+        final MessagesTemplate messagesTemplate = new MessagesTemplate(version, directoryParser, edimap);
         final File messageSchemaFile = new File(versionOutputDirectory + "/EDIFACT-Messages.dfdl.xsd");
         if (messageSchemaFile.exists()) {
             LOGGER.info("Skipping existing schema " + messageSchemaFile.getAbsolutePath());

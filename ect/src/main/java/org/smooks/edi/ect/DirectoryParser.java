@@ -2,7 +2,7 @@
  * ========================LICENSE_START=================================
  * smooks-ect
  * %%
- * Copyright (C) 2020 Smooks
+ * Copyright (C) 2020 - 2021 Smooks
  * %%
  * Licensed under the terms of the Apache License Version 2.0, or
  * the GNU Lesser General Public License version 3.0 or later.
@@ -42,10 +42,16 @@
  */
 package org.smooks.edi.ect;
 
+import org.smooks.edi.ect.EdiParseException;
 import org.smooks.edi.edisax.interchange.EdiDirectory;
+import org.smooks.edi.edisax.model.internal.Component;
 import org.smooks.edi.edisax.model.internal.Edimap;
+import org.smooks.edi.edisax.model.internal.Field;
+import org.smooks.edi.edisax.model.internal.Segment;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -54,20 +60,23 @@ import java.util.Set;
  *
  * @author bardl
  */
-public interface EdiSpecificationReader {
+public interface DirectoryParser {
 
     /**
      * Interchange properties key for the interchange Type e.g. "UNEDIFACT".
      */
-    public static final String INTERCHANGE_TYPE = "interchangeType";
+    String INTERCHANGE_TYPE = "interchangeType";
+    
     /**
      * Interchange properties key for the interchange message binding config.
      */
-    public static final String MESSAGE_BINDING_CONFIG = "messageBindingConfig";
+    String MESSAGE_BINDING_CONFIG = "messageBindingConfig";
     /**
      * Interchange properties key for the top level interchange binding config.
      */
-    public static final String INTERCHANGE_BINDING_CONFIG = "interchangeBindingConfig";
+    String INTERCHANGE_BINDING_CONFIG = "interchangeBindingConfig";
+    
+    String getVersion();
 
     /**
      * Get a list of the names of the messages defined in the EDI Specification (e.g. UN/EDIFACT
@@ -75,7 +84,7 @@ public interface EdiSpecificationReader {
      *
      * @return The namels of the messages.
      */
-    Set<String> getMessageNames();
+    Set<String> getMessageNames(Edimap edimap);
 
     /**
      * Get the EDI Mapping Model for the named message.
@@ -90,10 +99,8 @@ public interface EdiSpecificationReader {
      * @throws IOException Error reading/converting the message definition to
      *                     an EDI Mapping Model.
      */
-    Edimap getMappingModel(String messageName) throws IOException;
+    Edimap getMappingModel(String messageName, Edimap edimap) throws IOException;
 
-    
-    
     /**
      * Get the message interchange properties for the associated EDI specification.
      * @return The message interchange properties for the associated EDI specification.
@@ -109,5 +116,15 @@ public interface EdiSpecificationReader {
      * @return The EdiDirector instance.
      * @throws IOException Error reading specification.
      */
-    EdiDirectory getEdiDirectory(String... includeMessages) throws IOException;
+    EdiDirectory getEdiDirectory(Edimap edimap, String... includeMessages) throws IOException;
+
+    Map<String, byte[]> getDefinitionFiles();
+
+    Map<String, Field> readCompositeDataElements() throws IOException, EdiParseException;
+
+    List<Segment> readSegments() throws IOException, EdiParseException;
+
+    Map<String, Component> readDataElements() throws IOException, EdiParseException;
+
+    boolean isUseShortName();
 }

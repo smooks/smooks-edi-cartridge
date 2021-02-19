@@ -42,22 +42,24 @@
  */
 package org.smooks.edi.ect.ecore;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.smooks.edi.ect.ecore.ECoreConversionUtils.toJavaName;
-
-import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.zip.ZipInputStream;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.junit.jupiter.api.Test;
-import org.smooks.edi.ect.ecore.ECoreGenerator;
-import org.smooks.edi.ect.formats.unedifact.UnEdifactSpecificationReader;
+import org.smooks.edi.ect.formats.unedifact.parser.D96BDirectoryParser;
+import org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser;
+import org.smooks.edi.ect.DirectoryParser;
+import org.smooks.edi.ect.formats.unedifact.UnEdifactDefinitionReader;
+
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.zip.ZipInputStream;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.smooks.edi.ect.ecore.ECoreConversionUtils.toJavaName;
 
 public class ECoreGenerationTest {
 
@@ -65,14 +67,13 @@ public class ECoreGenerationTest {
 
     @Test
     public void testECoreGeneration() throws Exception {
-        InputStream inputStream = getClass().getResourceAsStream("/D99A.zip");
+        InputStream inputStream = getClass().getResourceAsStream("/d99a.zip");
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
 
-        UnEdifactSpecificationReader ediSpecificationReader = new UnEdifactSpecificationReader(
-                zipInputStream, false, false);
+        DirectoryParser directoryParserStrategy = new UnEdifactDirectoryParser(zipInputStream, false, false);
         ECoreGenerator generator = new ECoreGenerator();
         Set<EPackage> packages = generator
-                .generatePackages(ediSpecificationReader.getEdiDirectory());
+                .generatePackages(directoryParserStrategy.getEdiDirectory(UnEdifactDefinitionReader.parse(directoryParserStrategy)));
         for (EPackage pkg : packages) {
             validatePackage(pkg);
             if ("cuscar".equals(pkg.getName())) {
@@ -103,12 +104,8 @@ public class ECoreGenerationTest {
                 String location = pkg.getName() + "#" + clazz.getName();
                 if (!"DocumentRoot".equals(clazz.getName())) {
                     String metadataName = metadata.getName(clazz);
-                    boolean same = clazz.getName().equals(metadataName)
-                            || clazz.getName().equals(
-                            toJavaName(metadataName, true));
-                    assertTrue(same,
-                            location + " metadata missmatch " + clazz.getName()
-                                    + "<>" + metadataName);
+                    boolean same = clazz.getName().equals(metadataName) || clazz.getName().equals(toJavaName(metadataName, true));
+                    assertTrue(same, location + " metadata missmatch " + clazz.getName() + "<>" + metadataName);
                     assertTrue(names.add(clazz.getName()), location + " duplicate");
                 }
             }
@@ -120,11 +117,10 @@ public class ECoreGenerationTest {
         InputStream inputStream = getClass().getResourceAsStream("/d96b.zip");
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
 
-        UnEdifactSpecificationReader ediSpecificationReader = new UnEdifactSpecificationReader(
-                zipInputStream, false);
+        DirectoryParser directoryParserStrategy = new D96BDirectoryParser(zipInputStream, false, true);
         ECoreGenerator generator = new ECoreGenerator();
         Set<EPackage> packages = generator
-                .generatePackages(ediSpecificationReader.getEdiDirectory());
+                .generatePackages(directoryParserStrategy.getEdiDirectory(UnEdifactDefinitionReader.parse(directoryParserStrategy)));
         boolean found = false;
         for (EPackage pkg : packages) {
             validatePackage(pkg);

@@ -42,23 +42,18 @@
  */
 package org.smooks.edi.ect;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
-
 import org.junit.jupiter.api.Test;
-import org.smooks.edi.ect.EdiConvertionTool;
-import org.smooks.edi.ect.formats.unedifact.UnEdifactSpecificationReader;
+import org.smooks.edi.ect.formats.unedifact.parser.D93ADirectoryParser;
+import org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser;
+import org.smooks.edi.ect.formats.unedifact.UnEdifactDefinitionReader;
 import org.smooks.edi.edisax.EDIConfigurationException;
 import org.smooks.edi.edisax.model.EDIConfigDigester;
 import org.smooks.edi.edisax.model.internal.Edimap;
 import org.xml.sax.SAXException;
+
+import java.io.*;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @author <a href="mailto:tom.fennelly@gmail.com">tom.fennelly@gmail.com</a>
@@ -67,7 +62,7 @@ public class UnEdifact_EdiConvertionTool_Test {
 
 	@Test
     public void test_D08A_longName() throws IOException {
-        ZipInputStream zipInputStream = new ZipInputStream(getClass().getResourceAsStream("D08A.zip"));
+        ZipInputStream zipInputStream = new ZipInputStream(getClass().getResourceAsStream("/d08a.zip"));
         File modelSetFile = new File("./target/D08A-mapping-model.zip");
 
         modelSetFile.delete();
@@ -77,11 +72,12 @@ public class UnEdifact_EdiConvertionTool_Test {
 
 	@Test
     public void test_MILYN_475() throws IOException, EDIConfigurationException, SAXException {
-        ZipInputStream zipInputStream = new ZipInputStream(getClass().getResourceAsStream("D08A.zip"));
-        UnEdifactSpecificationReader specReader = new UnEdifactSpecificationReader(zipInputStream, false, false);
+        ZipInputStream zipInputStream = new ZipInputStream(getClass().getResourceAsStream("/d08a.zip"));
+
+        DirectoryParser directoryParser = new UnEdifactDirectoryParser(zipInputStream, false, false);
         ByteArrayOutputStream serializedMap = new ByteArrayOutputStream();
 
-        Edimap jupreq = specReader.getMappingModel("JUPREQ");
+        Edimap jupreq = directoryParser.getMappingModel("JUPREQ", UnEdifactDefinitionReader.parse(directoryParser));
         Writer writer = new OutputStreamWriter(serializedMap);
 
         jupreq.write(writer);
@@ -91,11 +87,11 @@ public class UnEdifact_EdiConvertionTool_Test {
 
 	@Test
     public void test_MILYN_476() throws IOException, EDIConfigurationException, SAXException {
-        ZipInputStream zipInputStream = new ZipInputStream(getClass().getResourceAsStream("d93a.zip"));
-        UnEdifactSpecificationReader specReader = new UnEdifactSpecificationReader(zipInputStream, false, false);
+        ZipInputStream zipInputStream = new ZipInputStream(getClass().getResourceAsStream("/d93a.zip"));
+        DirectoryParser directoryParserStrategy = new D93ADirectoryParser(zipInputStream, false, false);
         ByteArrayOutputStream serializedMap = new ByteArrayOutputStream();
 
-        Edimap jupreq = specReader.getMappingModel("INVOIC");
+        Edimap jupreq = directoryParserStrategy.getMappingModel("INVOIC", UnEdifactDefinitionReader.parse(directoryParserStrategy));
         Writer writer = new OutputStreamWriter(serializedMap);
 
         jupreq.write(writer);
