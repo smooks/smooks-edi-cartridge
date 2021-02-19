@@ -63,8 +63,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class AbstractDirectoryParserTest {
 
-    protected String getEdiMessageAsString(DirectoryParser directoryParserStrategy, String messageType) throws IOException {
-        Edimap edimap = directoryParserStrategy.getMappingModel(messageType, UnEdifactDefinitionReader.parse(directoryParserStrategy));
+    protected String getEdiMessageAsString(DirectoryParser directoryParser, String messageType) throws IOException {
+        Edimap edimap = directoryParser.getMappingModel(messageType, UnEdifactDefinitionReader.parse(directoryParser));
         StringWriter sw = new StringWriter();
         edimap.write(sw);
         return sw.toString();

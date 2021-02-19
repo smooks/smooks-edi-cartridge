@@ -88,10 +88,10 @@ public class UnEdifact_EdiConvertionTool_Test {
 	@Test
     public void test_MILYN_476() throws IOException, EDIConfigurationException, SAXException {
         ZipInputStream zipInputStream = new ZipInputStream(getClass().getResourceAsStream("/d93a.zip"));
-        DirectoryParser directoryParserStrategy = new D93ADirectoryParser(zipInputStream, false, false);
+        DirectoryParser directoryParser = new D93ADirectoryParser(zipInputStream, false, false);
         ByteArrayOutputStream serializedMap = new ByteArrayOutputStream();
 
-        Edimap jupreq = directoryParserStrategy.getMappingModel("INVOIC", UnEdifactDefinitionReader.parse(directoryParserStrategy));
+        Edimap jupreq = directoryParser.getMappingModel("INVOIC", UnEdifactDefinitionReader.parse(directoryParser));
         Writer writer = new OutputStreamWriter(serializedMap);
 
         jupreq.write(writer);

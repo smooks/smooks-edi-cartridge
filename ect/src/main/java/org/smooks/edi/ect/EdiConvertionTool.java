@@ -131,17 +131,17 @@ public class EdiConvertionTool {
 
     /**
      * Write an EDI Mapping Model configuration set from the specified EDI Specification Reader.
-     * @param directoryParserStrategy The configuration reader for the EDI interchange configuration set.
+     * @param directoryParser The configuration reader for the EDI interchange configuration set.
      * @param modelSetOutStream The EDI Mapping Model output Stream.
      * @param urn The URN for the EDI Mapping model configuration set.
      * @throws IOException Error writing Mapping Model configuration set.
      */
-    public static void fromSpec(DirectoryParser directoryParserStrategy, ZipOutputStream modelSetOutStream, String urn) throws IOException {
-        AssertArgument.isNotNull(directoryParserStrategy, "directoryParserStrategy");
+    public static void fromSpec(DirectoryParser directoryParser, ZipOutputStream modelSetOutStream, String urn) throws IOException {
+        AssertArgument.isNotNull(directoryParser, "directoryParser");
         AssertArgument.isNotNull(modelSetOutStream, "modelSetOutStream");
 
         try {
-            Archive archive = createArchive(directoryParserStrategy, urn);
+            Archive archive = createArchive(directoryParser, urn);
 
             // Now output the generated archive...
             archive.toOutputStream(modelSetOutStream);
@@ -171,29 +171,29 @@ public class EdiConvertionTool {
 
     /**
      * Write an EDI Mapping Model configuration set from the specified EDI Specification Reader.
-     * @param directoryParserStrategy The configuration reader for the EDI interchange configuration set.
+     * @param directoryParser The configuration reader for the EDI interchange configuration set.
      * @param modelSetOutFolder The output folder for the generated EDI Mapping Model configuration set.
      * @param urn The URN for the EDI Mapping model configuration set.
      * @throws IOException Error writing Mapping Model configuration set.
      */
-    public static void fromSpec(DirectoryParser directoryParserStrategy, File modelSetOutFolder, String urn) throws IOException {
-        AssertArgument.isNotNull(directoryParserStrategy, "ediSpecificationReader");
+    public static void fromSpec(DirectoryParser directoryParser, File modelSetOutFolder, String urn) throws IOException {
+        AssertArgument.isNotNull(directoryParser, "ediSpecificationReader");
         AssertArgument.isNotNull(modelSetOutFolder, "modelSetOutFolder");
 
-        Archive archive = createArchive(directoryParserStrategy, urn);
+        Archive archive = createArchive(directoryParser, urn);
 
         // Now output the generated archive...
         archive.toFileSystem(modelSetOutFolder);
     }
 
-    private static Archive createArchive(DirectoryParser directoryParserStrategy, String urn, String... messages) throws IOException {
+    private static Archive createArchive(DirectoryParser directoryParser, String urn, String... messages) throws IOException {
         Archive archive = new Archive();
         StringBuilder modelListBuilder = new StringBuilder();
         StringWriter messageEntryWriter = new StringWriter();
         String pathPrefix = urn.replace(".", "_").replace(":", "/");
 
-        Edimap edimap = UnEdifactDefinitionReader.parse(directoryParserStrategy);
-        EdiDirectory ediDirectory = directoryParserStrategy.getEdiDirectory(edimap, messages);
+        Edimap edimap = UnEdifactDefinitionReader.parse(directoryParser);
+        EdiDirectory ediDirectory = directoryParser.getEdiDirectory(edimap, messages);
 
         // Add the common model...
         addModel(ediDirectory.getCommonModel(), pathPrefix, modelListBuilder, messageEntryWriter, archive);
@@ -219,7 +219,7 @@ public class EdiConvertionTool {
         archive.addEntry(EDIUtils.EDI_MAPPING_MODEL_URN, urn);
 
         // Add an entry for the interchange properties...
-        Properties interchangeProperties = directoryParserStrategy.getInterchangeProperties();
+        Properties interchangeProperties = directoryParser.getInterchangeProperties();
         ByteArrayOutputStream propertiesOutStream = new ByteArrayOutputStream();
         try {
             interchangeProperties.store(propertiesOutStream, "UN/EDIFACT Interchange Properties");

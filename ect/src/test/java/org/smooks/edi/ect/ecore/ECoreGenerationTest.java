@@ -70,10 +70,10 @@ public class ECoreGenerationTest {
         InputStream inputStream = getClass().getResourceAsStream("/d99a.zip");
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
 
-        DirectoryParser directoryParserStrategy = new UnEdifactDirectoryParser(zipInputStream, false, false);
+        DirectoryParser directoryParser = new UnEdifactDirectoryParser(zipInputStream, false, false);
         ECoreGenerator generator = new ECoreGenerator();
         Set<EPackage> packages = generator
-                .generatePackages(directoryParserStrategy.getEdiDirectory(UnEdifactDefinitionReader.parse(directoryParserStrategy)));
+                .generatePackages(directoryParser.getEdiDirectory(UnEdifactDefinitionReader.parse(directoryParser)));
         for (EPackage pkg : packages) {
             validatePackage(pkg);
             if ("cuscar".equals(pkg.getName())) {
@@ -117,10 +117,10 @@ public class ECoreGenerationTest {
         InputStream inputStream = getClass().getResourceAsStream("/d96b.zip");
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
 
-        DirectoryParser directoryParserStrategy = new D96BDirectoryParser(zipInputStream, false, true);
+        DirectoryParser d96BDirectoryParser = new D96BDirectoryParser(zipInputStream, false, true);
         ECoreGenerator generator = new ECoreGenerator();
         Set<EPackage> packages = generator
-                .generatePackages(directoryParserStrategy.getEdiDirectory(UnEdifactDefinitionReader.parse(directoryParserStrategy)));
+                .generatePackages(d96BDirectoryParser.getEdiDirectory(UnEdifactDefinitionReader.parse(d96BDirectoryParser)));
         boolean found = false;
         for (EPackage pkg : packages) {
             validatePackage(pkg);
