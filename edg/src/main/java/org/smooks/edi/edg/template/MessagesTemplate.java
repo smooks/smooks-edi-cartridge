@@ -44,7 +44,7 @@ package org.smooks.edi.edg.template;
 
 import com.github.mustachejava.TemplateFunction;
 import org.apache.commons.jxpath.JXPathContext;
-import org.smooks.edi.ect.formats.unedifact.UnEdifactSpecificationReader;
+import org.smooks.edi.ect.DirectoryParser;
 import org.smooks.edi.edisax.model.internal.Edimap;
 import org.smooks.edi.edisax.util.EDIUtils;
 
@@ -61,13 +61,13 @@ public class MessagesTemplate extends Template {
 
     private final List<String> messageTypes;
 
-    public MessagesTemplate(final String version, final UnEdifactSpecificationReader unEdifactSpecificationReader) throws IOException {
+    public MessagesTemplate(final String version, final DirectoryParser directoryParser, final Edimap edimap) throws IOException {
         super(version);
         final List<Map<String, Object>> messageDefinitions = new ArrayList<>();
-        messageTypes = unEdifactSpecificationReader.getMessageNames().stream().filter(m -> !m.equals(EDIUtils.MODEL_SET_DEFINITIONS_DESCRIPTION.getName())).collect(Collectors.toList());
+        messageTypes = directoryParser.getMessageNames(edimap).stream().filter(m -> !m.equals(EDIUtils.MODEL_SET_DEFINITIONS_DESCRIPTION.getName())).collect(Collectors.toList());
         for (String messageType : messageTypes) {
-            final Edimap edimap = unEdifactSpecificationReader.getMappingModel(messageType);
-            final Map<String, Object> messageDefinition = OBJECT_MAPPER.convertValue(edimap, Map.class);
+            final Edimap messageTypeEdimap = directoryParser.getMappingModel(messageType, edimap);
+            final Map<String, Object> messageDefinition = OBJECT_MAPPER.convertValue(messageTypeEdimap, OBJECT_MAPPER.getTypeFactory().constructMapType(Map.class, String.class, Object.class));
             final List<Map<String, Object>> segments = (List<Map<String, Object>>) JXPathContext.newContext(messageDefinition).getValue("/segments/segments", List.class);
             templatizeSegments(segments);
 
@@ -120,12 +120,12 @@ public class MessagesTemplate extends Template {
     private void writeSegmentGroup(final Map<String, Object> headSegment, final List<Map<String, Object>> tailSegments, final StringWriter stringWriter, final int segmentGroupIndex) {
         headSegment.put("xmltag", "SegGrp-" + segmentGroupIndex);
         stringWriter.write(MESSAGE_SEGMENT_GROUP_MUSTACHE_PARTIAL);
-        if (!tailSegments.isEmpty() && isEmpty((Collection) tailSegments.get(0).get("segments"))) {
+        if (!tailSegments.isEmpty() && isEmpty((Collection<?>) tailSegments.get(0).get("segments"))) {
             stringWriter.write(SEQUENCE_XML_START_TAG);
         }
     }
 
-    private List tail(final List list) {
+    private List<Map<String, Object>> tail(final List<Map<String, Object>> list) {
         if (list.isEmpty() || list.size() < 2) {
             return Collections.EMPTY_LIST;
         } else {
@@ -133,7 +133,7 @@ public class MessagesTemplate extends Template {
         }
     }
 
-    private boolean isEmpty(final Collection collection) {
+    private boolean isEmpty(final Collection<?> collection) {
         return (collection == null || collection.isEmpty());
     }
 

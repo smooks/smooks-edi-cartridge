@@ -2,7 +2,7 @@
  * ========================LICENSE_START=================================
  * smooks-ect
  * %%
- * Copyright (C) 2020 Smooks
+ * Copyright (C) 2020 - 2021 Smooks
  * %%
  * Licensed under the terms of the Apache License Version 2.0, or
  * the GNU Lesser General Public License version 3.0 or later.
@@ -40,44 +40,13 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * =========================LICENSE_END==================================
  */
-package org.smooks.edi.ect.ecore;
+package org.smooks.edi.ect.formats.unedifact.parser;
 
-import org.eclipse.emf.ecore.EPackage;
-import org.junit.jupiter.api.Test;
-import org.smooks.archive.Archive;
-import org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser;
-import org.smooks.edi.ect.DirectoryParser;
-import org.smooks.edi.ect.formats.unedifact.UnEdifactDefinitionReader;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
 import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
-public class XSDExportTest {
-
-    @Test
-    public void testSchemaExport() throws Exception {
-        String directory = "d03b";
-        String pluginID = "org.smooks.edi.unedifact." + directory;
-        String pathPrefix = pluginID.replace('.', '/');
-        InputStream inputStream = getClass().getResourceAsStream("/" + directory + ".zip");
-        ZipInputStream zipInputStream = new ZipInputStream(inputStream);
-        DirectoryParser directoryParser = new UnEdifactDirectoryParser(zipInputStream, false, false);
-        ECoreGenerator ecoreGen = new ECoreGenerator();
-        Set<EPackage> packages = ecoreGen.generatePackages(directoryParser.getEdiDirectory(UnEdifactDefinitionReader.parse(directoryParser)));
-        // To make tests execution faster let us just select a small subset of packages
-        Set<EPackage> smallerSet = new HashSet<EPackage>();
-        for (EPackage pkg : packages) {
-            if ("cuscar".equals(pkg.getName()) || "invoic".equals(pkg.getName())) {
-                smallerSet.add(pkg);
-            }
-        }
-        Archive archive = SchemaConverter.INSTANCE.createArchive(smallerSet, pluginID, pathPrefix);
-        archive.toOutputStream(new ZipOutputStream(new FileOutputStream(new File("./target/" + archive.getArchiveName()))));
+public class D95BDirectoryParser extends D94ADirectoryParser {
+    public D95BDirectoryParser(ZipInputStream specificationInStream, boolean useImport, boolean useShortName) throws IOException {
+        super(specificationInStream, useImport, useShortName);
     }
-
 }

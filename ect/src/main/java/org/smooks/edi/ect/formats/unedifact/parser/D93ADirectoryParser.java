@@ -2,7 +2,7 @@
  * ========================LICENSE_START=================================
  * smooks-ect
  * %%
- * Copyright (C) 2020 Smooks
+ * Copyright (C) 2020 - 2021 Smooks
  * %%
  * Licensed under the terms of the Apache License Version 2.0, or
  * the GNU Lesser General Public License version 3.0 or later.
@@ -40,66 +40,41 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * =========================LICENSE_END==================================
  */
-package org.smooks.edi.ect.configreader;
+package org.smooks.edi.ect.formats.unedifact.parser;
 
-import org.smooks.edi.edisax.interchange.EdiDirectory;
-import org.smooks.edi.ect.EdiSpecificationReader;
 import org.smooks.edi.ect.EdiParseException;
-import org.smooks.edi.edisax.model.internal.Edimap;
-import org.smooks.edi.edisax.model.internal.Description;
-import org.smooks.edi.edisax.model.internal.Delimiters;
-import org.smooks.edi.edisax.model.internal.SegmentGroup;
+import org.smooks.edi.edisax.model.internal.CodeList;
 
-import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Properties;
-import java.util.Set;
-import java.util.HashSet;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.zip.ZipInputStream;
 
-public class CustomEdiSpecificationReader implements EdiSpecificationReader {
-    public void initialize(InputStream inputStream, boolean useImport) throws IOException, EdiParseException {
+public class D93ADirectoryParser extends UnEdifactDirectoryParser {
+    public D93ADirectoryParser(ZipInputStream specificationInStream, boolean useImport, boolean useShortName) throws IOException {
+        super(specificationInStream, useImport, useShortName);
     }
 
-    public Set<String> getMessageNames() {
-        return new HashSet<String>();
+    @Override
+    protected void doReadDefinitionEntries(ZipInputStream zipInputStream) throws IOException {
+        readDefinitionEntries(zipInputStream,
+                new ZipDirectoryEntry("eded.", definitionFiles),
+                new ZipDirectoryEntry("edcd.", definitionFiles),
+                new ZipDirectoryEntry("edsd.", definitionFiles),
+                new ZipDirectoryEntry("edmd.", "*", messageFiles));
     }
 
-    public Edimap getMappingModel(String messageName) throws IOException {
-        return createEdimap();
+    @Override
+    protected void parseEDIDefinitionFiles() throws EdiParseException {
+        dataElementsDirectoryReader = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("eded.")));
+        compositeDataElementsDirectoryReader = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("edcd.")));
+        standardSegmentsDirectoryReader = new InputStreamReader(new ByteArrayInputStream(definitionFiles.get("edsd.")));
     }
 
-    public Properties getInterchangeProperties() {
-        return new Properties();
-    }
-
-    public EdiDirectory getEdiDirectory(String... includeMessages) throws IOException {
-        return null;
-    }
-
-    public Edimap getDefinitionModel() throws IOException {
-        return createEdimap();
-    }
-
-    private Edimap createEdimap() {
-        Edimap edimap = new Edimap();
-
-        Description description = new Description();
-        description.setName("Custom Config Reader");
-        description.setVersion("1.0");
-        edimap.setDescription(description);
-
-        Delimiters delimiters = new Delimiters();
-        delimiters.setSegment("'");
-        delimiters.setField("+");
-        delimiters.setComponent(":");
-        delimiters.setSubComponent("^");
-        delimiters.setEscape("?");
-        edimap.setDelimiters(delimiters);
-
-        SegmentGroup root = new SegmentGroup();
-        root.setXmltag("Root");
-        edimap.setSegments(root);
-
-        return edimap;
+    @Override
+    public Map<String, CodeList> readCodes() throws IOException, EdiParseException {
+        return new HashMap<>();
     }
 }

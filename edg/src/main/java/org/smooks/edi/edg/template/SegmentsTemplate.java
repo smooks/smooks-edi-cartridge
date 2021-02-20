@@ -44,13 +44,8 @@ package org.smooks.edi.edg.template;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.mustachejava.TemplateFunction;
-import org.smooks.edi.ect.formats.unedifact.UnEdifactSpecificationReader;
-import org.smooks.edi.edisax.model.internal.Component;
-import org.smooks.edi.edisax.model.internal.Field;
-import org.smooks.edi.edisax.model.internal.Segment;
-import org.smooks.edi.edisax.model.internal.SegmentGroup;
+import org.smooks.edi.edisax.model.internal.*;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
@@ -60,11 +55,11 @@ public class SegmentsTemplate extends Template {
     private static final String SEGMENT_PART_REPEAT_MUSTACHE_PARTIAL = "{{> EDISegmentPartRepeatSequenceFormat.xsd.mustache}}";
     private static final String SEGMENT_MUSTACHE_PARTIAL = "{{> EDISegmentSequenceFormat.xsd.mustache}}\n";
 
-    public SegmentsTemplate(final String version, final UnEdifactSpecificationReader unEdifactSpecificationReader) throws IOException {
+    public SegmentsTemplate(final String version, final Edimap edimap) {
         super(version);
-        final List<Map<String, Object>> segments = prepareSegments(unEdifactSpecificationReader.getDefinitionModel().getSegments().getSegments());
-        final List<Map<String, Object>> compositeDataElements = prepareCompositeDataElements(unEdifactSpecificationReader.getDefinitionModel().getCompositeDataElements());
-        final List<Map<String, Object>> simpleDataElements = prepareSimpleDataElements(unEdifactSpecificationReader.getDefinitionModel().getSimpleDataElements());
+        final List<Map<String, Object>> segments = prepareSegments(edimap.getSegments().getSegments());
+        final List<Map<String, Object>> compositeDataElements = prepareCompositeDataElements(edimap.getCompositeDataElements());
+        final List<Map<String, Object>> simpleDataElements = prepareSimpleDataElements(edimap.getSimpleDataElements());
 
         Map<String, Map<String, String>> alphaTypes = new HashMap<>();
         Map<String, Map<String, String>> numericTypes = new HashMap<>();

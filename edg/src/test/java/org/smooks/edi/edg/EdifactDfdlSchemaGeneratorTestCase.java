@@ -47,7 +47,6 @@ import com.github.mustachejava.Mustache;
 import org.apache.commons.io.FileUtils;
 import org.apache.daffodil.tdml.Runner;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import scala.Option;
 
@@ -73,7 +72,7 @@ public class EdifactDfdlSchemaGeneratorTestCase {
         assertFalse(new File("target/generated-test-resources/d03b/EDIFACT-Messages.dfdl.xsd").exists());
         assertFalse(new File("target/generated-test-resources/d03b/EDIFACT-Segments.dfdl.xsd").exists());
 
-        EdifactDfdlSchemaGenerator.main(new String[]{"/d03b.zip", "target/generated-test-resources"});
+        EdifactDfdlSchemaGenerator.main(new String[]{"/d03b.zip,org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser", "target/generated-test-resources"});
 
         assertTrue(new File("target/generated-test-resources/d03b/EDIFACT-Interchange.dfdl.xsd").exists());
         assertTrue(new File("target/generated-test-resources/d03b/EDIFACT-Messages.dfdl.xsd").exists());
@@ -82,7 +81,7 @@ public class EdifactDfdlSchemaGeneratorTestCase {
 
     @Test
     public void testDfdlSchema() throws Throwable {
-        EdifactDfdlSchemaGenerator.main(new String[]{"/d03b.zip", "target/generated-test-resources"});
+        EdifactDfdlSchemaGenerator.main(new String[]{"/d03b.zip,org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser", "target/generated-test-resources"});
 
         File generatedSchema = new File("target/generated-test-resources/d03b/EDIFACT-Interchange.dfdl.xsd");
         Mustache mustache = new DefaultMustacheFactory().compile("EDIFACT-Common/EDIFACT-Interchange.dfdl.xsd.mustache");

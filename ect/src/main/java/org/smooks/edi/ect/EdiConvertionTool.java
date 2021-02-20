@@ -43,16 +43,17 @@
 package org.smooks.edi.ect;
 
 import org.eclipse.emf.ecore.EPackage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smooks.archive.Archive;
 import org.smooks.assertion.AssertArgument;
 import org.smooks.edi.ect.ecore.ECoreGenerator;
 import org.smooks.edi.ect.ecore.SchemaConverter;
-import org.smooks.edi.ect.formats.unedifact.UnEdifactSpecificationReader;
+import org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser;
+import org.smooks.edi.ect.formats.unedifact.UnEdifactDefinitionReader;
 import org.smooks.edi.edisax.interchange.EdiDirectory;
 import org.smooks.edi.edisax.model.internal.*;
 import org.smooks.edi.edisax.util.EDIUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.LinkedHashSet;
@@ -65,7 +66,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * EDI Convertion Tool.
  * <p/>
- * Takes the set of messages from an {@link EdiSpecificationReader} and generates
+ * Takes the set of messages from an {@link DirectoryParser} and generates
  * a Smooks EDI Mapping Model archive that can be written to a zip file or folder.
  * 
  * @author bardl
@@ -86,7 +87,7 @@ public class EdiConvertionTool {
      */
     public static void fromUnEdifactSpec(ZipInputStream specification, ZipOutputStream modelSetOutStream, String urn, boolean useShortName) throws IOException {
         try {
-            fromSpec(new UnEdifactSpecificationReader(specification, true, useShortName), modelSetOutStream, urn);
+            fromSpec(new UnEdifactDirectoryParser(specification, true, useShortName), modelSetOutStream, urn);
         } finally {
             specification.close();
         }
@@ -125,22 +126,22 @@ public class EdiConvertionTool {
             throw new EdiParseException("Error opening zip file containing the Un/Edifact specification '" + specification.getAbsoluteFile() + "'.", e);
         }
 
-        return createArchive(new UnEdifactSpecificationReader(definitionZipStream, true), urn, messages);
+        return createArchive(new UnEdifactDirectoryParser(definitionZipStream, true, true), urn, messages);
     }
 
     /**
      * Write an EDI Mapping Model configuration set from the specified EDI Specification Reader.
-     * @param ediSpecificationReader The configuration reader for the EDI interchange configuration set.
+     * @param directoryParser The configuration reader for the EDI interchange configuration set.
      * @param modelSetOutStream The EDI Mapping Model output Stream.
      * @param urn The URN for the EDI Mapping model configuration set.
      * @throws IOException Error writing Mapping Model configuration set.
      */
-    public static void fromSpec(EdiSpecificationReader ediSpecificationReader, ZipOutputStream modelSetOutStream, String urn) throws IOException {
-        AssertArgument.isNotNull(ediSpecificationReader, "ediSpecificationReader");
+    public static void fromSpec(DirectoryParser directoryParser, ZipOutputStream modelSetOutStream, String urn) throws IOException {
+        AssertArgument.isNotNull(directoryParser, "directoryParser");
         AssertArgument.isNotNull(modelSetOutStream, "modelSetOutStream");
 
         try {
-            Archive archive = createArchive(ediSpecificationReader, urn);
+            Archive archive = createArchive(directoryParser, urn);
 
             // Now output the generated archive...
             archive.toOutputStream(modelSetOutStream);
@@ -162,7 +163,7 @@ public class EdiConvertionTool {
      */
     public static void fromUnEdifactSpec(ZipInputStream specification, File modelSetOutFolder, String urn, boolean useShortName) throws IOException {
         try {
-            fromSpec(new UnEdifactSpecificationReader(specification, true, useShortName), modelSetOutFolder, urn);
+            fromSpec(new UnEdifactDirectoryParser(specification, true, useShortName), modelSetOutFolder, urn);
         } finally {
             specification.close();
         }
@@ -170,27 +171,29 @@ public class EdiConvertionTool {
 
     /**
      * Write an EDI Mapping Model configuration set from the specified EDI Specification Reader.
-     * @param ediSpecificationReader The configuration reader for the EDI interchange configuration set.
+     * @param directoryParser The configuration reader for the EDI interchange configuration set.
      * @param modelSetOutFolder The output folder for the generated EDI Mapping Model configuration set.
      * @param urn The URN for the EDI Mapping model configuration set.
      * @throws IOException Error writing Mapping Model configuration set.
      */
-    public static void fromSpec(EdiSpecificationReader ediSpecificationReader, File modelSetOutFolder, String urn) throws IOException {
-        AssertArgument.isNotNull(ediSpecificationReader, "ediSpecificationReader");
+    public static void fromSpec(DirectoryParser directoryParser, File modelSetOutFolder, String urn) throws IOException {
+        AssertArgument.isNotNull(directoryParser, "ediSpecificationReader");
         AssertArgument.isNotNull(modelSetOutFolder, "modelSetOutFolder");
 
-        Archive archive = createArchive(ediSpecificationReader, urn);
+        Archive archive = createArchive(directoryParser, urn);
 
         // Now output the generated archive...
         archive.toFileSystem(modelSetOutFolder);
     }
 
-    private static Archive createArchive(EdiSpecificationReader ediSpecificationReader, String urn, String... messages) throws IOException {
+    private static Archive createArchive(DirectoryParser directoryParser, String urn, String... messages) throws IOException {
         Archive archive = new Archive();
         StringBuilder modelListBuilder = new StringBuilder();
         StringWriter messageEntryWriter = new StringWriter();
         String pathPrefix = urn.replace(".", "_").replace(":", "/");
-        EdiDirectory ediDirectory = ediSpecificationReader.getEdiDirectory(messages);
+
+        Edimap edimap = UnEdifactDefinitionReader.parse(directoryParser);
+        EdiDirectory ediDirectory = directoryParser.getEdiDirectory(edimap, messages);
 
         // Add the common model...
         addModel(ediDirectory.getCommonModel(), pathPrefix, modelListBuilder, messageEntryWriter, archive);
@@ -216,7 +219,7 @@ public class EdiConvertionTool {
         archive.addEntry(EDIUtils.EDI_MAPPING_MODEL_URN, urn);
 
         // Add an entry for the interchange properties...
-        Properties interchangeProperties = ediSpecificationReader.getInterchangeProperties();
+        Properties interchangeProperties = directoryParser.getInterchangeProperties();
         ByteArrayOutputStream propertiesOutStream = new ByteArrayOutputStream();
         try {
             interchangeProperties.store(propertiesOutStream, "UN/EDIFACT Interchange Properties");
