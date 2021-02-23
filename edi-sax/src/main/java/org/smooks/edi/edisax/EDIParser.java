@@ -43,7 +43,6 @@
 package org.smooks.edi.edisax;
 
 import org.smooks.assertion.AssertArgument;
-import org.smooks.converter.TypeConverterException;
 import org.smooks.edi.edisax.model.EdifactModel;
 import org.smooks.edi.edisax.model.internal.*;
 import org.smooks.edi.edisax.util.EDIUtils;
@@ -830,15 +829,6 @@ public class EDIParser implements XMLReader {
         // Return when validation is turned off.
         if (!getFeature(FEATURE_VALIDATE)) {
             return;
-        }
-
-        // Validate type.
-        if (valueNode.getDataType() != null && !valueNode.getDataType().equals("")) {
-            try {
-                valueNode.isValidForType(value);
-            } catch (TypeConverterException e) {
-                throw new EDIParseException(edifactModel.getEdimap(), "Validation of expected type [" + valueNode.getDataType() + "] failed for value [" + value + "]. Currently at segment number " + segmentReader.getCurrentSegmentNumber() + ".", e, valueNode, segmentReader.getCurrentSegmentNumber(), segmentReader.getCurrentSegmentFields());
-            }
         }
 
         //Test minLength.
