@@ -239,13 +239,7 @@ public class ECoreConversionUtils {
 		attr.setName(toJavaName(field.getXmltag(), false));
 		attr.setLowerBound(field.isRequired() ? 1 : 0);
 		attr.setUpperBound(1);
-		if (field.getTypeClass() != null) {
-			attr.setEType(toEType(field.getTypeClass()));
-		} else {
-			LOGGER.warn("Field " + field.getXmltag()
-					+ " has no type! Setting it's type to String");
-			attr.setEType(XMLTypePackage.Literals.STRING);
-		}
+		attr.setEType(XMLTypePackage.Literals.STRING);
 		addMappingInformation(attr, field);
 		annotateField(field, attr);
 		return attr;
@@ -365,12 +359,6 @@ public class ECoreConversionUtils {
 		annotate(element, "datatype", valueNode.getDataType());
 		annotate(element, "maxLength", String.valueOf(valueNode.getMaxLength()));
 		annotate(element, "minLength", String.valueOf(valueNode.getMinLength()));
-		if (valueNode.getTypeClass() != null) {
-			annotate(element, "typeConverter", valueNode.getTypeConverter().getClass()
-					.getCanonicalName());
-		} else {
-			annotate(element, "typeConverter", "");
-		}
 	}
 
 	/**

@@ -43,8 +43,6 @@
 package org.smooks.edi.edisax.v1_2.model;
 
 import org.junit.jupiter.api.Test;
-import org.smooks.cdr.SmooksConfigurationException;
-import org.smooks.converter.factory.system.StringToDateConverterFactory;
 import org.smooks.edi.edisax.EDIConfigurationException;
 import org.smooks.edi.edisax.model.EDIConfigDigester;
 import org.smooks.edi.edisax.model.internal.*;
@@ -55,7 +53,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.smooks.io.StreamUtils.readStream;
 
 /**
@@ -124,8 +123,6 @@ public class EDIConfigDigesterTest {
         // Assert field is read correctly.
         // <medi:field xmltag="aTime" type="Time" format="HHmm" minLength="0" maxLength="4"/>
         assertEquals(fields.get(0).getDataType(), "Date", "Failed to digest type-attribute for Field");
-        assertEquals(fields.get(0).getTypeParameters().get(0).getKey(), "format", "Failed to digest parameters-attribute for Field");
-        assertEquals(fields.get(0).getTypeParameters().get(0).getValue(), "HHmm", "Failed to digest parameters-attribute for Field");
         assertEquals(fields.get(0).getMinLength(), new Integer(0), "Failed to digest minLength-attribute for Field");
         assertEquals(fields.get(0).getMaxLength(), new Integer(4), "Failed to digest maxLength-attribute for Field");
         assertEquals(fields.get(0).getDocumentation(), "field1-documentation", "Failed to digest documentation for Field");
@@ -134,7 +131,6 @@ public class EDIConfigDigesterTest {
         // <medi:component xmltag="aBinary" required="true" type="Binary" minLength="0" maxLength="8"/>
         Component component = fields.get(1).getComponents().get(0);
         assertEquals(component.getDataType(), "Binary", "Failed to digest type-attribute for Component");
-        assertNull(component.getTypeParameters(), "Parameters-attribute should be null in Component");
         assertEquals(component.getMinLength(), new Integer(0), "Failed to digest minLength-attribute for Component");
         assertEquals(component.getMaxLength(), new Integer(8), "Failed to digest maxLength-attribute for Component");
         assertEquals(component.getDocumentation(), "component-documentation", "Failed to digest documentation for Component");
@@ -143,8 +139,6 @@ public class EDIConfigDigesterTest {
         // <medi:sub-component xmltag="aNumeric" type="Numeric" format="#0.00" minLength="1" maxLength="4"/>
         SubComponent subcomponent = fields.get(1).getComponents().get(1).getSubComponents().get(0);
         assertEquals(subcomponent.getDataType(), "Double", "Failed to digest type-attribute for SubComponent");
-        assertEquals(subcomponent.getTypeParameters().get(0).getKey(), "format", "Failed to digest parameters-attribute for SubComponent");
-        assertEquals(subcomponent.getTypeParameters().get(0).getValue(), "#0.00", "Failed to digest format-attribute for SubComponent");
         assertEquals(subcomponent.getMinLength(), new Integer(1), "Failed to digest minLength-attribute for SubComponent");
         assertEquals(subcomponent.getMaxLength(), new Integer(4), "Failed to digest maxLength-attribute for SubComponent");
         assertEquals(subcomponent.getDocumentation(), "subcomponent-documentation", "Failed to digest documentation for SubComponent");
@@ -165,97 +159,5 @@ public class EDIConfigDigesterTest {
         Segment segment = (Segment) edimap.getSegments().getSegments().get(0).getSegments().get(0);
         String expected = "This segment is used for testing all new elements in v.1.2";
         assertEquals(segment.getDescription(), expected, "Description in segment [" + segment.getDescription() + "] doesn't match expected value [" + expected + "].");
-    }
-
-    @Test
-    public void testCorrectParametersNoCustomType() throws IOException, SAXException, EDIConfigurationException {
-        InputStream input = new ByteArrayInputStream(readStream(getClass().getResourceAsStream("edi-config-correct-no-custom-parameter.xml")));
-
-        Edimap edimap = EDIConfigDigester.digestConfig(input);
-
-        Segment segment = (Segment) edimap.getSegments().getSegments().get(0);
-        Field field = segment.getFields().get(0);
-
-        assertEquals(field.getTypeParameters().size(), 2, "Number of parameters in list [" + field.getTypeParameters().size() + "] doesn't match expected value [2].");
-
-        String expected = "format";
-        String value = field.getTypeParameters().get(0).getKey();
-        assertEquals(value, expected, "Key in parameters [" + value + "] doesn't match expected value [" + expected + "].");
-
-        expected = "yyyyMMdd";
-        value = field.getTypeParameters().get(0).getValue();
-        assertEquals(value, expected, "Value in parameters [" + value + "] doesn't match expected value [" + expected + "].");
-
-        expected = "param2";
-        value = field.getTypeParameters().get(1).getKey();
-        assertEquals(value, expected, "Key in parameters [" + value + "] doesn't match expected value [" + expected + "].");
-
-        expected = "value2";
-        value = field.getTypeParameters().get(1).getValue();
-        assertEquals(value, expected, "Value in parameters [" + value + "] doesn't match expected value [" + expected + "].");
-
-    }
-
-    @Test
-    public void testIncorrectParametersNoCustomType() throws IOException, SAXException {
-        InputStream input = new ByteArrayInputStream(readStream(getClass().getResourceAsStream("edi-config-incorrect-no-custom-parameter.xml")));
-
-        try {
-            EDIConfigDigester.digestConfig(input);
-            assertTrue(false, "EDIConfigDigester should fail for test configuration.");
-        } catch (EDIConfigurationException e) {
-            String expected = "Invalid use of paramaters in ValueNode. A parameter-entry should consist of a key-value-pair separated with the '='-character. Example: [parameters=\"key1=value1;key2=value2\"]";
-            assertEquals(e.getMessage(), expected, "Message in exception [" + e.getMessage() + "] doesn't match expected value [" + expected + "].");
-        }
-    }
-
-    @Test
-    public void testIncorrectParametersNoCustomType_ClassName() throws IOException, SAXException {
-        InputStream input = new ByteArrayInputStream(readStream(getClass().getResourceAsStream("edi-config-incorrect-no-custom-parameter2.xml")));
-
-        try {
-            EDIConfigDigester.digestConfig(input);
-            assertTrue(false, "EDIConfigDigester should fail for test configuration.");
-        } catch (EDIConfigurationException e) {
-            String expected = "When first parameter in list of parameters is not a key-value-pair the type of the ValueNode should be Custom.";
-            assertEquals(e.getMessage(), expected, "Message in exception [" + e.getMessage() + "] doesn't match expected value [" + expected + "].");
-        }
-    }
-
-    @Test
-    public void testCorrectParametersCustomType() throws IOException, SAXException, EDIConfigurationException {
-        InputStream input = new ByteArrayInputStream(readStream(getClass().getResourceAsStream("edi-config-correct-custom-parameter.xml")));
-
-        Edimap edimap = EDIConfigDigester.digestConfig(input);
-
-        Segment segment = (Segment) edimap.getSegments().getSegments().get(0);
-        Field field = segment.getFields().get(0);
-
-        assertEquals(field.getTypeParameters().size(), 2, "Number of parameters in list [" + field.getTypeParameters().size() + "] doesn't match expected value [2].");
-
-        String expected = "CustomClass";
-        String value = field.getTypeParameters().get(0).getValue();
-        assertEquals(StringToDateConverterFactory.class.getName(), value, "Value in parameters [" + value + "] doesn't match expected value [" + expected + "].");
-
-        expected = "param1";
-        value = field.getTypeParameters().get(1).getKey();
-        assertEquals(value, expected, "Key in parameters [" + value + "] doesn't match expected value [" + expected + "].");
-
-        expected = "value1";
-        value = field.getTypeParameters().get(1).getValue();
-        assertEquals(value, expected, "Value in parameters [" + value + "] doesn't match expected value [" + expected + "].");
-
-    }
-
-    @Test
-    public void testIncorrectParametersCustomType_NoClassName() throws IOException, SAXException, EDIConfigurationException {
-        InputStream input = new ByteArrayInputStream(readStream(getClass().getResourceAsStream("edi-config-incorrect-custom-parameter.xml")));
-
-        try {
-            EDIConfigDigester.digestConfig(input);
-            fail("Expected SmooksConfigurationException");
-        } catch (SmooksConfigurationException e) {
-            assertEquals("Mandatory property 'typeConverterClass' not specified.", e.getMessage());
-        }
     }
 }

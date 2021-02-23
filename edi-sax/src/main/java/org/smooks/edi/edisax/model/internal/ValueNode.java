@@ -42,36 +42,17 @@
  */
 package org.smooks.edi.edisax.model.internal;
 
-import org.smooks.config.Configurable;
-import org.smooks.converter.TypeConverter;
-import org.smooks.converter.TypeConverterException;
-import org.smooks.converter.TypeConverterFactoryLoader;
-import org.smooks.converter.factory.TypeConverterFactory;
-import org.smooks.converter.factory.system.StringConverterFactory;
-
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 /**
  * ValueNode.
  *
  * @author bardl
  */
 public class ValueNode extends MappingNode {
-
-    private static final Set<TypeConverterFactory<?, ?>> TYPE_CONVERTER_FACTORIES = new TypeConverterFactoryLoader().load();
-
+    
     private String dataType;
-    private List<Map.Entry<String,String>> parameters;
     private Integer minLength;
     private Integer maxLength;
     private Class<?> typeClass;
-    private Properties decodeParams;
-    private TypeConverter<String, ?> typeConverter;
 
     public ValueNode() {
 	}
@@ -88,72 +69,13 @@ public class ValueNode extends MappingNode {
     
     public void setDataType(String dataType) {
         this.dataType = dataType;
-        if (dataType != null) {
-            if (dataType.equals("Custom")) {
-                typeConverter = new CustomTypeConverter();
-            } else {
-                Set<TypeConverterFactory<?, ?>> typeConverterFactories = TYPE_CONVERTER_FACTORIES.stream().filter(i -> i.getClass().isAnnotationPresent(Resource.class) && dataType.equals(i.getClass().getAnnotation(Resource.class).name())).collect(Collectors.toSet());
-                if (typeConverterFactories.isEmpty()) {
-                    typeConverter = new StringConverterFactory().createTypeConverter();
-                    typeClass = String.class;
-                } else {
-                    TypeConverterFactory typeConverterFactory = typeConverterFactories.toArray(new TypeConverterFactory[]{})[0];
-                    typeConverter = (TypeConverter<String, ?>) typeConverterFactory.createTypeConverter();
-                    typeClass = (Class<?>) typeConverterFactory.getTypeConverterDescriptor().getTargetType();
-                }
-            }
-        }
-    }
-
-    public TypeConverter<String, ?> getTypeConverter() {
-        return typeConverter;
+        typeClass = String.class;
     }
 
     public Class<?> getTypeClass() {
         return typeClass;
     }
-
-    public List<Map.Entry<String,String>> getTypeParameters() {
-        return parameters;
-    }
-
-    public void setDataTypeParameters(List<Map.Entry<String,String>> parameters) {
-        this.parameters = parameters;
-
-        if (typeConverter instanceof Configurable) {
-            if(typeConverter  == null) {
-                throw new IllegalStateException("Illegal call to set parameters before 'dataType' has been configured on the " + getClass().getName());
-            }
-
-            decodeParams = new Properties();
-            if(parameters != null) {
-                for (Map.Entry<String,String> entry : parameters) {
-                    decodeParams.setProperty(entry.getKey(), entry.getValue());
-                }
-            }
-            ((Configurable) typeConverter).setConfiguration(decodeParams);
-        }
-    }
-
-    public String getDataTypeParametersString() {
-        if(parameters == null) {
-            return null;
-        }
-
-        StringBuilder builder = new StringBuilder();
-
-        for(Map.Entry<String,String> parameter : parameters) {
-            if(builder.length() > 0) {
-                builder.append(";");
-            }
-            builder.append(parameter.getKey());
-            builder.append("=");
-            builder.append(parameter.getValue());
-        }
-
-        return builder.toString();
-    }
-
+    
     public Integer getMinLength() {
         return minLength;
     }
@@ -168,9 +90,5 @@ public class ValueNode extends MappingNode {
 
     public void setMaxLength(Integer maxLength) {
         this.maxLength = maxLength;
-    }
-
-    public void isValidForType(String value) throws TypeConverterException {
-        typeConverter.convert(value);
     }
 }

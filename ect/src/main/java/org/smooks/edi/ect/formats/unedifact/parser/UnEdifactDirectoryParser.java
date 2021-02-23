@@ -531,7 +531,6 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
         field.setRequired(isMandatory);
         field.setTruncatable(true);
         field.setDataType(component.getDataType());
-        field.setDataTypeParameters(component.getTypeParameters());
         field.setCodeList(component.getCodeList());
 
         return field;
@@ -548,7 +547,6 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
         field.setRequired(isMandatory);
         field.setTruncatable(true);
         field.setDataType(oldField.getDataType());
-        field.setDataTypeParameters(oldField.getTypeParameters());
         field.getComponents().addAll(oldField.getComponents());
         return field;
     }
@@ -687,7 +685,6 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
         toComponent.setMinLength(fromComponent.getMinLength());
         toComponent.setTruncatable(true);
         toComponent.setDataType(fromComponent.getDataType());
-        toComponent.setDataTypeParameters(fromComponent.getTypeParameters());
         toComponent.setXmltag(XmlTagEncoder.encode(fromComponent.getXmltag()));
         toComponent.setName(fromComponent.getName());
         toComponent.setCodeList(fromComponent.getCodeList());

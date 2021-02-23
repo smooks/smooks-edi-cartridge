@@ -44,7 +44,6 @@ package org.smooks.edi.edisax.model;
 
 import org.smooks.assertion.AssertArgument;
 import org.smooks.edi.edisax.EDIConfigurationException;
-import org.smooks.edi.edisax.EDITypeEnum;
 import org.smooks.edi.edisax.model.internal.*;
 import org.smooks.resource.URIResourceLocator;
 import org.smooks.xml.XmlUtil;
@@ -58,9 +57,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -488,54 +485,6 @@ public class EDIConfigDigester {
         }
         valueNode.setMinLength(getNodeValueAsInteger(node, "minLength"));
         valueNode.setMaxLength(getNodeValueAsInteger(node, "maxLength"));
-        String dataTypeParams = getAttributeValue(node, "dataTypeParameters");
-        if(dataTypeParams != null) {
-            digestParameters(valueNode, dataTypeParams);
-        } else {
-            digestParameters(valueNode, getAttributeValue(node, "typeParameters"));
-        }
-    }
-
-    /**
-     * Digests parameters from parameters attribute and insertsthe parameters into
-     * the valueNode. If first parameter is not a key-value-pair the parameter is
-     * considered to be a custom class name.
-     * @param valueNode the valueNode to populate.
-     * @param value the parameters as a string value.
-     * @throws EDIConfigurationException is thrown when parameters are used incorrectly.
-     */
-    private static void digestParameters(ValueNode valueNode, String value) throws EDIConfigurationException {
-
-        if (value != null && !value.equals("")) {
-            List<Map.Entry<String, String>> result = new ArrayList<Map.Entry<String, String>>();
-            String[] parameters = value.split(";");
-            String[] entry;
-            String customClass = null;
-            for (int i = 0; i < parameters.length; i++) {
-                String parameter = parameters[i];
-                entry = parameter.split("=");
-                if (entry.length == 1) {
-                    if (i == 0) {
-                        customClass = entry[0];
-                        result.add(new ParamEntry<String, String>(CustomTypeConverter.CLASS_PROPERTY_NAME, entry[0]));
-                    } else {
-                        throw new EDIConfigurationException("Invalid use of paramaters in ValueNode. A parameter-entry should consist of a key-value-pair separated with the '='-character. Example: [parameters=\"key1=value1;key2=value2\"]");
-                    }
-                } else if (entry.length == 2) {
-                    result.add(new ParamEntry<String, String>(entry[0], entry[1]));
-                } else {
-                    throw new EDIConfigurationException("Invalid use of paramaters in ValueNode. A parameter-entry should consist of a key-value-pair separated with the '='-character. Example: [parameters=\"key1=value1;key2=value2\"]");
-                }
-            }
-            valueNode.setDataTypeParameters(result);
-
-            if ( valueNode.getDataType().equals(EDITypeEnum.CUSTOM_NAME) && customClass == null) {
-                throw new EDIConfigurationException("When using the Custom type in ValueNode the custom class type must exist as the first element in parameters");
-            } else if ( customClass != null && !valueNode.getDataType().equals(EDITypeEnum.CUSTOM_NAME)) {
-                throw new EDIConfigurationException("When first parameter in list of parameters is not a key-value-pair the type of the ValueNode should be Custom.");
-            }
-
-        }
     }
 
     /**
