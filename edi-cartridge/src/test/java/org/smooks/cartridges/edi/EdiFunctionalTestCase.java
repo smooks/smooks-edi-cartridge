@@ -49,7 +49,7 @@ import org.smooks.Smooks;
 import org.smooks.io.StreamUtils;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.smooks.SmooksUtil.filterAndSerialize;
+import static org.smooks.support.SmooksUtil.filterAndSerialize;
 
 public class EdiFunctionalTestCase {
 

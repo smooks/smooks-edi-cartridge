@@ -46,9 +46,9 @@ import org.apache.daffodil.japi.DataProcessor;
 import org.apache.daffodil.japi.ValidationMode;
 import org.smooks.cartridges.dfdl.DataProcessorFactory;
 import org.smooks.cartridges.dfdl.DfdlSchema;
-import org.smooks.cdr.Parameter;
-import org.smooks.cdr.SmooksConfigurationException;
-import org.smooks.container.ApplicationContext;
+import org.smooks.api.resource.config.Parameter;
+import org.smooks.api.SmooksConfigException;
+import org.smooks.api.ApplicationContext;
 
 import javax.inject.Inject;
 import java.net.URI;
@@ -84,7 +84,7 @@ public class EdiDataProcessorFactory extends DataProcessorFactory {
 
             return doCreateDataProcessor(variables);
         } catch (Throwable t) {
-            throw new SmooksConfigurationException(t);
+            throw new SmooksConfigException(t);
         }
     }
 

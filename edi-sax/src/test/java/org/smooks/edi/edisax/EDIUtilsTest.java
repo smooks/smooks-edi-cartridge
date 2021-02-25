@@ -50,7 +50,7 @@ import org.smooks.edi.edisax.model.internal.Delimiters;
 import org.smooks.edi.edisax.unedifact.UNEdifactInterchangeParser;
 import org.smooks.edi.edisax.util.EDIUtils;
 import org.smooks.edi.edisax.util.IllegalNameException;
-import org.smooks.util.CollectionsUtil;
+import org.smooks.support.CollectionsUtil;
 import org.xml.sax.SAXException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

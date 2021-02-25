@@ -44,8 +44,8 @@ package org.smooks.cartridges.edi;
 
 import org.smooks.assertion.AssertArgument;
 import org.smooks.cartridges.dfdl.parser.DfdlReaderConfigurator;
-import org.smooks.cdr.Parameter;
-import org.smooks.cdr.ResourceConfig;
+import org.smooks.api.resource.config.ResourceConfig;
+import org.smooks.engine.resource.config.DefaultParameter;
 
 import java.util.List;
 
@@ -115,14 +115,14 @@ public class EdiReaderConfigurator extends DfdlReaderConfigurator {
         final List<ResourceConfig> resourceConfigs = super.toConfig();
         final ResourceConfig resourceConfig = resourceConfigs.get(0);
 
-        resourceConfig.setParameter(new Parameter("dataProcessorFactory", getDataProcessorFactory()));
-        resourceConfig.setParameter(new Parameter("segmentTerminator", segmentTerminator));
-        resourceConfig.setParameter(new Parameter("dataElementSeparator", dataElementSeparator));
-        resourceConfig.setParameter(new Parameter("compositeDataElementSeparator", compositeDataElementSeparator));
-        resourceConfig.setParameter(new Parameter("escapeCharacter", escapeCharacter));
-        resourceConfig.setParameter(new Parameter("repetitionSeparator", repetitionSeparator));
-        resourceConfig.setParameter(new Parameter("decimalSign", decimalSign));
-        resourceConfig.setParameter(new Parameter("triadSeparator", triadSeparator));
+        resourceConfig.setParameter(new DefaultParameter<>("dataProcessorFactory", getDataProcessorFactory()));
+        resourceConfig.setParameter(new DefaultParameter<>("segmentTerminator", segmentTerminator));
+        resourceConfig.setParameter(new DefaultParameter<>("dataElementSeparator", dataElementSeparator));
+        resourceConfig.setParameter(new DefaultParameter<>("compositeDataElementSeparator", compositeDataElementSeparator));
+        resourceConfig.setParameter(new DefaultParameter<>("escapeCharacter", escapeCharacter));
+        resourceConfig.setParameter(new DefaultParameter<>("repetitionSeparator", repetitionSeparator));
+        resourceConfig.setParameter(new DefaultParameter<>("decimalSign", decimalSign));
+        resourceConfig.setParameter(new DefaultParameter<>("triadSeparator", triadSeparator));
 
         return resourceConfigs;
     }

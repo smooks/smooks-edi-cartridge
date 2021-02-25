@@ -49,9 +49,9 @@ import org.apache.daffodil.japi.ValidationMode;
 import org.apache.daffodil.util.Misc;
 import org.smooks.cartridges.dfdl.DfdlSchema;
 import org.smooks.cartridges.edi.EdiDataProcessorFactory;
-import org.smooks.cdr.Parameter;
-import org.smooks.cdr.SmooksConfigurationException;
-import org.smooks.container.ApplicationContext;
+import org.smooks.api.resource.config.Parameter;
+import org.smooks.api.SmooksConfigException;
+import org.smooks.api.ApplicationContext;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -81,7 +81,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
         try {
             MUSTACHE = new DefaultMustacheFactory().compile("EDIFACT-Common/EDIFACT-Interchange.dfdl.xsd.mustache");
         } catch (Throwable t) {
-            throw new SmooksConfigurationException(t);
+            throw new SmooksConfigException(t);
         }
     }
 
@@ -112,7 +112,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
 
             return compileOrGet(dfdlSchema);
         } catch (Throwable t) {
-            throw new SmooksConfigurationException(t);
+            throw new SmooksConfigException(t);
         }
     }
     

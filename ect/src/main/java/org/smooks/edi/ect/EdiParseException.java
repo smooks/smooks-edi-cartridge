@@ -42,7 +42,7 @@
  */
 package org.smooks.edi.ect;
 
-import org.smooks.SmooksException;
+import org.smooks.api.SmooksException;
 
 /**
  * EdiParseException

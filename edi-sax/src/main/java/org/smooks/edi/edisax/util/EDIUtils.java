@@ -52,9 +52,8 @@ import org.smooks.edi.edisax.model.internal.DelimiterType;
 import org.smooks.edi.edisax.model.internal.Delimiters;
 import org.smooks.edi.edisax.model.internal.Description;
 import org.smooks.io.StreamUtils;
-import org.smooks.javabean.pojogen.JType;
 import org.smooks.resource.URIResourceLocator;
-import org.smooks.util.ClassUtil;
+import org.smooks.support.ClassUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -523,28 +522,6 @@ public class EDIUtils {
         }
 
         assertLegalName(result);
-
-        return result;
-    }
-
-    /**
-     * Encodes a String into standard java attribute name convention. The following steps are performed
-     * on the name:
-     * 1. First character is set to lower case.
-     * 2. Illegal characters like '-' and whitespace are removed.
-     * 3. If attributetype is a Collection a 's'-character is appended.
-     *
-     * @param type the type of attribute.
-     * @param name the original attribut name.
-     * @return the attribute name complying with standard java attribute name convention.
-     * @throws IllegalNameException when attribute name is a reserved keyword in java.
-     */
-    public static String encodeAttributeName(JType type, String name) throws IllegalNameException {
-        String result = encodeAttributeName(name);
-
-        if(type != null && Collection.class.isAssignableFrom(type.getClass())) {
-            result += "s";
-        }
 
         return result;
     }

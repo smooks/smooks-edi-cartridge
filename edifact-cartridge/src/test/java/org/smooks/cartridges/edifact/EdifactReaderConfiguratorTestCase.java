@@ -50,7 +50,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.smooks.SmooksUtil.filterAndSerialize;
+import static org.smooks.support.SmooksUtil.filterAndSerialize;
 
 public class EdifactReaderConfiguratorTestCase {
 

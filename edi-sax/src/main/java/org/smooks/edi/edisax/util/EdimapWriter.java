@@ -62,7 +62,7 @@ import org.smooks.edi.edisax.model.internal.Segment;
 import org.smooks.edi.edisax.model.internal.SegmentGroup;
 import org.smooks.edi.edisax.model.internal.SubComponent;
 import org.smooks.edi.edisax.unedifact.UNEdifactInterchangeParser;
-import org.smooks.util.ClassUtil;
+import org.smooks.support.ClassUtil;
 import org.smooks.xml.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

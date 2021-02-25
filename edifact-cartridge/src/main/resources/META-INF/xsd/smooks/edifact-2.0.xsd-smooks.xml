@@ -48,61 +48,61 @@
     <import file="dfdl-1.0.xsd-smooks.xml"/>
 
     <resource-config selector="edifact:parser">
-        <resource>org.smooks.cdr.extension.NewResourceConfig</resource>
+        <resource>org.smooks.engine.resource.extension.NewResourceConfig</resource>
         <param name="resource">org.smooks.cartridges.dfdl.parser.DfdlParser</param>
     </resource-config>
     <resource-config selector="edifact:parser">
-        <resource>org.smooks.cdr.extension.SetOnResourceConfig</resource>
+        <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>
         <param name="setOn">dataProcessorFactory</param>
         <param name="value">org.smooks.cartridges.edifact.EdifactDataProcessorFactory</param>
     </resource-config>
     <resource-config selector="edifact:parser">
-        <resource>org.smooks.cdr.extension.SetOnResourceConfig</resource>
+        <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>
         <param name="setOn">selector</param>
         <param name="value">org.xml.sax.driver</param>
     </resource-config>
     <resource-config selector="edifact:parser">
-        <resource>org.smooks.cdr.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">indent</param>
     </resource-config>
 
     <resource-config selector="edifact:unparser">
-        <resource>org.smooks.cdr.extension.NewResourceConfig</resource>
+        <resource>org.smooks.engine.resource.extension.NewResourceConfig</resource>
     </resource-config>
     <resource-config selector="edifact:unparser">
-        <resource>org.smooks.cdr.extension.SetOnResourceConfig</resource>
+        <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>
         <param name="setOn">resourceType</param>
         <param name="value">dfdl</param>
     </resource-config>
     <resource-config selector="edifact:unparser">
-        <resource>org.smooks.cdr.extension.SetOnResourceConfig</resource>
+        <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>
         <param name="setOn">dataProcessorFactory</param>
         <param name="value">org.smooks.cartridges.edifact.EdifactDataProcessorFactory</param>
     </resource-config>
     <resource-config selector="edifact:unparser">
-        <resource>org.smooks.cdr.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">unparseOnElement</param>
         <param name="mapTo">selector</param>
     </resource-config>
 
     <resource-config selector="edifact:parser,edifact:unparser">
-        <resource>org.smooks.cdr.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">schemaURI</param>
     </resource-config>
     <resource-config selector="edifact:parser,edifact:unparser">
-        <resource>org.smooks.cdr.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">validationMode</param>
     </resource-config>
     <resource-config selector="edifact:parser,edifact:unparser">
-        <resource>org.smooks.cdr.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">cacheOnDisk</param>
     </resource-config>
     <resource-config selector="edifact:parser,edifact:unparser">
-        <resource>org.smooks.cdr.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">debugging</param>
     </resource-config>
     <resource-config selector="edifact:messageTypes/messageType">
-        <resource>org.smooks.cdr.extension.MapToResourceConfigFromText</resource>
+        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromText</resource>
         <param name="mapTo">messageType</param>
     </resource-config>
 

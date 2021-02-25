@@ -42,10 +42,10 @@
  */
 package org.smooks.cartridges.edifact;
 
+import org.smooks.api.resource.config.ResourceConfig;
 import org.smooks.assertion.AssertArgument;
 import org.smooks.cartridges.edi.EdiReaderConfigurator;
-import org.smooks.cdr.Parameter;
-import org.smooks.cdr.ResourceConfig;
+import org.smooks.engine.resource.config.DefaultParameter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +79,7 @@ public class EdifactReaderConfigurator extends EdiReaderConfigurator {
         final ResourceConfig resourceConfig = resourceConfigs.get(0);
 
         for (String messageType : messageTypes) {
-            resourceConfig.setParameter(new Parameter("messageType", messageType));
+            resourceConfig.setParameter(new DefaultParameter<>("messageType", messageType));
         }
 
         return resourceConfigs;

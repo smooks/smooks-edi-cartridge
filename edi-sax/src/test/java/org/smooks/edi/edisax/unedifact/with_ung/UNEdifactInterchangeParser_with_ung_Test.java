@@ -53,7 +53,6 @@ import org.smooks.edi.edisax.EDIParseException;
 import org.smooks.edi.edisax.EDIParser;
 import org.smooks.edi.edisax.MockContentHandler;
 import org.smooks.edi.edisax.MockContentHandlerNS;
-import org.smooks.namespace.NamespaceAwareHandler;
 import org.smooks.namespace.NamespaceDeclarationStack;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

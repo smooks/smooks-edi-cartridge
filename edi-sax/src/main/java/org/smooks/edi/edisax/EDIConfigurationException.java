@@ -42,7 +42,7 @@
  */
 package org.smooks.edi.edisax;
 
-import org.smooks.SmooksException;
+import org.smooks.api.SmooksException;
 
 /**
  * EDI message configuration exception.
