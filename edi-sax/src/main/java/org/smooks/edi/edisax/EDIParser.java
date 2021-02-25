@@ -46,7 +46,6 @@ import org.smooks.assertion.AssertArgument;
 import org.smooks.edi.edisax.model.EdifactModel;
 import org.smooks.edi.edisax.model.internal.*;
 import org.smooks.edi.edisax.util.EDIUtils;
-import org.smooks.lang.MutableInt;
 import org.smooks.namespace.NamespaceDeclarationStack;
 import org.smooks.resource.URIResourceLocator;
 import org.xml.sax.*;
@@ -156,8 +155,8 @@ public class EDIParser implements XMLReader {
     private NamespaceDeclarationStack nsStack;
 
     private ContentHandler contentHandler;
-    private MutableInt indentDepth;
-    private static Pattern EMPTY_LINE = Pattern.compile("[\n\r ]*");
+    private Integer indentDepth;
+    private static final Pattern EMPTY_LINE = Pattern.compile("[\n\r ]*");
 
     private EdifactModel edifactModel;
     private BufferedSegmentReader segmentReader;
@@ -352,7 +351,7 @@ public class EDIParser implements XMLReader {
      * Get the indent depth counter
 	 * @return Indent depth counter.
 	 */
-	public MutableInt getIndentDepth() {
+	public Integer getIndentDepth() {
 		return indentDepth;
 	}
 
@@ -360,7 +359,7 @@ public class EDIParser implements XMLReader {
      * Set the indent depth counter
 	 * @param indentDepth Indent depth counter.
 	 */
-	public void setIndentDepth(MutableInt indentDepth) {
+	public void setIndentDepth(Integer indentDepth) {
 		this.indentDepth = indentDepth;
 	}
 
@@ -382,7 +381,7 @@ public class EDIParser implements XMLReader {
 	        segmentReader.setIgnoreNewLines(getFeature(FEATURE_IGNORE_NEWLINES));
 	        
 	        // Initialize the indent counter...
-	        indentDepth = new MutableInt(0);
+	        indentDepth = 0;
 	        
 	        // Fire the startDocument event, as well as the startElement event...
 	        contentHandler.startDocument();
@@ -869,7 +868,7 @@ public class EDIParser implements XMLReader {
             contentHandler.startElement(namespace, elementName, elementName, attributes);
         }
 
-        indentDepth.value++;
+        indentDepth++;
     }
 
     public void endElement(MappingNode node, boolean indent) throws SAXException {
@@ -879,7 +878,7 @@ public class EDIParser implements XMLReader {
     }
 
     public void endElement(String elementName, String namespace, boolean indent) throws SAXException {
-    	indentDepth.value--;
+    	indentDepth--;
         if(indent) {
             indent();
         }
@@ -918,7 +917,7 @@ public class EDIParser implements XMLReader {
     	if(indentDepth == null) {
     		throw new IllegalStateException("'indentDepth' property not set on parser instance.  Cannot indent.");
     	}
-        contentHandler.characters(indentChars, 0, indentDepth.value + 1);
+        contentHandler.characters(indentChars, 0, indentDepth + 1);
     }
     public void setContentHandler(ContentHandler contentHandler) {
         this.contentHandler = contentHandler;

@@ -47,8 +47,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.smooks.cartridges.dfdl.DfdlSchema;
-import org.smooks.cdr.ResourceConfig;
-import org.smooks.container.standalone.DefaultApplicationContextBuilder;
+import org.smooks.api.resource.config.ResourceConfig;
+import org.smooks.engine.DefaultApplicationContextBuilder;
+import org.smooks.engine.resource.config.DefaultResourceConfig;
 import org.smooks.io.FileUtils;
 
 import java.io.File;
@@ -80,7 +81,7 @@ public class EdifactDataProcessorFactoryTestCase {
     @Test
     public void testDoCreateDataProcessorGivenNonUtf8FileEncodingDoesNotThrowMalformedInputException() throws NoSuchFieldException, IllegalAccessException {
         EdifactDataProcessorFactory edifactDataProcessorFactory = new EdifactDataProcessorFactory();
-        edifactDataProcessorFactory.setResourceConfig(new ResourceConfig());
+        edifactDataProcessorFactory.setResourceConfig(new DefaultResourceConfig());
         edifactDataProcessorFactory.setApplicationContext(new DefaultApplicationContextBuilder().build());
         edifactDataProcessorFactory.getResourceConfig().setParameter("schemaURI", "/d03b/EDIFACT-Messages.dfdl.xsd");
         edifactDataProcessorFactory.getResourceConfig().setParameter("messageType", "ORDERS");
@@ -102,7 +103,7 @@ public class EdifactDataProcessorFactoryTestCase {
     @Test
     public void testNextDoCreateDataProcessorIsCacheHitGivenIdenticalMessageType() {
         EdifactDataProcessorFactory edifactDataProcessorFactory = new EdifactDataProcessorFactory();
-        edifactDataProcessorFactory.setResourceConfig(new ResourceConfig());
+        edifactDataProcessorFactory.setResourceConfig(new DefaultResourceConfig());
         edifactDataProcessorFactory.setApplicationContext(new DefaultApplicationContextBuilder().build());
         edifactDataProcessorFactory.getResourceConfig().setParameter("cacheOnDisk", "true");
         edifactDataProcessorFactory.getResourceConfig().setParameter("schemaURI", "/d03b/EDIFACT-Messages.dfdl.xsd");
@@ -113,7 +114,7 @@ public class EdifactDataProcessorFactoryTestCase {
         assertEquals(1, new File(DfdlSchema.WORKING_DIRECTORY).listFiles().length);
         
         EdifactDataProcessorFactory cachedEdifactDataProcessorFactory = new EdifactDataProcessorFactory();
-        cachedEdifactDataProcessorFactory.setResourceConfig(new ResourceConfig());
+        cachedEdifactDataProcessorFactory.setResourceConfig(new DefaultResourceConfig());
         cachedEdifactDataProcessorFactory.setApplicationContext(new DefaultApplicationContextBuilder().build());
         cachedEdifactDataProcessorFactory.getResourceConfig().setParameter("cacheOnDisk", "true");
         cachedEdifactDataProcessorFactory.getResourceConfig().setParameter("schemaURI", "/d03b/EDIFACT-Messages.dfdl.xsd");
@@ -127,7 +128,7 @@ public class EdifactDataProcessorFactoryTestCase {
     @Test
     public void testNextDoCreateDataProcessorIsCacheMissGivenDifferentMessageType() {
         EdifactDataProcessorFactory edifactDataProcessorFactory = new EdifactDataProcessorFactory();
-        edifactDataProcessorFactory.setResourceConfig(new ResourceConfig());
+        edifactDataProcessorFactory.setResourceConfig(new DefaultResourceConfig());
         edifactDataProcessorFactory.setApplicationContext(new DefaultApplicationContextBuilder().build());
         edifactDataProcessorFactory.getResourceConfig().setParameter("cacheOnDisk", "true");
         edifactDataProcessorFactory.getResourceConfig().setParameter("schemaURI", "/d03b/EDIFACT-Messages.dfdl.xsd");
@@ -138,7 +139,7 @@ public class EdifactDataProcessorFactoryTestCase {
         assertEquals(1, new File(DfdlSchema.WORKING_DIRECTORY).listFiles().length);
 
         EdifactDataProcessorFactory cachedEdifactDataProcessorFactory = new EdifactDataProcessorFactory();
-        cachedEdifactDataProcessorFactory.setResourceConfig(new ResourceConfig());
+        cachedEdifactDataProcessorFactory.setResourceConfig(new DefaultResourceConfig());
         cachedEdifactDataProcessorFactory.setApplicationContext(new DefaultApplicationContextBuilder().build());
         cachedEdifactDataProcessorFactory.getResourceConfig().setParameter("cacheOnDisk", "true");
         cachedEdifactDataProcessorFactory.getResourceConfig().setParameter("schemaURI", "/d03b/EDIFACT-Messages.dfdl.xsd");

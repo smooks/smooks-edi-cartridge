@@ -51,7 +51,6 @@ import org.smooks.edi.edisax.model.internal.Description;
 import org.smooks.edi.edisax.model.internal.Edimap;
 import org.smooks.edi.edisax.model.internal.Segment;
 import org.smooks.edi.edisax.registry.MappingsRegistry;
-import org.smooks.lang.MutableInt;
 import org.smooks.namespace.NamespaceDeclarationStack;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -67,14 +66,14 @@ public class InterchangeContext {
 
     public static final String INTERCHANGE_MESSAGE_BLOCK_ELEMENT_NAME = "interchangeMessage";
 
-	private BufferedSegmentReader segmentReader;
-	private ContentHandler contentHandler;
-    private Map<String,Boolean> features;
-    private EDIParser controlSegmentParser;
-    public MutableInt indentDepth = new MutableInt(0);
-    private ControlBlockHandlerFactory controlBlockHandlerFactory;
-    private boolean validate;
-    private MappingsRegistry registry;
+	private final BufferedSegmentReader segmentReader;
+	private final ContentHandler contentHandler;
+    private final Map<String,Boolean> features;
+    private final EDIParser controlSegmentParser;
+    public Integer indentDepth = 0;
+    private final ControlBlockHandlerFactory controlBlockHandlerFactory;
+    private final boolean validate;
+    private final MappingsRegistry registry;
     private NamespaceDeclarationStack namespaceDeclarationStack;
     private boolean containerManagedNamespaceStack = false;
 

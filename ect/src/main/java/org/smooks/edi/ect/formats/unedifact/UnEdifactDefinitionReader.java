@@ -50,7 +50,7 @@ import org.smooks.edi.edisax.model.internal.*;
 import org.smooks.edi.edisax.unedifact.UNEdifactInterchangeParser;
 import org.smooks.edi.edisax.unedifact.handlers.r41.UNEdifact41ControlBlockHandlerFactory;
 import org.smooks.edi.edisax.util.EDIUtils;
-import org.smooks.util.ClassUtil;
+import org.smooks.support.ClassUtil;
 
 import java.io.IOException;
 import java.util.*;

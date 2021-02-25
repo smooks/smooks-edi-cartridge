@@ -42,7 +42,7 @@
  */
 package org.smooks.edi.edisax.unedifact.handlers.r41;
 
-import org.smooks.cdr.SmooksConfigurationException;
+import org.smooks.api.SmooksConfigException;
 import org.smooks.edi.edisax.interchange.ControlBlockHandler;
 import org.smooks.edi.edisax.interchange.ControlBlockHandlerFactory;
 import org.smooks.edi.edisax.model.EDIConfigDigester;
@@ -53,7 +53,6 @@ import org.smooks.edi.edisax.unedifact.handlers.*;
 import org.smooks.xml.hierarchy.HierarchyChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smooks.edi.edisax.unedifact.handlers.*;
 import org.xml.sax.SAXException;
 
 import java.nio.charset.Charset;
@@ -126,7 +125,7 @@ public class UNEdifact41ControlBlockHandlerFactory implements ControlBlockHandle
                 }
             }
         } catch (Exception e) {
-            throw new SmooksConfigurationException("Unexpected exception reading UN/EDIFACT v4.1 segment definitions.", e);
+            throw new SmooksConfigException("Unexpected exception reading UN/EDIFACT v4.1 segment definitions.", e);
         }
 
         toCharsetMapping = new HashMap<String, Charset>();

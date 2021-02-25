@@ -80,7 +80,7 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 public class UNEdifactInterchangeParser implements XMLReader, NamespaceDeclarationStackAware, HierarchyChangeReader {
 
-    private Map<String, Boolean> features = new HashMap<String, Boolean>();
+    private final Map<String, Boolean> features = new HashMap<String, Boolean>();
 	
 	public static final Delimiters defaultUNEdifactDelimiters = new Delimiters().setSegment("'").setField("+").setComponent(":").setEscape("?").setDecimalSeparator(".");
 	
@@ -137,9 +137,9 @@ public class UNEdifactInterchangeParser implements XMLReader, NamespaceDeclarati
 
                     ControlBlockHandler handler = interchangeContext.getControlBlockHandler(segCode);
 
-					interchangeContext.indentDepth.value++;
+					interchangeContext.indentDepth++;
 		        	handler.process(interchangeContext);
-					interchangeContext.indentDepth.value--;
+					interchangeContext.indentDepth--;
 		        } else {
 		        	break;
 		        }
