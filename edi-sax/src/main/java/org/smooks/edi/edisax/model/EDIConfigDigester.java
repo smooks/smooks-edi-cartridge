@@ -46,7 +46,7 @@ import org.smooks.assertion.AssertArgument;
 import org.smooks.edi.edisax.EDIConfigurationException;
 import org.smooks.edi.edisax.model.internal.*;
 import org.smooks.resource.URIResourceLocator;
-import org.smooks.xml.XmlUtil;
+import org.smooks.support.XmlUtil;
 import org.smooks.xml.XsdDOMValidator;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
