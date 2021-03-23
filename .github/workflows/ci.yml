@@ -24,7 +24,10 @@ jobs:
         with:
           java-version: 1.8
       - name: Prepare
-        run: sudo apt-get purge -y sphinxsearch hhvm ansible heroku google-cloud-sdk php* apache2 kubectl nginx p7zip p7zip-full p7zip-rar podman buildah skopeo mongodb-org ruby-full postgresql* gfortran* mysql* python* subversion mercurial firefox google-chrome-stable esl-erlang
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android          
+          sudo apt-get purge -y sphinxsearch hhvm ansible heroku google-cloud-sdk php* apache2 kubectl nginx p7zip p7zip-full p7zip-rar podman buildah skopeo mongodb-org ruby-full postgresql* gfortran* mysql* python* subversion mercurial firefox google-chrome-stable esl-erlang
       - name: Cache Maven repository
         uses: actions/cache@v2
         with:
