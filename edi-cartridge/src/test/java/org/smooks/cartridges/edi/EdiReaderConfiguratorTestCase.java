@@ -44,7 +44,7 @@ package org.smooks.cartridges.edi;
 
 import org.junit.jupiter.api.Test;
 import org.smooks.Smooks;
-import org.smooks.io.StreamUtils;
+import org.smooks.support.StreamUtils;
 
 import java.io.IOException;
 

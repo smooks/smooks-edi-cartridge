@@ -53,13 +53,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.smooks.edi.ect.DirectoryParser;
-import org.smooks.edi.ect.formats.unedifact.parser.D94ADirectoryParser;
 import org.smooks.edi.ect.formats.unedifact.UnEdifactDefinitionReader;
 import org.smooks.edi.edisax.model.internal.CodeList;
 import org.smooks.edi.edisax.model.internal.Edimap;
 import org.smooks.edi.edisax.model.internal.Field;
 import org.smooks.edi.edisax.model.internal.Segment;
-import org.smooks.io.StreamUtils;
+import org.smooks.support.StreamUtils;
 import org.xmlunit.builder.DiffBuilder;
 
 import java.io.IOException;
@@ -71,7 +70,6 @@ import java.util.Map;
 import java.util.zip.ZipInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class D94ADirectoryParserTest {
 

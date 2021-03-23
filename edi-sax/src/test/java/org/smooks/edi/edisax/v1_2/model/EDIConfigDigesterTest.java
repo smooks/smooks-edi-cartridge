@@ -55,7 +55,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.smooks.io.StreamUtils.readStream;
+import static org.smooks.support.StreamUtils.readStream;
 
 /**
  * This testcase tests that all new elements introduced in version 1.2 is digested from
