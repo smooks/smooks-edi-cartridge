@@ -56,7 +56,7 @@ import org.smooks.edi.edisax.model.EdifactModel;
 import org.smooks.edi.edisax.registry.DefaultMappingsRegistry;
 import org.smooks.edi.edisax.unedifact.UNEdifactInterchangeParser;
 import org.smooks.edi.edisax.util.EDIUtils;
-import org.smooks.io.StreamUtils;
+import org.smooks.support.StreamUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xmlunit.builder.DiffBuilder;

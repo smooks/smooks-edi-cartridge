@@ -59,7 +59,7 @@ import org.smooks.edi.ect.formats.unedifact.UnEdifactDefinitionReader;
 import org.smooks.edi.edisax.EDIConfigurationException;
 import org.smooks.edi.edisax.model.internal.Component;
 import org.smooks.edi.edisax.model.internal.Edimap;
-import org.smooks.io.StreamUtils;
+import org.smooks.support.StreamUtils;
 import org.xml.sax.SAXException;
 import org.xmlunit.builder.DiffBuilder;
 

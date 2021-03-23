@@ -51,11 +51,11 @@ import org.smooks.edi.edisax.model.EdifactModel;
 import org.smooks.edi.edisax.model.internal.DelimiterType;
 import org.smooks.edi.edisax.model.internal.Delimiters;
 import org.smooks.edi.edisax.model.internal.Description;
-import org.smooks.io.StreamUtils;
 import org.smooks.resource.URIResourceLocator;
 import org.smooks.support.ClassUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smooks.support.StreamUtils;
 import org.xml.sax.SAXException;
 
 import java.io.*;

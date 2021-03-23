@@ -47,7 +47,7 @@ import org.junit.jupiter.api.Test;
 import org.smooks.edi.edisax.EDIConfigurationException;
 import org.smooks.edi.edisax.model.EdifactModel;
 import org.smooks.edi.edisax.model.internal.Segment;
-import org.smooks.io.StreamUtils;
+import org.smooks.support.StreamUtils;
 import org.xml.sax.SAXException;
 
 import java.io.InputStream;

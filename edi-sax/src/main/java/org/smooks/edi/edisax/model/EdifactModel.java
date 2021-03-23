@@ -64,8 +64,8 @@ import org.smooks.edi.edisax.model.internal.Delimiters;
 import org.smooks.edi.edisax.model.internal.Description;
 import org.smooks.edi.edisax.model.internal.Edimap;
 import org.smooks.edi.edisax.model.internal.Import;
-import org.smooks.io.StreamUtils;
 import org.smooks.resource.URIResourceLocator;
+import org.smooks.support.StreamUtils;
 import org.xml.sax.SAXException;
 
 /**                                          

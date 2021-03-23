@@ -50,7 +50,7 @@ import org.smooks.cartridges.dfdl.DfdlSchema;
 import org.smooks.api.resource.config.ResourceConfig;
 import org.smooks.engine.DefaultApplicationContextBuilder;
 import org.smooks.engine.resource.config.DefaultResourceConfig;
-import org.smooks.io.FileUtils;
+import org.smooks.support.FileUtils;
 
 import java.io.File;
 import java.lang.reflect.Field;
