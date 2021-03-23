@@ -47,7 +47,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.smooks.cartridges.dfdl.DfdlSchema;
-import org.smooks.api.resource.config.ResourceConfig;
 import org.smooks.engine.DefaultApplicationContextBuilder;
 import org.smooks.engine.resource.config.DefaultResourceConfig;
 import org.smooks.support.FileUtils;
