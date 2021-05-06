@@ -81,7 +81,7 @@
     </resource-config>
     <resource-config selector="edifact:unparser">
         <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
-        <param name="attribute">unparseOnElement</param>
+        <param name="attribute">unparseOnNode</param>
         <param name="mapTo">selector</param>
     </resource-config>
 
