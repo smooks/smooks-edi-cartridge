@@ -25,7 +25,7 @@ In the following pass-through configuration, Smooks parses an EDI document and t
     <edi:unparser schemaURI="/edi-to-xml-mapping.dfdl.xsd" // <1>
                   segmentTerminator="%NL;" // <2>
                   compositeDataElementSeparator="^" // <3>
-                  unparseOnElement="/Order"/> // <4>
+                  unparseOnNode="/Order"/> // <4>
 
 </smooks-resource-list>
 ----
@@ -36,7 +36,7 @@ Config attributes common to the parser and unparser resources are:
 . _segmentTerminator_: the terminator for groups of related data elements. DFDL interprets _%NL;_ as a newline. 
 . _compositeDataElementSeparator_: the delimiter for compound data elements.
 
-The _unparseOnElement_ attribute is exclusive to the unparser visitor. It tells the unparser which event to intercept and serialise. Consult  with the EDI cartridge's link:/xsd/smooks/edi-2.0.xsd[XSD documentation] for the complete list of config attributes and elements.
+The `+unparseOnNode+` attribute is exclusive to the unparser visitor. It tells the unparser which event to intercept and serialise. Consult  with the EDI cartridge's link:/xsd/smooks/edi-2.0.xsd[XSD documentation] for the complete list of config attributes and elements.
 
 === EDI DFDL Schema
 
@@ -316,7 +316,7 @@ message definition zip directories]. This allows you to easily convert a UN/EDIF
 
     <edifact:parser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd"/>
 
-    <edifact:unparser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnElement="/Interchange"/>
+    <edifact:unparser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnNode="/Interchange"/>
 
 </smooks-resource-list>
 ----
@@ -337,7 +337,7 @@ The _edifact:parser_ and _edifact:unparser_, analogous to the _edi:parser_ and _
         </edifact:messageTypes>
     </edifact:parser>
 
-    <edifact:unparser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnElement="/Interchange">
+    <edifact:unparser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnNode="/Interchange">
        <edifact:messageTypes>
             <edifact:messageType>ORDERS</edifact:messageType>
             <edifact:messageType>INVOIC</edifact:messageType>
