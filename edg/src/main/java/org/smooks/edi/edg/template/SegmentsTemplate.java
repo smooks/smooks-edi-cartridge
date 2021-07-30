@@ -221,7 +221,7 @@ public class SegmentsTemplate extends Template {
         }
 
         if (repetitions.get() > 0) {
-            fieldHead.put("maxOccurs", repetitions.get());
+            fieldHead.put("maxOccurs", repetitions.get() + 1);
         } else {
             fieldHead.put("maxOccurs", fieldHead.get("cardinality"));
         }
