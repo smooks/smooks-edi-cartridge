@@ -321,7 +321,7 @@ message definition zip directories]. This allows you to easily convert a UN/EDIF
 </smooks-resource-list>
 ----
 
-The _edifact:parser_ and _edifact:unparser_, analogous to the _edi:parser_ and _edi:unparser_, convert the stream according to the pre-generated DFDL schema referenced in the _schemaURI_ attribute. Given that an EDIFACT schema can be very big compared to your average EDI schema, it may take minutes for the parser to compile it. Even having the _onDiskCache_ attribute enabled may not be sufficient to meet your compilation time needs. For such situations, you can mitigate this problem by declaring ahead of time which message types the parser will process:
+The _edifact:parser_ and _edifact:unparser_, analogous to the _edi:parser_ and _edi:unparser_, convert the stream according to the pre-generated DFDL schema referenced in the _schemaURI_ attribute. Given that an EDIFACT schema can be very big compared to your average EDI schema, it may take minutes for the parser to compile it. Even having the _cacheOnDisk_ attribute enabled may not be sufficient to meet your compilation time needs. For such situations, you can mitigate this problem by declaring ahead of time which message types the parser will process:
 
 .smooks-config.xml
 [source,xml]
