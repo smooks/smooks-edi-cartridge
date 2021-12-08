@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="ASCII"?>
-
 <tdml:testSuite
         suiteName="ISA"
         xmlns:tdml="http://www.ibm.com/xmlns/dfdl/testData"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         defaultImplementations="ibm daffodil"
-        xsi:schemaLocation="http://www.ibm.com/xmlns/dfdl/testData"
         defaultRoundTrip="none">
 
     <tdml:parserTestCase name="PAXLST" validation="on" root="Interchange" model="target/generated-test-resources/d03b/EDIFACT-Interchange.dfdl.xsd">

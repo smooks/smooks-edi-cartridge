@@ -93,8 +93,8 @@ public class EdifactDfdlSchemaGeneratorTestCase {
             }});
         }
 
-        Runner runner = new Runner(null, "", "parse.tdml", true, true, false, Runner.defaultRoundTripDefaultDefault(), Runner.defaultValidationDefaultDefault(), Runner.defaultImplementationsDefaultDefault());
-        runner.runOneTest("PAXLST", Option.empty(), true);
-        runner.runOneTest("INVOIC", Option.empty(), true);
+        Runner runner = Runner.apply("", "parse.tdml", true, true, false, Runner.defaultRoundTripDefaultDefault(), Runner.defaultValidationDefaultDefault(), Runner.defaultImplementationsDefaultDefault());
+        runner.runOneTest("PAXLST", true);
+        runner.runOneTest("INVOIC", true);
     }
 }
