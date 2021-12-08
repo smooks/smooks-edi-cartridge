@@ -55,7 +55,7 @@ import static org.smooks.support.SmooksUtil.filterAndSerialize;
 public class EdifactReaderConfiguratorTestCase {
 
     @Test
-    public void testToConfig() throws IOException {
+    public void testToConfig() {
         EdifactReaderConfigurator edifactReaderConfigurator = new EdifactReaderConfigurator("/d03b/EDIFACT-Messages.dfdl.xsd").setMessageTypes(Arrays.asList("INVOIC"));
 
         Smooks smooks = new Smooks();
