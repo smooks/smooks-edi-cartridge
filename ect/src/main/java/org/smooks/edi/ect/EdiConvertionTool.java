@@ -45,12 +45,13 @@ package org.smooks.edi.ect;
 import org.eclipse.emf.ecore.EPackage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.smooks.archive.Archive;
+
 import org.smooks.assertion.AssertArgument;
 import org.smooks.edi.ect.ecore.ECoreGenerator;
 import org.smooks.edi.ect.ecore.SchemaConverter;
 import org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser;
 import org.smooks.edi.ect.formats.unedifact.UnEdifactDefinitionReader;
+import org.smooks.edi.edisax.archive.Archive;
 import org.smooks.edi.edisax.interchange.EdiDirectory;
 import org.smooks.edi.edisax.model.internal.*;
 import org.smooks.edi.edisax.util.EDIUtils;

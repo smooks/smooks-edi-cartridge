@@ -42,7 +42,6 @@
  */
 package org.smooks.edi.ect.ecore;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.*;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
@@ -185,7 +184,7 @@ public class ECoreConversionUtils {
 	 * @param value
 	 */
 	private static void annotate(EModelElement element, String key, String value) {
-		if (!StringUtils.isEmpty(value)) {
+		if (value != null && !value.trim().isEmpty()) {
 			EAnnotation annotation = element
 					.getEAnnotation(SmooksMetadata.ANNOTATION_TYPE);
 			if (annotation == null) {

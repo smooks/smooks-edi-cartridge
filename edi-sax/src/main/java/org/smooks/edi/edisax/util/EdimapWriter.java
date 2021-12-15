@@ -50,7 +50,6 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.lang.StringUtils;
 import org.smooks.edi.edisax.model.internal.Component;
 import org.smooks.edi.edisax.model.internal.Delimiters;
 import org.smooks.edi.edisax.model.internal.Description;
@@ -140,7 +139,7 @@ public class EdimapWriter {
         Element descriptionElement = newElement("description", edimapEl);
 
         mapBeanProperties(description, descriptionElement, "name", "version");
-        if (!StringUtils.isEmpty(description.getNamespace())) {
+        if (description.getNamespace() != null && description.getNamespace().trim().length() > 0) {
         	descriptionElement.setAttribute("namespace", description.getNamespace());
         }
     }

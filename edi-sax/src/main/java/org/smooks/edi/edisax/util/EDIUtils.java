@@ -42,11 +42,11 @@
  */
 package org.smooks.edi.edisax.util;
 
-import org.smooks.archive.Archive;
-import org.smooks.archive.ArchiveClassLoader;
 import org.smooks.assertion.AssertArgument;
 import org.smooks.edi.edisax.EDIConfigurationException;
 import org.smooks.edi.edisax.EDIParser;
+import org.smooks.edi.edisax.archive.Archive;
+import org.smooks.edi.edisax.archive.ArchiveClassLoader;
 import org.smooks.edi.edisax.model.EdifactModel;
 import org.smooks.edi.edisax.model.internal.DelimiterType;
 import org.smooks.edi.edisax.model.internal.Delimiters;
