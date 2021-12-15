@@ -46,7 +46,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.apache.commons.lang.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.smooks.edi.edisax.model.internal.Delimiters;
 import org.xml.sax.InputSource;
@@ -159,9 +158,5 @@ public class BufferedSegmentReaderTest {
         delimiters.setEscape("?");
         BufferedSegmentReader reader = new BufferedSegmentReader(inputSource, delimiters);
         return reader;
-    }
-
-    public void test_split() {
-        Arrays.asList(StringUtils.splitPreserveAllTokens("a*b***C*d", "*"));
     }
 }

@@ -1,6 +1,6 @@
 /*-
  * ========================LICENSE_START=================================
- * smooks-ect
+ * Commons
  * %%
  * Copyright (C) 2020 Smooks
  * %%
@@ -40,44 +40,40 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * =========================LICENSE_END==================================
  */
-package org.smooks.edi.ect.ecore;
+package org.smooks.edi.edisax.archive;
 
-import org.eclipse.emf.ecore.EPackage;
 import org.junit.jupiter.api.Test;
-import org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser;
-import org.smooks.edi.ect.DirectoryParser;
-import org.smooks.edi.ect.formats.unedifact.UnEdifactDefinitionReader;
-import org.smooks.edi.edisax.archive.Archive;
+import org.smooks.support.StreamUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
-public class XSDExportTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
-    @Test
-    public void testSchemaExport() throws Exception {
-        String directory = "d03b";
-        String pluginID = "org.smooks.edi.unedifact." + directory;
-        String pathPrefix = pluginID.replace('.', '/');
-        InputStream inputStream = getClass().getResourceAsStream("/" + directory + ".zip");
-        ZipInputStream zipInputStream = new ZipInputStream(inputStream);
-        DirectoryParser directoryParser = new UnEdifactDirectoryParser(zipInputStream, false, false);
-        ECoreGenerator ecoreGen = new ECoreGenerator();
-        Set<EPackage> packages = ecoreGen.generatePackages(directoryParser.getEdiDirectory(UnEdifactDefinitionReader.parse(directoryParser)));
-        // To make tests execution faster let us just select a small subset of packages
-        Set<EPackage> smallerSet = new HashSet<EPackage>();
-        for (EPackage pkg : packages) {
-            if ("cuscar".equals(pkg.getName()) || "invoic".equals(pkg.getName())) {
-                smallerSet.add(pkg);
-            }
-        }
-        Archive archive = SchemaConverter.INSTANCE.createArchive(smallerSet, pluginID, pathPrefix);
-        archive.toOutputStream(new ZipOutputStream(new FileOutputStream("./target/" + archive.getArchiveName())));
+
+/**
+ * @author <a href="mailto:tom.fennelly@gmail.com">tom.fennelly@gmail.com</a>
+ */
+public class ArchiveClassLoaderTestCase {
+
+	@Test
+    public void test_produced_zip() throws IOException, ClassNotFoundException {
+        Archive archive = new Archive("testarchive");
+
+        archive.addEntry("//my/resource.txt", new ByteArrayInputStream("Hi!!".getBytes()));
+        archive.addEntry(Archive.class);
+
+        ArchiveClassLoader classLoader = new ArchiveClassLoader(archive);
+
+        Class<?> clazzInst = classLoader.loadClass(Archive.class.getName());
+
+        // Classes are loaded by different classloaders, so shouldn't be the same class instance...
+        assertNotSame(Archive.class, clazzInst);
+        // But should be the same class...
+        assertEquals(Archive.class.getName(), clazzInst.getName());
+
+        String hiString = StreamUtils.readStreamAsString(classLoader.getResourceAsStream("my/resource.txt"), "UTF-8");
+        assertEquals("Hi!!", hiString);
     }
-
 }

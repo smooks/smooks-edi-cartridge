@@ -51,7 +51,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.util.XSDResourceFactoryImpl;
-import org.smooks.archive.Archive;
+import org.smooks.edi.edisax.archive.Archive;
 import org.smooks.edi.edisax.model.internal.Edimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
