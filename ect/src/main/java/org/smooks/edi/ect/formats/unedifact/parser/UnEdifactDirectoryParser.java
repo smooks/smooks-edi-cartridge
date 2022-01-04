@@ -198,7 +198,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
      * Group1 = change indicator
      * Group2 = code
      */
-    private static final Pattern CODE = Pattern.compile("^([+*#|X]){0,2} +([A-Z0-9]+) +.+");
+    private static final Pattern CODE = Pattern.compile("^([+*#|X]){0,2} +([A-Z]+ +|[0-9]+) +.+");
     
     private HashMap<String, CodeList> codeLists;
     private HashMap<String, Field> compositeDataElements;
@@ -611,7 +611,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
         while (line != null && !line.matches(ELEMENT_SEPARATOR)) {
             Matcher codeMatcher = CODE.matcher(line);
             if (codeMatcher.matches()) {
-                codeList.getCodes().add(codeMatcher.group(2));
+                codeList.getCodes().add(codeMatcher.group(2).trim());
             }
             line = reader.readLine();
         }
