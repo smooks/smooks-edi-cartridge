@@ -612,11 +612,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
             Matcher codeMatcher = CODE.matcher(line);
             if (codeMatcher.matches()) {
                 codeList.getCodes().add(codeMatcher.group(2));
-                while (line != null && line.length() > 0) {
-                    line = reader.readLine();
-                }
             }
-
             line = reader.readLine();
         }
 

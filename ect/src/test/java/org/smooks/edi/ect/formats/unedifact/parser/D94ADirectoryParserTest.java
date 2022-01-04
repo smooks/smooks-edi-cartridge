@@ -58,6 +58,7 @@ import org.smooks.edi.edisax.model.internal.CodeList;
 import org.smooks.edi.edisax.model.internal.Edimap;
 import org.smooks.edi.edisax.model.internal.Field;
 import org.smooks.edi.edisax.model.internal.Segment;
+import org.smooks.edi.edisax.util.IllegalNameException;
 import org.smooks.support.StreamUtils;
 import org.xmlunit.builder.DiffBuilder;
 
@@ -74,12 +75,17 @@ import static org.junit.jupiter.api.Assertions.*;
 public class D94ADirectoryParserTest {
 
     private DirectoryParser d94AReader;
+    private DirectoryParser d96AReader;
 
     @BeforeEach
     public void init() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("/d94a.zip");
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
         d94AReader = new D94ADirectoryParser(zipInputStream, false, false);
+
+        inputStream = getClass().getResourceAsStream("/d96a.zip");
+        zipInputStream = new ZipInputStream(inputStream);
+        d96AReader = new D96ADirectoryParser(zipInputStream, false, false);
     }
 
     @Test
@@ -177,6 +183,63 @@ public class D94ADirectoryParserTest {
         for (final Field field : aliSegment.getFields()) {
             assertFalse(field.getDocumentation().contains("3166"));
         }
+    }
+
+    @Test
+    public void checkCorrectParsingOfCodesD96A() throws IOException, JDOMException {
+        Edimap edimap = UnEdifactDefinitionReader.parse(d96AReader);
+
+        StringWriter stringWriter = new StringWriter();
+        edimap.write(stringWriter);
+
+        edimap.getSimpleDataElements().forEach(a -> {
+            if (a.getCodeList() != null) {
+                assertTrue(a.getCodeList().getCodes().size() > 0);
+            }
+            if (a.getNodeTypeRef().equals("1153")) {
+                assertTrue(a.getCodeList().getCodes().contains("AAA"));
+                assertTrue(a.getCodeList().getCodes().contains("AEK"));
+                assertTrue(a.getCodeList().getCodes().contains("AEJ"));
+                assertTrue(a.getCodeList().getCodes().contains("VN"));
+                assertTrue(a.getCodeList().getCodes().contains("ON"));
+                assertTrue(a.getCodeList().getCodes().contains("BT"));
+                assertTrue(a.getCodeList().getCodes().contains("VA"));
+            }
+            if (a.getNodeTypeRef().equals("3139")) {
+                assertTrue(a.getCodeList().getCodes().contains("IC"));
+            }
+            if (a.getNodeTypeRef().equals("3155")) {
+                assertTrue(a.getCodeList().getCodes().contains("TE"));
+            }
+            if (a.getNodeTypeRef().equals("6311")) {
+                assertTrue(a.getCodeList().getCodes().contains("AAY"));
+            }
+            if (a.getNodeTypeRef().equals("6313")) {
+                assertTrue(a.getCodeList().getCodes().contains("HM"));
+                assertTrue(a.getCodeList().getCodes().contains("LM"));
+                assertTrue(a.getCodeList().getCodes().contains("WM"));
+                assertTrue(a.getCodeList().getCodes().contains("GW"));
+                assertTrue(a.getCodeList().getCodes().contains("LM"));
+            }
+            if (a.getNodeTypeRef().equals("7143")) {
+                assertTrue(a.getCodeList().getCodes().contains("BP"));
+                assertTrue(a.getCodeList().getCodes().contains("VP"));
+            }
+            if (a.getNodeTypeRef().equals("7077")) {
+                assertTrue(a.getCodeList().getCodes().contains("F"));
+            }
+            if (a.getNodeTypeRef().equals("3035")) {
+                assertTrue(a.getCodeList().getCodes().contains("BY"));
+                assertTrue(a.getCodeList().getCodes().contains("SU"));
+            }
+            if (a.getNodeTypeRef().equals("5125")) {
+                assertTrue(a.getCodeList().getCodes().contains("INF"));
+            }
+            if (a.getNodeTypeRef().equals("5387")) {
+                assertTrue(a.getCodeList().getCodes().contains("NTP"));
+            }
+        });
+
     }
 
     private void testSegment(final String segmentCode, Document doc, boolean useShortName) throws IOException, JDOMException {
