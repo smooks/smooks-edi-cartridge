@@ -119,7 +119,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
     protected URI materialiseEntrySchema(final String schemaUri, final List<String> messageTypes, final String version) throws IOException {
         final File generatedEntrySchemaDir = Files.createTempDirectory(null).toFile();
         generatedEntrySchemaDir.deleteOnExit();
-        final File generatedEntrySchema = new File(generatedEntrySchemaDir.toString() + "/EDIFACT-Interchange-" + UUID.nameUUIDFromBytes(String.join(":", messageTypes).getBytes()) + "-.dfdl.xsd");
+        final File generatedEntrySchema = new File(generatedEntrySchemaDir + "/EDIFACT-Interchange-" + UUID.nameUUIDFromBytes(String.join(":", messageTypes).getBytes()) + ".dfdl.xsd");
         try (Writer fileWriter = new OutputStreamWriter(new FileOutputStream(generatedEntrySchema), StandardCharsets.UTF_8)) {
             MUSTACHE.execute(fileWriter, new HashMap<String, Object>() {{
                 this.put("schemaLocation", schemaUri);
