@@ -66,17 +66,17 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
 
     protected final Map<String, byte[]> definitionFiles;
     protected final Map<String, byte[]> messageFiles;
-    protected  InputStreamReader dataElementsDirectoryReader;
+    protected InputStreamReader dataElementsDirectoryReader;
     protected InputStreamReader compositeDataElementsDirectoryReader;
     protected InputStreamReader standardSegmentsDirectoryReader;
     protected InputStreamReader consolidatedCodeListReader;
-    
+
     private final boolean useShortName;
     private final boolean useImport;
     private final Set<String> versions = new HashSet<>();
     private final Set<String> messages = new HashSet<>();
     private EdiDirectory ediDirectory;
-   
+
     /**
      * Matcher to recognize and parse entries like CUSCAR_D.08A
      */
@@ -90,7 +90,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
     /**
      * Matches the line of '-' characters separating the data-, composite- or segment-definitions.
      */
-    private static final String ELEMENT_SEPARATOR = "^[-|�]+$";
+    protected static final String ELEMENT_SEPARATOR = "^[-|�]+$";
 
     /**
      * Matches the string "..".
@@ -190,7 +190,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
      */
     private static final Pattern SECOND_SEGMENT_ELEMENT = Pattern.compile("^(.*) *( C| M) *(\\d)?.*");
 
-    private static final Pattern CODE_ID = Pattern.compile("[SX|+\\-*# ]*(\\w{4}) *(.*)");
+    protected static final Pattern CODE_ID = Pattern.compile("[SX|+\\-*# ]*(\\w{4}) *(.*)");
 
     /**
      * Extracts information from a code.
@@ -198,8 +198,8 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
      * Group1 = change indicator
      * Group2 = code
      */
-    private static final Pattern CODE = Pattern.compile("^([+*#|X]){0,2} +([A-Z0-9]+) +.+");
-    
+    private static final Pattern CODE = Pattern.compile("^([+*#|X]{0,2} +)([A-Z0-9]+) +.+");
+
     private HashMap<String, CodeList> codeLists;
     private HashMap<String, Field> compositeDataElements;
     private HashMap<String, Component> dataElements;
@@ -224,7 +224,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
 
         return segments;
     }
-    
+
     public UnEdifactDirectoryParser(ZipInputStream zipInputStream, boolean useImport, boolean useShortName) throws IOException {
         this.useImport = useImport;
         this.useShortName = useShortName;
@@ -242,7 +242,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
         // Read Definition Configuration
         parseEDIDefinitionFiles();
     }
-    
+
     protected void doReadDefinitionEntries(ZipInputStream zipInputStream) throws IOException {
         readDefinitionEntries(zipInputStream,
                 new ZipDirectoryEntry("eded.", definitionFiles),
@@ -605,16 +605,15 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
             throw new EdiParseException("Unable to extract id and name for code from line [" + line + "].");
         }
 
-        String description = getValue(reader, "Desc:");
-        codeList.setDocumentation(description);
+        codeList.setDocumentation(getValue(reader, "Desc:"));
         line = readUntilCode(reader);
+        Matcher firstCodeMatcher = CODE.matcher(line);
+        firstCodeMatcher.matches();
+        int expectedIndentLength = firstCodeMatcher.group(1).length();
         while (line != null && !line.matches(ELEMENT_SEPARATOR)) {
             Matcher codeMatcher = CODE.matcher(line);
-            if (codeMatcher.matches()) {
+            if (isCode(codeMatcher, expectedIndentLength)) {
                 codeList.getCodes().add(codeMatcher.group(2));
-                while (line != null && line.length() > 0) {
-                    line = reader.readLine();
-                }
             }
 
             line = reader.readLine();
@@ -622,7 +621,11 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
 
         return id;
     }
-    
+
+    protected boolean isCode(Matcher codeMatcher, int expectedIndentLength) {
+        return codeMatcher.matches() && codeMatcher.group(1).length() == expectedIndentLength;
+    }
+
     protected String readUntilCode(BufferedReader reader) throws IOException {
         String line = readUntilValue(reader);
         while (line != null && !CODE.matcher(line).matches()) {
@@ -631,10 +634,10 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
             }
             line = reader.readLine();
         }
-        
+
         return line;
     }
-    
+
     protected String populateDataElement(BufferedReader reader, Map<String, Component> dataElements, Field field) throws IOException, EdiParseException {
         //Read id and name.
         String line = readUntilValue(reader);
@@ -757,7 +760,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
         return id;
     }
 
-   private int getMinLength(String[] typeAndOccurrence) {
+    private int getMinLength(String[] typeAndOccurrence) {
         if (typeAndOccurrence.length == 0) {
             return 0;
         } else if (typeAndOccurrence.length == 1) {
@@ -789,7 +792,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
         }
     }
 
-    private static String getValue(BufferedReader reader, String prefix) throws IOException {
+    protected static String getValue(BufferedReader reader, String prefix) throws IOException {
         StringBuilder result = new StringBuilder();
         String line;
         while ((line = readUntilValue(reader)) != null) {
@@ -807,7 +810,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
         return result.toString().trim();
     }
 
-    private static String readUntilValue(BufferedReader reader) throws IOException {
+    protected static String readUntilValue(BufferedReader reader) throws IOException {
         String line = reader.readLine();
         while (line != null && line.length() == 0) {
             line = reader.readLine();
@@ -815,7 +818,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
         return line;
     }
 
-   private void moveToNextPart(BufferedReader reader) throws IOException {
+    private void moveToNextPart(BufferedReader reader) throws IOException {
         String currentLine = "";
 
         while (currentLine != null && !currentLine.matches(ELEMENT_SEPARATOR)) {
