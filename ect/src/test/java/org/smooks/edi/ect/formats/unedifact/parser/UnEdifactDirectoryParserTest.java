@@ -202,16 +202,6 @@ public class UnEdifactDirectoryParserTest extends AbstractDirectoryParserTest {
 
             StringWriter stringWriter = new StringWriter();
             edimap.write(stringWriter);
-//		String expected = new String(StreamUtils.readStream(getClass().getResourceAsStream("d08a/message/expected-" + messageName.toLowerCase() + ".xml"))).trim();
-//
-//        String result = removeCRLF(stringWriter.toString());
-//		expected = removeCRLF(expected);
-//
-//        if(!result.equals(expected)) {
-//            System.out.println("Expected: \n[" + expected + "]");
-//            System.out.println("Actual: \n[" + result + "]");
-//            assertEquals("Message [" + messageName + "] failed.", expected, result);
-//        }
 
             StringWriter result = new StringWriter();
             edimap.write(result);

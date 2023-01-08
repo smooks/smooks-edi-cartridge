@@ -45,8 +45,8 @@ package org.smooks.edi.ect.formats.unedifact.parser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.smooks.edi.ect.DirectoryParser;
-import org.smooks.edi.ect.formats.unedifact.parser.D96ADirectoryParser;
 import org.smooks.edi.ect.formats.unedifact.UnEdifactDefinitionReader;
+import org.smooks.edi.edisax.model.internal.Component;
 import org.smooks.edi.edisax.model.internal.Edimap;
 import org.smooks.edi.edisax.model.internal.Field;
 
@@ -67,8 +67,10 @@ public class D96ADirectoryParserTest {
         DirectoryParser d96AReader = new D96ADirectoryParser(zipInputStream, false, false);
 
         Map<String, byte[]> definitionFiles = d96AReader.getDefinitionFiles();
-        assertFalse(
-                definitionFiles.get("uncl") == null || definitionFiles.get("uncl").length == 0);
+        assertFalse(definitionFiles.get("uncl") == null || definitionFiles.get("uncl").length == 0);
+
+        final Component component = getSimpleDataElement(d96AReader, "5125");
+        assertEquals(9, component.getCodeList().getCodes().size());
     }
 
     @Test
@@ -87,6 +89,16 @@ public class D96ADirectoryParserTest {
         for (final Field field : edimap.getCompositeDataElements()) {
             if (componentName.equals(field.getNodeTypeRef())) {
                 return field;
+            }
+        }
+        return null;
+    }
+
+    private Component getSimpleDataElement(final DirectoryParser reader, final String componentName) throws IOException {
+        Edimap edimap = UnEdifactDefinitionReader.parse(reader);
+        for (final Component component : edimap.getSimpleDataElements()) {
+            if (componentName.equals(component.getNodeTypeRef())) {
+                return component;
             }
         }
         return null;
