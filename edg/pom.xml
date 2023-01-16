@@ -41,7 +41,7 @@
         <dependency>
             <groupId>org.apache.daffodil</groupId>
             <artifactId>daffodil-tdml-processor_2.12</artifactId>
-            <version>3.2.1</version>
+            <version>3.4.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
