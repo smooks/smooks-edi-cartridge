@@ -48,7 +48,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.daffodil.tdml.Runner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import scala.Option;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -93,7 +92,7 @@ public class EdifactDfdlSchemaGeneratorTestCase {
             }});
         }
 
-        Runner runner = Runner.apply("", "parse.tdml", true, true, false, Runner.defaultRoundTripDefaultDefault(), Runner.defaultValidationDefaultDefault(), Runner.defaultImplementationsDefaultDefault());
+        Runner runner = Runner.apply("parse.tdml");
         runner.runOneTest("PAXLST", true);
         runner.runOneTest("INVOIC", true);
     }
