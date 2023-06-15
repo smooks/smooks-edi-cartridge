@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<jxb:bindings xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+<jxb:bindings xmlns:jxb="https://jakarta.ee/xml/ns/jaxb"
               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-              version="2.1">
+              version="3.0">
 
     <jxb:globalBindings typesafeEnumMaxMembers="1024"/>
 
@@ -10,11 +10,11 @@
             <jxb:package name="org.smooks.edifact.binding.d00a"/>
         </jxb:schemaBindings>
     </jxb:bindings>
-    
-    <jxb:bindings schemaLocation="/EDIFACT-Common/EDIFACT-Service-Segments-4.1.dfdl.xsd" node="/xsd:schema">
+
+    <jxb:bindings schemaLocation="EDIFACT-Common/EDIFACT-Service-Segments-4.1.dfdl.xsd" node="/xsd:schema">
         <jxb:schemaBindings>
             <jxb:package name="org.smooks.edifact.binding.service"/>
         </jxb:schemaBindings>
     </jxb:bindings>
-    
+
 </jxb:bindings>

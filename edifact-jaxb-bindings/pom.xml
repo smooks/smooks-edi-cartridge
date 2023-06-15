@@ -12,7 +12,11 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>edifact-jaxb-bindings</artifactId>
     <packaging>pom</packaging>
-    
+
+    <properties>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+    </properties>
+
     <modules>
         <module>service</module>
         <module>d00a</module>
@@ -78,14 +82,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration combine.children="append">
                     <show>public</show>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <configuration>
-                    <!-- FIXME: Travis times out without this because license-maven-plugin execution takes too long -->
-                    <skipUpdateLicense>true</skipUpdateLicense>
+                    <excludePackageNames>org.smooks.edifact.binding.service</excludePackageNames>
                 </configuration>
             </plugin>
             <plugin>
@@ -93,8 +90,24 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <excludes>
+                        <exclude>MANIFEST.MF</exclude>
+                        <exclude>pom.properties</exclude>
+                        <exclude>pom.xml</exclude>
+                        <exclude>META-INF/maven/org.smooks.cartridges.edi/edi-schemas/**</exclude>
                         <exclude>**/*.xsd</exclude>
                         <exclude>**/*.xjb</exclude>
+                        <exclude>org/smooks/edifact/binding/service/**</exclude>
+                        <exclude>EDIFACT-Common/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*.xjb</exclude>
+                        <exclude>org/smooks/edifact/binding/service/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -114,6 +127,10 @@
                                     <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FlattenFileMapper"/>
                                 </fileMappers>
                             </artifactItem>
+                            <artifactItem>
+                                <groupId>org.smooks.cartridges.edi</groupId>
+                                <artifactId>edi-schemas</artifactId>
+                            </artifactItem>
                         </artifactItems>
                         <outputDirectory>${project.build.outputDirectory}</outputDirectory>
                     </configuration>
@@ -129,7 +146,7 @@
                 <plugin>
                     <groupId>org.apache.cxf</groupId>
                     <artifactId>cxf-xjc-plugin</artifactId>
-                    <version>3.3.1</version>
+                    <version>4.0.0</version>
                     <configuration>
                         <sourceRoot>${project.build.directory}/generated-sources</sourceRoot>
                         <extensions>
@@ -143,7 +160,6 @@
                                 <extensionArgs>
                                     <extensionArg>-Xfluent-api</extensionArg>
                                 </extensionArgs>
-                                <deleteDirs>${project.build.directory}/generated-sources/org/smooks/edifact/binding/service</deleteDirs>
                             </xsdOption>
                         </xsdOptions>
                     </configuration>
@@ -159,4 +175,14 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.smooks.cartridges.edi</groupId>
+                <artifactId>edi-schemas</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
