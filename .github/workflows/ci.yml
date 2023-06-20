@@ -27,30 +27,21 @@ jobs:
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /usr/local/lib/android          
           sudo apt-get purge -y sphinxsearch ansible google-cloud-sdk php* apache2 kubectl nginx p7zip p7zip-full p7zip-rar podman buildah skopeo ruby-full postgresql* gfortran* mysql* python* subversion mercurial firefox google-chrome-stable
-      - name: Cache Maven repository
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 11
-      - name: Build on Java 11
-        run: mvn install -pl edi-sax,ect,common-schemas,edg,edifact-schemas,edifact-jaxb-bindings -T 1C -B -U -Dmaven.javadoc.skip=true
-      - name: Set up JDK 8
-        uses: actions/setup-java@v3
-        if: matrix.java == '8'
-        with:
-          distribution: 'zulu'
-          java-version: 8
+          java-version: |
+            8
+            11
+          cache: 'maven'
       - name: Build
-        run: mvn install -pl edi-cartridge,edifact-cartridge -B -U
+        run: |
+          mvn install -pl '!edi-cartridge,!edifact-cartridge' -T 1C -U -Dmaven.javadoc.skip=true
+          export JAVA_HOME=$JAVA_HOME_${{ matrix.java }}_X64
+          mvn install -pl edi-cartridge,edifact-cartridge -U
       - name: Deploy
         if: github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.java == '11'
         run: |
           echo $GPG_SECRET_KEYS | base64 --decode | gpg --import --no-tty --batch --yes
           echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
-          mvn deploy -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -B
+          mvn deploy -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true
