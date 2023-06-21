@@ -38,7 +38,7 @@ jobs:
         run: |
           mvn install -pl '!edi-cartridge,!edifact-cartridge' -T 1C -U -Dmaven.javadoc.skip=false
           export JAVA_HOME=$JAVA_HOME_${{ matrix.java }}_X64
-          mvn install -pl edi-cartridge,edifact-cartridge -U
+          mvn install -pl edi-cartridge,edifact-cartridge -U -Dmaven.javadoc.skip=false
       - name: Deploy
         if: github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.java == '11'
         run: |
