@@ -36,12 +36,12 @@ jobs:
           cache: 'maven'
       - name: Build
         run: |
-          mvn install -pl '!edi-cartridge,!edifact-cartridge' -T 1C -U -Dmaven.javadoc.skip=false
+          mvn install -pl '!edi-cartridge,!edifact-cartridge' -T 1C -U
           export JAVA_HOME=$JAVA_HOME_${{ matrix.java }}_X64
-          mvn install -pl edi-cartridge,edifact-cartridge -U -Dmaven.javadoc.skip=false
+          mvn install -pl edi-cartridge,edifact-cartridge -U
       - name: Deploy
         if: github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.java == '11'
         run: |
           echo $GPG_SECRET_KEYS | base64 --decode | gpg --import --no-tty --batch --yes
           echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
-          mvn deploy -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true
+          mvn deploy -T 1C --settings .mvn/settings.xml -Dgpg.skip=false -DskipTests=true -Dmaven.javadoc.skip=false
