@@ -36,7 +36,7 @@ jobs:
           cache: 'maven'
       - name: Build
         run: |
-          mvn install -pl '!edi-cartridge,!edifact-cartridge' -T 1C -U -Dmaven.javadoc.skip=true
+          mvn install -pl '!edi-cartridge,!edifact-cartridge' -T 1C -U
           export JAVA_HOME=$JAVA_HOME_${{ matrix.java }}_X64
           mvn install -pl edi-cartridge,edifact-cartridge -U
       - name: Deploy
