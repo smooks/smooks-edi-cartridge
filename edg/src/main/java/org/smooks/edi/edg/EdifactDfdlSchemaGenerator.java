@@ -42,7 +42,7 @@
  */
 package org.smooks.edi.edg;
 
-import org.apache.daffodil.dsom.RuntimeSchemaDefinitionError;
+import org.apache.daffodil.io.processors.charset.CharsetUtils;
 import org.apache.daffodil.japi.Daffodil;
 import org.apache.daffodil.japi.Diagnostic;
 import org.apache.daffodil.japi.ProcessorFactory;
@@ -74,9 +74,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.*;
 import java.lang.reflect.Constructor;
-import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.SortedMap;
 import java.util.zip.ZipInputStream;
 
 public final class EdifactDfdlSchemaGenerator {
@@ -92,7 +90,7 @@ public final class EdifactDfdlSchemaGenerator {
 
     public static void main(final String[] args) {
         //FIXME: https://issues.apache.org/jira/browse/DAFFODIL-2827
-        org.apache.daffodil.processors.charset.CharsetUtils.supportedEncodingsString();
+        CharsetUtils.supportedEncodingsString();
         Arrays.stream(Arrays.copyOfRange(args, 0, args.length - 1)).parallel().forEach(a -> {
             final String[] argAsArray = a.split(",");
             final String directoryPath = argAsArray[0];
