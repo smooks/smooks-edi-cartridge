@@ -46,7 +46,7 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import org.apache.daffodil.japi.DataProcessor;
 import org.apache.daffodil.japi.ValidationMode;
-import org.apache.daffodil.util.Misc;
+import org.apache.daffodil.lib.util.Misc;
 import org.smooks.cartridges.dfdl.DfdlSchema;
 import org.smooks.cartridges.edi.EdiDataProcessorFactory;
 import org.smooks.api.resource.config.Parameter;
