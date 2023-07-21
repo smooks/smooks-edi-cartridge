@@ -101,14 +101,6 @@ public class UnEdifactDirectoryParserTest extends AbstractDirectoryParserTest {
             d08AReader_shortnames = new UnEdifactDirectoryParser(zipInputStream, false, true);
         }
 
-        public void _disabled_test_D08A_Messages() throws IOException, EdiParseException {
-            test("BANSTA", d08AReader_longnames);
-            test("CASRES", d08AReader_longnames);
-            test("INVOIC", d08AReader_longnames);
-            test("PAYMUL", d08AReader_longnames);
-            test("TPFREP", d08AReader_longnames);
-        }
-
         @Test
         @DisplayName("should support long messages names")
         public void test_getMessagesLongName() throws IOException {
