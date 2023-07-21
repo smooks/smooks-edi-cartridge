@@ -609,6 +609,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
         line = readUntilCode(reader);
         Matcher firstCodeMatcher = CODE.matcher(line);
         firstCodeMatcher.matches();
+
         int expectedIndentLength = firstCodeMatcher.group(1).length();
         while (line != null && !line.matches(ELEMENT_SEPARATOR)) {
             Matcher codeMatcher = CODE.matcher(line);
@@ -623,7 +624,7 @@ public class UnEdifactDirectoryParser implements DirectoryParser {
     }
 
     protected boolean isCode(Matcher codeMatcher, int expectedIndentLength) {
-        return codeMatcher.matches() && codeMatcher.group(1).length() == expectedIndentLength;
+        return codeMatcher.matches() && codeMatcher.group(1).length() <= expectedIndentLength;
     }
 
     protected String readUntilCode(BufferedReader reader) throws IOException {

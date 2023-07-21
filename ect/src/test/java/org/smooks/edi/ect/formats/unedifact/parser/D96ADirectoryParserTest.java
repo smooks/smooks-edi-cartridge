@@ -60,8 +60,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class D96ADirectoryParserTest {
     @Test
-    @DisplayName("should extract legacy D96A code list values correctly")
-    public void checkThatD96ACodeListsAreReadCorrectlyForLegacyD96A() throws Exception {
+    @DisplayName("should extract D96A code list values correctly")
+    public void checkThatD96ACodeListsAreReadCorrectly() throws Exception {
         InputStream inputStream = getClass().getResourceAsStream("/d96a.zip");
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
         DirectoryParser d96AReader = new D96ADirectoryParser(zipInputStream, false, false);
@@ -69,8 +69,11 @@ public class D96ADirectoryParserTest {
         Map<String, byte[]> definitionFiles = d96AReader.getDefinitionFiles();
         assertFalse(definitionFiles.get("uncl") == null || definitionFiles.get("uncl").length == 0);
 
-        final Component component = getSimpleDataElement(d96AReader, "5125");
-        assertEquals(9, component.getCodeList().getCodes().size());
+        final Component component5125 = getSimpleDataElement(d96AReader, "5125");
+        assertEquals(9, component5125.getCodeList().getCodes().size());
+
+        final Component component6063 = getSimpleDataElement(d96AReader, "6063");
+        assertEquals(180, component6063.getCodeList().getCodes().size());
     }
 
     @Test
