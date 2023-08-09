@@ -43,6 +43,9 @@
 package org.smooks.edi.edisax;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.smooks.edi.edisax.model.internal.DelimiterType;
@@ -50,7 +53,6 @@ import org.smooks.edi.edisax.model.internal.Delimiters;
 import org.smooks.edi.edisax.unedifact.UNEdifactInterchangeParser;
 import org.smooks.edi.edisax.util.EDIUtils;
 import org.smooks.edi.edisax.util.IllegalNameException;
-import org.smooks.support.CollectionsUtil;
 import org.xml.sax.SAXException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -151,13 +153,13 @@ public class EDIUtilsTest {
     public void test_concatAndTruncate() {
         Delimiters delims = UNEdifactInterchangeParser.defaultUNEdifactDelimiters;
 
-        assertEquals("ab", EDIUtils.concatAndTruncate(CollectionsUtil.toList("a", "b", "+:+"), DelimiterType.SEGMENT, delims));
-        assertEquals("a+:+b", EDIUtils.concatAndTruncate(CollectionsUtil.toList("a", "+:+", "b", "+:+"), DelimiterType.SEGMENT, delims));
-        assertEquals("a+:+bc+:+", EDIUtils.concatAndTruncate(CollectionsUtil.toList("a", "+:+", "b", "c+:+"), DelimiterType.SEGMENT, delims));
+        assertEquals("ab", EDIUtils.concatAndTruncate(Stream.of("a", "b", "+:+").collect(Collectors.toList()), DelimiterType.SEGMENT, delims));
+        assertEquals("a+:+b", EDIUtils.concatAndTruncate(Stream.of("a", "+:+", "b", "+:+").collect(Collectors.toList()), DelimiterType.SEGMENT, delims));
+        assertEquals("a+:+bc+:+", EDIUtils.concatAndTruncate(Stream.of("a", "+:+", "b", "c+:+").collect(Collectors.toList()), DelimiterType.SEGMENT, delims));
 
-        assertEquals("ab", EDIUtils.concatAndTruncate(CollectionsUtil.toList("a", "b", "+:+"), DelimiterType.FIELD, delims));
-        assertEquals("ab+:+'", EDIUtils.concatAndTruncate(CollectionsUtil.toList("a", "b", "+:+'"), DelimiterType.FIELD, delims));
-        assertEquals("ab+:+", EDIUtils.concatAndTruncate(CollectionsUtil.toList("a", "b", "+:+"), DelimiterType.COMPONENT, delims));
+        assertEquals("ab", EDIUtils.concatAndTruncate(Stream.of("a", "b", "+:+").collect(Collectors.toList()), DelimiterType.FIELD, delims));
+        assertEquals("ab+:+'", EDIUtils.concatAndTruncate(Stream.of("a", "b", "+:+'").collect(Collectors.toList()), DelimiterType.FIELD, delims));
+        assertEquals("ab+:+", EDIUtils.concatAndTruncate(Stream.of("a", "b", "+:+").collect(Collectors.toList()), DelimiterType.COMPONENT, delims));
     }
 
     @Test
