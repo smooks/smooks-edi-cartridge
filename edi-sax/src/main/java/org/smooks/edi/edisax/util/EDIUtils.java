@@ -6,35 +6,35 @@
  * %%
  * Licensed under the terms of the Apache License Version 2.0, or
  * the GNU Lesser General Public License version 3.0 or later.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0 OR LGPL-3.0-or-later
- * 
+ *
  * ======================================================================
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * ======================================================================
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -72,7 +72,7 @@ import java.util.zip.ZipInputStream;
 public class EDIUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EDIUtils.class);
-    
+
     public static final String EDI_MAPPING_MODEL_ZIP_LIST_FILE = "META-INF/services/org/smooks/edi/mapping-model.lst";
     public static final String EDI_MAPPING_MODEL_INTERCHANGE_PROPERTIES_FILE = "META-INF/services/org/smooks/edi/interchange.properties";
     public static final String EDI_MAPPING_MODEL_URN = "META-INF/services/org/smooks/edi/urn";
@@ -80,7 +80,7 @@ public class EDIUtils {
      * Most model sets contain a set of common definitions (common types).
      */
     public static final Description MODEL_SET_DEFINITIONS_DESCRIPTION = new Description().setName("__modelset_definitions").setVersion("local");
-    
+
     /**
      * Lookup name (string representation) of {@link #MODEL_SET_DEFINITIONS_DESCRIPTION}
      */
@@ -92,9 +92,9 @@ public class EDIUtils {
      * The split method follows the same behavior as the method splitPreserveAllTokens(String, String)
      * in {@link org.apache.commons.lang.StringUtils}.
      *
-     * @param value the string to split, may be null.
+     * @param value     the string to split, may be null.
      * @param delimiter the delimiter sequence. A null delimiter splits on whitespace.
-     * @param escape the escape sequence. A null escape is allowed,  and result will be consistent with the splitPreserveAllTokens method.
+     * @param escape    the escape sequence. A null escape is allowed,  and result will be consistent with the splitPreserveAllTokens method.
      * @return an array of split edi-sequences, null if null string input.
      */
     public static String[] split(String value, String delimiter, String escape) {
@@ -119,29 +119,29 @@ public class EDIUtils {
 
         return putCharacterSequenceIntoResult(charSequences);
     }
-    
+
     public static void loadMappingModels(String mappingModelFiles, Map<String, EdifactModel> mappingModels, URI baseURI) throws EDIConfigurationException, IOException, SAXException {
-		AssertArgument.isNotNullAndNotEmpty(mappingModelFiles, "mappingModelFiles");
-		AssertArgument.isNotNull(mappingModels, "mappingModels");
-		AssertArgument.isNotNull(baseURI, "baseURI");
+        AssertArgument.isNotNullAndNotEmpty(mappingModelFiles, "mappingModelFiles");
+        AssertArgument.isNotNull(mappingModels, "mappingModels");
+        AssertArgument.isNotNull(baseURI, "baseURI");
 
-		String[] mappingModelFileTokens = mappingModelFiles.split(",");
+        String[] mappingModelFileTokens = mappingModelFiles.split(",");
 
-        for(String mappingModelFile : mappingModelFileTokens) {
+        for (String mappingModelFile : mappingModelFileTokens) {
             mappingModelFile = mappingModelFile.trim();
 
             // First try processing based on the file extension
-            if(mappingModelFile.endsWith(".xml")) {
-                if(loadXMLMappingModel(mappingModelFile, mappingModels, baseURI)) {
+            if (mappingModelFile.endsWith(".xml")) {
+                if (loadXMLMappingModel(mappingModelFile, mappingModels, baseURI)) {
                     // Loaded an XML config... on to next config in list...
                     continue;
                 }
-            } else if(mappingModelFile.endsWith(".zip") || mappingModelFile.endsWith(".jar")) {
-                if(loadZippedMappingModels(mappingModelFile, mappingModels, baseURI)) {
+            } else if (mappingModelFile.endsWith(".zip") || mappingModelFile.endsWith(".jar")) {
+                if (loadZippedMappingModels(mappingModelFile, mappingModels, baseURI)) {
                     // Loaded an zipped config... on to next config in list...
                     continue;
                 }
-            } else if(mappingModelFile.startsWith("urn:")) {
+            } else if (mappingModelFile.startsWith("urn:")) {
                 String urn = mappingModelFile.substring(4);
                 List<String> rootMappingModels = getMappingModelList(urn);
 
@@ -152,8 +152,8 @@ public class EDIUtils {
 
             // The file extension didn't match up with what we expected, so perform a
             // brute force attempt to process the config...
-            if(!loadXMLMappingModel(mappingModelFile, mappingModels, baseURI)) {
-                if(!loadZippedMappingModels(mappingModelFile, mappingModels, baseURI)) {
+            if (!loadXMLMappingModel(mappingModelFile, mappingModels, baseURI)) {
+                if (!loadZippedMappingModels(mappingModelFile, mappingModels, baseURI)) {
                     throw new EDIConfigurationException("Failed to process EDI Mapping Model config file '" + mappingModelFile + "'.  Not a valid EDI Mapping Model configuration.");
                 }
             }
@@ -161,52 +161,52 @@ public class EDIUtils {
     }
 
     private static boolean loadXMLMappingModel(String mappingModelFile, Map<String, EdifactModel> mappingModels, URI baseURI) throws EDIConfigurationException {
-		try {
-			EdifactModel model = EDIParser.parseMappingModel(mappingModelFile, baseURI);
-			mappingModels.put(toLookupName(model.getEdimap().getDescription()), model);
-			return true;
-		} catch (IOException e) {
-			return false;
-		} catch (SAXException e) {
-			LOGGER.debug("Configured mapping model file '" + mappingModelFile + "' is not a valid Mapping Model xml file.");
-			return false;
-		}
-	}
+        try {
+            EdifactModel model = EDIParser.parseMappingModel(mappingModelFile, baseURI);
+            mappingModels.put(toLookupName(model.getEdimap().getDescription()), model);
+            return true;
+        } catch (IOException e) {
+            return false;
+        } catch (SAXException e) {
+            LOGGER.debug("Configured mapping model file '" + mappingModelFile + "' is not a valid Mapping Model xml file.");
+            return false;
+        }
+    }
 
     private static boolean loadZippedMappingModels(String mappingModelFile, Map<String, EdifactModel> mappingModels, URI baseURI) throws IOException, SAXException, EDIConfigurationException {
-		URIResourceLocator locator = new URIResourceLocator();
+        URIResourceLocator locator = new URIResourceLocator();
 
-		locator.setBaseURI(baseURI);
+        locator.setBaseURI(baseURI);
 
-		InputStream rawZipStream = locator.getResource(mappingModelFile);
-		if(rawZipStream != null) {
+        InputStream rawZipStream = locator.getResource(mappingModelFile);
+        if (rawZipStream != null) {
             Archive archive = loadArchive(rawZipStream);
 
-			if(archive != null) {
-				List<String> rootMappingModels = getMappingModelList(archive);
+            if (archive != null) {
+                List<String> rootMappingModels = getMappingModelList(archive);
 
-				if(rootMappingModels.isEmpty()) {
-					LOGGER.debug("Configured mapping model file '" + mappingModelFile + "' is not a valid Mapping Model zip file.  Check that the zip has a valid '" + EDI_MAPPING_MODEL_ZIP_LIST_FILE + "' mapping list file.");
-					return false;
-				}
+                if (rootMappingModels.isEmpty()) {
+                    LOGGER.debug("Configured mapping model file '" + mappingModelFile + "' is not a valid Mapping Model zip file.  Check that the zip has a valid '" + EDI_MAPPING_MODEL_ZIP_LIST_FILE + "' mapping list file.");
+                    return false;
+                }
 
-				ClassLoader threadCCL = Thread.currentThread().getContextClassLoader();
+                ClassLoader threadCCL = Thread.currentThread().getContextClassLoader();
 
-				try {
-					ArchiveClassLoader archiveClassLoader = new ArchiveClassLoader(threadCCL, archive);
+                try {
+                    ArchiveClassLoader archiveClassLoader = new ArchiveClassLoader(threadCCL, archive);
 
-					Thread.currentThread().setContextClassLoader(archiveClassLoader);
+                    Thread.currentThread().setContextClassLoader(archiveClassLoader);
                     loadMappingModels(mappingModels, baseURI, rootMappingModels);
                 } finally {
-					Thread.currentThread().setContextClassLoader(threadCCL);
-				}
+                    Thread.currentThread().setContextClassLoader(threadCCL);
+                }
 
-				return true;
-			}
-		}
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
     public static void loadMappingModels(Map<String, EdifactModel> mappingModels, URI baseURI, List<String> rootMappingModels) throws IOException, SAXException, EDIConfigurationException {
         for (String rootMappingModel : rootMappingModels) {
@@ -215,27 +215,27 @@ public class EDIUtils {
 
                 mappingModel.setAssociateModels(mappingModels.values());
                 mappingModels.put(toLookupName(mappingModel.getDescription()), mappingModel);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 throw new EDIConfigurationException("Error parsing EDI Mapping Model '" + rootMappingModel + "'.", e);
             }
         }
     }
 
     @SuppressWarnings("unchecked")
-	private static List<String> getMappingModelList(Archive archive) throws IOException {
-		byte[] zipEntryBytes = archive.getEntryBytes(EDI_MAPPING_MODEL_ZIP_LIST_FILE);
+    private static List<String> getMappingModelList(Archive archive) throws IOException {
+        byte[] zipEntryBytes = archive.getEntryBytes(EDI_MAPPING_MODEL_ZIP_LIST_FILE);
 
-		if(zipEntryBytes != null) {
+        if (zipEntryBytes != null) {
             return getMappingModelList(new ByteArrayInputStream(zipEntryBytes));
         }
 
-		return Collections.EMPTY_LIST;
-	}
+        return Collections.EMPTY_LIST;
+    }
 
     private static List<String> getMappingModelList(String urn) throws IOException, EDIConfigurationException {
         InputStream mappingModelListStream = getMappingModelConfigStream(urn, EDI_MAPPING_MODEL_ZIP_LIST_FILE);
 
-        if(mappingModelListStream == null) {
+        if (mappingModelListStream == null) {
             throw new EDIConfigurationException("Failed to locate jar file for EDI Mapping Model URN '" + urn + "'.  Jar must be available on classpath.");
         }
 
@@ -245,28 +245,28 @@ public class EDIUtils {
     public static Properties getInterchangeProperties(String ediMappingModel) throws IOException {
         InputStream interchangePropertiesStream = null;
 
-        if(ediMappingModel.startsWith("urn:")) {
+        if (ediMappingModel.startsWith("urn:")) {
             interchangePropertiesStream = getMappingModelConfigStream(ediMappingModel, EDI_MAPPING_MODEL_INTERCHANGE_PROPERTIES_FILE);
 
-            if(interchangePropertiesStream == null) {
+            if (interchangePropertiesStream == null) {
                 throw new EDIConfigurationException("Failed to locate jar file for EDI Mapping Model URN '" + ediMappingModel + "'.  Jar must be available on classpath.");
             }
-        } else if(ediMappingModel.endsWith(".jar") || ediMappingModel.endsWith(".zip")) {
+        } else if (ediMappingModel.endsWith(".jar") || ediMappingModel.endsWith(".zip")) {
             URIResourceLocator locator = new URIResourceLocator();
 
             InputStream rawZipStream = locator.getResource(ediMappingModel);
-            if(rawZipStream != null) {
+            if (rawZipStream != null) {
                 Archive archive = loadArchive(rawZipStream);
-                if(archive != null) {
+                if (archive != null) {
                     byte[] bytes = archive.getEntryBytes(EDI_MAPPING_MODEL_INTERCHANGE_PROPERTIES_FILE);
-                    if(bytes != null) {
+                    if (bytes != null) {
                         interchangePropertiesStream = new ByteArrayInputStream(bytes);
                     }
                 }
             }
         }
 
-        if(interchangePropertiesStream != null) {
+        if (interchangePropertiesStream != null) {
             Properties properties = new Properties();
             try {
                 properties.load(interchangePropertiesStream);
@@ -280,19 +280,19 @@ public class EDIUtils {
     }
 
     public static String concatAndTruncate(List<String> nodeTokens, DelimiterType outerDelimiterType, Delimiters delimiters) {
-        if(nodeTokens.isEmpty()) {
+        if (nodeTokens.isEmpty()) {
             return "";
         }
 
-        for(int i = nodeTokens.size() - 1; i >= 0; i--) {
-            if(!delimiters.removeableNodeToken(nodeTokens.get(i), outerDelimiterType)) {
+        for (int i = nodeTokens.size() - 1; i >= 0; i--) {
+            if (!delimiters.removeableNodeToken(nodeTokens.get(i), outerDelimiterType)) {
                 break;
             }
             nodeTokens.remove(i);
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-        for(String nodeToken : nodeTokens) {
+        for (String nodeToken : nodeTokens) {
             stringBuilder.append(nodeToken);
         }
         return stringBuilder.toString();
@@ -301,32 +301,32 @@ public class EDIUtils {
     private static InputStream getMappingModelConfigStream(String urn, String fileName) throws IOException, EDIConfigurationException {
         List<URL> urnFiles = ClassUtil.getResources(EDI_MAPPING_MODEL_URN, EDIUtils.class);
         boolean ignoreVersion = false;
-        
-        if(urn.startsWith("urn:")) {
+
+        if (urn.startsWith("urn:")) {
             urn = urn.substring(4);
         }
         if (urn.endsWith(":*")) {
-        	// We have an wildcard as a version
-        	ignoreVersion = true;
-        	urn = urn.substring(0, urn.lastIndexOf(':'));
+            // We have an wildcard as a version
+            ignoreVersion = true;
+            urn = urn.substring(0, urn.lastIndexOf(':'));
         }
-        
-        for(URL urnFile : urnFiles) {
+
+        for (URL urnFile : urnFiles) {
             InputStream urnStream = urnFile.openStream();
             try {
                 String archiveURN = StreamUtils.readStreamAsString(urnStream, "UTF-8");
                 if (ignoreVersion) {
-                	// Cut the version out
-                	archiveURN = archiveURN.substring(0, archiveURN.lastIndexOf(':'));
+                    // Cut the version out
+                    archiveURN = archiveURN.substring(0, archiveURN.lastIndexOf(':'));
                 }
-                if(archiveURN.equals(urn)) {
+                if (archiveURN.equals(urn)) {
                     String urnFileString = urnFile.toString();
                     String modelConfigFile = urnFileString.substring(0, urnFileString.length() - EDI_MAPPING_MODEL_URN.length()) + fileName;
 
                     List<URL> urlList = ClassUtil.getResources(fileName, EDIUtils.class);
 
-                    for(URL url : urlList) {
-                        if(url.toString().equals(modelConfigFile)) {
+                    for (URL url : urlList) {
+                        if (url.toString().equals(modelConfigFile)) {
                             return url.openStream();
                         }
                     }
@@ -346,9 +346,9 @@ public class EDIUtils {
             BufferedReader lineReader = new BufferedReader(new InputStreamReader(modelListStream, "UTF-8"));
 
             String line = lineReader.readLine();
-            while(line != null) {
+            while (line != null) {
                 line = line.trim();
-                if(line.length() > 0 && !line.startsWith("#")) {
+                if (line.length() > 0 && !line.startsWith("#")) {
                     rootMappingModels.add(line);
                 }
                 line = lineReader.readLine();
@@ -364,14 +364,15 @@ public class EDIUtils {
     private static Archive loadArchive(InputStream rawStream) {
         try {
             return new Archive(new ZipInputStream(rawStream));
-		} catch(Exception e) {
-			// Assume it's not a Zip file.  Just return null...
-			return null;
-		}
-	}
+        } catch (Exception e) {
+            // Assume it's not a Zip file.  Just return null...
+            return null;
+        }
+    }
 
     /**
      * Loops through all CharSequences and decides whether to write out value or split.
+     *
      * @param charSequences a list of CharSequence
      * @return a String[] containing the split values.
      */
@@ -381,7 +382,7 @@ public class EDIUtils {
         boolean escapeNextSequence = false;
         boolean delimiterLastSequence = false;
         CharSequence previousSequence = null;
-        
+
         for (CharSequence sequence : charSequences) {
             delimiterLastSequence = false;
 
@@ -391,11 +392,11 @@ public class EDIUtils {
 
             try {
                 switch (sequence.getType()) {
-                    case PLAIN : {
+                    case PLAIN: {
                         stringBuilder.append(sequence.getValue());
                         break;
                     }
-                    case DELIMITER : {
+                    case DELIMITER: {
                         if (escapeNextSequence) {
                             stringBuilder.append(sequence.getValue());
                         } else {
@@ -405,7 +406,7 @@ public class EDIUtils {
                         }
                         break;
                     }
-                    case ESCAPE : {
+                    case ESCAPE: {
                         if (escapeNextSequence) {
                             stringBuilder.append(sequence.getValue());
                         } else {
@@ -432,10 +433,11 @@ public class EDIUtils {
     /**
      * Reads value and put the different parts into a list of CharSequence for easier handling of escape- and
      * delimiter-sequences when splitting value.
-     * @param value the string to split
+     *
+     * @param value     the string to split
      * @param delimiter the characters defining the delimiter
-     * @param escape the characters defining the escape
-     * @param result a lis CharSequence.
+     * @param escape    the characters defining the escape
+     * @param result    a lis CharSequence.
      */
     private static void readSequenceStructure(String value, String delimiter, String escape, List<CharSequence> result) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -472,20 +474,20 @@ public class EDIUtils {
     }
 
     private static boolean builderEndsWith(StringBuilder stringBuilder, String string) {
-        if(string == null) {
+        if (string == null) {
             return false;
         }
 
         int builderLen = stringBuilder.length();
         int stringLen = string.length();
 
-        if(builderLen < stringLen) {
+        if (builderLen < stringLen) {
             return false;
         }
 
         int stringIndx = 0;
-        for(int i = (builderLen - stringLen); i < builderLen; i++) {
-            if(stringBuilder.charAt(i) != string.charAt(stringIndx)) {
+        for (int i = (builderLen - stringLen); i < builderLen; i++) {
+            if (stringBuilder.charAt(i) != string.charAt(stringIndx)) {
                 return false;
             }
             stringIndx++;
@@ -517,7 +519,7 @@ public class EDIUtils {
         result = deleteWithPascalNotation(result, '_');
         result = encodeJavaIdentifier(result);
 
-        if(Character.isLowerCase(result.charAt(0))) {
+        if (Character.isLowerCase(result.charAt(0))) {
             result = Character.toUpperCase(result.charAt(0)) + result.substring(1);
         }
 
@@ -529,7 +531,7 @@ public class EDIUtils {
     public static String encodeAttributeName(String name) {
         String result;
 
-        if(name.toUpperCase().equals(name)) {
+        if (name.toUpperCase().equals(name)) {
             result = name.toLowerCase();
         } else {
             result = name;
@@ -538,7 +540,7 @@ public class EDIUtils {
         result = deleteWithPascalNotation(result, '_');
         result = encodeJavaIdentifier(result);
 
-        if(Character.isUpperCase(result.charAt(0))) {
+        if (Character.isUpperCase(result.charAt(0))) {
             result = Character.toLowerCase(result.charAt(0)) + result.substring(1);
         }
 
@@ -558,10 +560,10 @@ public class EDIUtils {
         for (int i = 0; i < len; i++) {
             currentChar = identifier.charAt(i);
 
-            if(i == 0 && !Character.isJavaIdentifierStart(currentChar)) {
+            if (i == 0 && !Character.isJavaIdentifierStart(currentChar)) {
                 result.append('_');
             }
-            if(!Character.isJavaIdentifierPart(currentChar)) {
+            if (!Character.isJavaIdentifierPart(currentChar)) {
                 matchPrevious = true;
                 continue;
             }
@@ -576,7 +578,8 @@ public class EDIUtils {
 
     /**
      * Removes all occurances of deleteChar and sets next character in value to uppercase.
-     * @param value the String to perform deletion on.
+     *
+     * @param value      the String to perform deletion on.
      * @param deleteChar the character to delete.
      * @return the pascal notated String.
      */
@@ -601,6 +604,7 @@ public class EDIUtils {
 
     /**
      * Checks that the name is not a reserved word in java.
+     *
      * @param name the value to check.
      * @throws IllegalNameException when name is a reserved keyword in java.
      */
@@ -628,18 +632,18 @@ public class EDIUtils {
         }
     }
 
-	/**
-	 * Convert {@link Description} to the string representation
-	 * that is used for lookup in the hashmaps
-	 * 
-	 * @param description
-	 * @return
-	 */
-	public static String toLookupName(Description description) {
-		return description.getName() + ":"
-				+ description.getVersion();
-	}    
-    
+    /**
+     * Convert {@link Description} to the string representation
+     * that is used for lookup in the hashmaps
+     *
+     * @param description
+     * @return
+     */
+    public static String toLookupName(Description description) {
+        return description.getName() + ":"
+                + description.getVersion();
+    }
+
     private enum CharSequenceTypeEnum {
         PLAIN,
         ESCAPE,
@@ -650,60 +654,60 @@ public class EDIUtils {
     // Initialize reservedKeywords Set containing all keywords in java.
     static {
         String[] words = new String[]{
-            "abstract",
-            "boolean",
-            "break",
-            "byte",
-            "case",
-            "catch",
-            "char",
-            "class",
-            "const",
-            "continue",
-            "default",
-            "do",
-            "double",
-            "else",
-            "extends",
-            "final",
-            "finally",
-            "float",
-            "for",
-            "goto",
-            "if",
-            "implements",
-            "import",
-            "instanceof",
-            "int",
-            "interface",
-            "long",
-            "native",
-            "new",
-            "package",
-            "private",
-            "protected",
-            "public",
-            "return",
-            "short",
-            "static",
-            "strictfp",
-            "super",
-            "switch",
-            "synchronized",
-            "this",
-            "throw",
-            "throws",
-            "transient",
-            "try",
-            "void",
-            "volatile",
-            "while",
-            "true",
-            "false",
-            "null",
-            "assert",
-            "enum"
-            };
+                "abstract",
+                "boolean",
+                "break",
+                "byte",
+                "case",
+                "catch",
+                "char",
+                "class",
+                "const",
+                "continue",
+                "default",
+                "do",
+                "double",
+                "else",
+                "extends",
+                "final",
+                "finally",
+                "float",
+                "for",
+                "goto",
+                "if",
+                "implements",
+                "import",
+                "instanceof",
+                "int",
+                "interface",
+                "long",
+                "native",
+                "new",
+                "package",
+                "private",
+                "protected",
+                "public",
+                "return",
+                "short",
+                "static",
+                "strictfp",
+                "super",
+                "switch",
+                "synchronized",
+                "this",
+                "throw",
+                "throws",
+                "transient",
+                "try",
+                "void",
+                "volatile",
+                "while",
+                "true",
+                "false",
+                "null",
+                "assert",
+                "enum"
+        };
         for (String w : words) {
             EDIUtils.reservedKeywords.add(w);
         }
