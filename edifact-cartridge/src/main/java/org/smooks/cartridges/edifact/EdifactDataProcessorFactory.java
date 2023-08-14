@@ -91,7 +91,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
     @Override
     public DataProcessor doCreateDataProcessor(final Map<String, String> variables) {
         try {
-            final Parameter<String> schemaUriParameter = resourceConfig.getParameter("schemaURI", String.class);
+            final Parameter<String> schemaUriParameter = resourceConfig.getParameter("schemaUri", String.class);
             final String version = readVersion(schemaUriParameter);
             final URI entrySchemaUri;
 
@@ -103,7 +103,11 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
                 entrySchemaUri = materialiseEntrySchema(schemaUriParameter.getValue(), messageTypes, version);
             }
 
-            final DfdlSchema dfdlSchema = new DfdlSchema(entrySchemaUri, variables, ValidationMode.valueOf(resourceConfig.getParameterValue("validationMode", String.class, "Off")), Boolean.parseBoolean(resourceConfig.getParameterValue("cacheOnDisk", String.class, "false")), Boolean.parseBoolean(resourceConfig.getParameterValue("debugging", String.class, "false")), null) {
+            final DfdlSchema dfdlSchema = new DfdlSchema(entrySchemaUri, variables, ValidationMode.valueOf(resourceConfig.getParameterValue("validationMode", String.class, "Off")),
+                                                         Boolean.parseBoolean(resourceConfig.getParameterValue("cacheOnDisk", String.class, "false")),
+                                                         Boolean.parseBoolean(resourceConfig.getParameterValue("debugging", String.class, "false")), resourceConfig.getParameterValue("distinguishedRootNode", String.class),
+                                                         resourceConfig.getParameterValue("schematronUrl", String.class),
+                                                         Boolean.parseBoolean(resourceConfig.getParameterValue("schematronValidation", String.class))) {
                 @Override
                 public String getName() {
                     return schemaUriParameter.getValue() + ":" + getValidationMode() + ":" + isCacheOnDisk() + ":" + isDebugging() + ":" + variables.toString();

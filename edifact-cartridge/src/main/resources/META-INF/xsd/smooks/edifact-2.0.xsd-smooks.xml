@@ -87,7 +87,7 @@
 
     <resource-config selector="edifact:parser,edifact:unparser">
         <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
-        <param name="attribute">schemaURI</param>
+        <param name="attribute">schemaUri</param>
     </resource-config>
     <resource-config selector="edifact:parser,edifact:unparser">
         <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>

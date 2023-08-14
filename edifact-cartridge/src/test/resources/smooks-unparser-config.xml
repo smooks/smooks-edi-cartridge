@@ -54,7 +54,7 @@
         </core:action>
         <core:config>
             <smooks-resource-list>
-                <edifact:unparser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnNode="*">
+                <edifact:unparser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnNode="*">
                     <edifact:messageTypes>
                         <edifact:messageType>ORDERS</edifact:messageType>
                         <edifact:messageType>INVOIC</edifact:messageType>

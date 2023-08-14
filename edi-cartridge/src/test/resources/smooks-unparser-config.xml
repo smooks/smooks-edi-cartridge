@@ -54,7 +54,7 @@
         </core:action>
         <core:config>
             <smooks-resource-list>
-                <edi:unparser schemaURI="/edi-to-xml-mapping.dfdl.xsd" unparseOnNode="*" dataElementSeparator="*"
+                <edi:unparser schemaUri="/edi-to-xml-mapping.dfdl.xsd" unparseOnNode="*" dataElementSeparator="*"
                               segmentTerminator="%NL;" compositeDataElementSeparator="^"/>
             </smooks-resource-list>
         </core:config>
