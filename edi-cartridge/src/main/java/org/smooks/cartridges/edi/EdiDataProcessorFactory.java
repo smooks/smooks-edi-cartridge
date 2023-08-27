@@ -89,7 +89,12 @@ public class EdiDataProcessorFactory extends DataProcessorFactory {
     }
 
     protected DataProcessor doCreateDataProcessor(final Map<String, String> variables) throws URISyntaxException {
-        final DfdlSchema dfdlSchema = new DfdlSchema(new URI(schemaUri), variables, ValidationMode.valueOf(resourceConfig.getParameterValue("validationMode", String.class, "Off")), Boolean.parseBoolean(resourceConfig.getParameterValue("cacheOnDisk", String.class, "false")), Boolean.parseBoolean(resourceConfig.getParameterValue("debugging", String.class, "false")), null);
+        final DfdlSchema dfdlSchema = new DfdlSchema(new URI(schemaUri), variables, ValidationMode.valueOf(resourceConfig.getParameterValue("validationMode", String.class, "Off")),
+                Boolean.parseBoolean(resourceConfig.getParameterValue("cacheOnDisk", String.class, "false")),
+                Boolean.parseBoolean(resourceConfig.getParameterValue("debugging", String.class, "false")),
+                resourceConfig.getParameterValue("distinguishedRootNode", String.class),
+                resourceConfig.getParameterValue("schematronUrl", String.class),
+                Boolean.parseBoolean(resourceConfig.getParameterValue("schematronValidation", String.class)));
         return compileOrGet(dfdlSchema);
     }
 

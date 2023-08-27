@@ -17,12 +17,12 @@ In the following pass-through configuration, Smooks parses an EDI document and t
                       xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd">    
 
     <!-- Configure the reader to parse the EDI stream into a stream of SAX events. -->  
-    <edi:parser schemaURI="/edi-to-xml-mapping.dfdl.xsd" // <1>
+    <edi:parser schemaUri="/edi-to-xml-mapping.dfdl.xsd" // <1>
                 segmentTerminator="%NL;" // <2>
                 compositeDataElementSeparator="^"/> // <3>
 
     <!-- Configure the writer to serialise the XML stream into EDI. -->  
-    <edi:unparser schemaURI="/edi-to-xml-mapping.dfdl.xsd" // <1>
+    <edi:unparser schemaUri="/edi-to-xml-mapping.dfdl.xsd" // <1>
                   segmentTerminator="%NL;" // <2>
                   compositeDataElementSeparator="^" // <3>
                   unparseOnNode="/Order"/> // <4>
@@ -32,7 +32,7 @@ In the following pass-through configuration, Smooks parses an EDI document and t
 
 Config attributes common to the parser and unparser resources are:
 
-. _schemaURI_: the DFDL schema describing the structure of the EDI document to be parser or unparsed. 
+. _schemaUri_: the DFDL schema describing the structure of the EDI document to be parser or unparsed.
 . _segmentTerminator_: the terminator for groups of related data elements. DFDL interprets _%NL;_ as a newline. 
 . _compositeDataElementSeparator_: the delimiter for compound data elements.
 
@@ -314,14 +314,14 @@ message definition zip directories]. This allows you to easily convert a UN/EDIF
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
                       xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd">
 
-    <edifact:parser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd"/>
+    <edifact:parser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd"/>
 
-    <edifact:unparser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnNode="/Interchange"/>
+    <edifact:unparser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnNode="/Interchange"/>
 
 </smooks-resource-list>
 ----
 
-The _edifact:parser_ and _edifact:unparser_, analogous to the _edi:parser_ and _edi:unparser_, convert the stream according to the pre-generated DFDL schema referenced in the _schemaURI_ attribute. Given that an EDIFACT schema can be very big compared to your average EDI schema, it may take minutes for the parser to compile it. Even having the _cacheOnDisk_ attribute enabled may not be sufficient to meet your compilation time needs. For such situations, you can mitigate this problem by declaring ahead of time which message types the parser will process:
+The _edifact:parser_ and _edifact:unparser_, analogous to the _edi:parser_ and _edi:unparser_, convert the stream according to the pre-generated DFDL schema referenced in the _schemaUri_ attribute. Given that an EDIFACT schema can be very big compared to your average EDI schema, it may take minutes for the parser to compile it. Even having the _cacheOnDisk_ attribute enabled may not be sufficient to meet your compilation time needs. For such situations, you can mitigate this problem by declaring ahead of time which message types the parser will process:
 
 .smooks-config.xml
 [source,xml]
@@ -330,14 +330,14 @@ The _edifact:parser_ and _edifact:unparser_, analogous to the _edi:parser_ and _
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
                       xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd">
 
-    <edifact:parser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd">
+    <edifact:parser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd">
         <edifact:messageTypes>
             <edifact:messageType>ORDERS</edifact:messageType>
             <edifact:messageType>INVOIC</edifact:messageType>
         </edifact:messageTypes>
     </edifact:parser>
 
-    <edifact:unparser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnNode="/Interchange">
+    <edifact:unparser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnNode="/Interchange">
        <edifact:messageTypes>
             <edifact:messageType>ORDERS</edifact:messageType>
             <edifact:messageType>INVOIC</edifact:messageType>
@@ -376,7 +376,7 @@ As an example, to add the D93A DFDL schema pack to your application classpath, a
 </dependency>
 ----
 
-Once you add an EDIFACT schema pack set to the application's classpath, you configure Smooks to use the schemas by referencing the root schema in _schemaURI_ attribute of the _edifact:parser_ or _edifact:unparser_ configuration (_<version>/EDIFACT-Messages.dfdl.xsd_):
+Once you add an EDIFACT schema pack set to the application's classpath, you configure Smooks to use the schemas by referencing the root schema in _schemaUri_ attribute of the _edifact:parser_ or _edifact:unparser_ configuration (_<version>/EDIFACT-Messages.dfdl.xsd_):
 
 .smooks-config.xml
 [source,xml]
@@ -385,7 +385,7 @@ Once you add an EDIFACT schema pack set to the application's classpath, you conf
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
                       xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-1.0.xsd">
 
-    <edifact:parser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd">
+    <edifact:parser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd">
         <edifact:messages>
             <edifact:message>ORDERS</edifact:message>
             <edifact:message>INVOIC</edifact:message>

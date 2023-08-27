@@ -45,7 +45,7 @@
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
                       xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd">
 
-    <edifact:parser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd">
+    <edifact:parser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd">
         <edifact:messageTypes>
             <edifact:messageType>ORDERS</edifact:messageType>
             <edifact:messageType>INVOIC</edifact:messageType>
