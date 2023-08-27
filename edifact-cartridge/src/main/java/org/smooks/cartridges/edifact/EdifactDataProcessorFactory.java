@@ -91,7 +91,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
     @Override
     public DataProcessor doCreateDataProcessor(final Map<String, String> variables) {
         try {
-            final Parameter<String> schemaUriParameter = resourceConfig.getParameter("schemaUri", String.class);
+            final Parameter<String> schemaUriParameter = resourceConfig.getParameter("schemaURI", String.class);
             final String version = readVersion(schemaUriParameter);
             final URI entrySchemaUri;
 
