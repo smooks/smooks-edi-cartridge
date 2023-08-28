@@ -47,11 +47,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.smooks.Smooks;
+import org.smooks.api.ExecutionContext;
+import org.smooks.cartridges.dfdl.parser.DfdlParser;
 import org.smooks.support.StreamUtils;
 import org.xmlunit.builder.DiffBuilder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.smooks.support.SmooksUtil.filterAndSerialize;
 
 public class EdifactFunctionalTestCase {
@@ -69,10 +72,17 @@ public class EdifactFunctionalTestCase {
     }
 
     @ParameterizedTest
-    @CsvSource({"/data/INVOIC_D.03B_Interchange_with_UNA.txt, /data/INVOIC_D.03B_Interchange_with_UNA.xml", "/data/ORDERS_D.03B_Interchange.txt, /data/ORDERS_D.03B_Interchange.xml"})
-    public void testSmooksConfigGivenParser(String fileName, String expectedResult) throws Exception {
+    @CsvSource({"/data/INVOIC_D.03B_Interchange_with_UNA.txt, /data/INVOIC_D.03B_Interchange_with_UNA.xml, 0", "/data/ORDERS_D.03B_Interchange.txt, /data/ORDERS_D.03B_Interchange.xml, 0", "/data/BAD_ORDERS_D.03B_Interchange.txt, /data/BAD_ORDERS_D.03B_Interchange.xml, 1"})
+    public void testSmooksConfigGivenParser(String fileName, String expectedResult, int diagnosticCount) throws Exception {
         smooks.addConfigurations("/smooks-parser-config.xml");
-        String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream(fileName), smooks);
+        ExecutionContext executionContext = smooks.createExecutionContext();
+        String result = filterAndSerialize(executionContext, getClass().getResourceAsStream(fileName), smooks);
+
+        if (diagnosticCount == 0) {
+            assertNull(executionContext.get(DfdlParser.DIAGNOSTICS_TYPED_KEY));
+        } else {
+            assertEquals(diagnosticCount, executionContext.get(DfdlParser.DIAGNOSTICS_TYPED_KEY).size());
+        }
 
         assertFalse(DiffBuilder.compare(getClass().getResourceAsStream(expectedResult)).ignoreWhitespace().withTest(result).build().hasDifferences());
     }
