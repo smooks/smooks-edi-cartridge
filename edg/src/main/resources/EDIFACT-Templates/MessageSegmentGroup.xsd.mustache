@@ -1,4 +1,4 @@
-<xsd:element minOccurs="{{value.minOccurs}}" maxOccurs="{{value.maxOccurs}}" name="{{value.xmltag}}">
+<xsd:element minOccurs="{{value.minOccurs}}" maxOccurs="{{value.maxOccurs}}" name="{{value.xmltag}}" {{#value.occursCountKind}}dfdl:occursCountKind="{{value.occursCountKind}}"{{/value.occursCountKind}}>
     <xsd:complexType>
         <xsd:sequence>
             {{#value.segments}}

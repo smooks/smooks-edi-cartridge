@@ -95,5 +95,6 @@ public class EdifactDfdlSchemaGeneratorTestCase {
         Runner runner = Runner.apply("parse.tdml");
         runner.runOneTest("PAXLST", true);
         runner.runOneTest("INVOIC", true);
+        runner.runOneTest("BAD-PAXLST", true);
     }
 }

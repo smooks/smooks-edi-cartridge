@@ -84,6 +84,9 @@ public class MessagesTemplate extends Template {
         final int segmentGroupIndex;
         final StringWriter stringWriter = new StringWriter();
         final List<Map<String, Object>> nestedSegments = (List<Map<String, Object>>) headSegment.get("segments");
+        if (((int) headSegment.get("minOccurs") == 0) || ((int) headSegment.get("maxOccurs"))  > 1) {
+            headSegment.put("occursCountKind", "parsed");
+        }
         if (isEmpty(nestedSegments)) {
             segmentGroupIndex = segmentGroupCounter;
             writeSegment(tailSegments, stringWriter, isFirstSegment);

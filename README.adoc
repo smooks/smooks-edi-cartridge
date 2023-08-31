@@ -5,9 +5,9 @@ image:https://img.shields.io/nexus/s/org.smooks.cartridges.edi/smooks-edi-cartri
 image:https://github.com/smooks/smooks-edi-cartridge/workflows/CI/badge.svg[Build Status]
 
 // tag::smooks-edi-cartridge[]
-The EDI cartridge provides a reader for parsing EDI documents, and a visitor for serialising the event stream into EDI.
+The EDI cartridge inherits from the https://github.com/smooks/smooks-javabean-cartridge/blob/master/README.adoc[DFDL cartridge] to provide a reader for parsing EDI documents, and a visitor for serialising the event stream into EDI. Many of the options that are available from the DFDL cartridge are supported in the EDI cartridge as well (e.g., https://github.com/smooks/smooks-dfdl-cartridge#validation-mode[validation mode]).
 
-In the following pass-through configuration, Smooks parses an EDI document and then serialises, or unparses in DFDL lingo, the generated event stream to produce an EDI document identical to the parsed document.
+In the following pass-through configuration, Smooks parses an EDI document and then serialises, or unparses in DFDL nomenclature, the generated event stream to produce an EDI document identical to the parsed document.
 
 .smooks-config.xml
 [source,xml]
@@ -304,8 +304,8 @@ image:https://img.shields.io/nexus/s/org.smooks.cartridges.edi/smooks-edifact-ca
 image:https://github.com/smooks/smooks-edifact-cartridge/workflows/CI/badge.svg[Build Status]
 
 // tag::smooks-edifact-cartridge[]
-Smooks 2 provides out-of-the-box support for UN/EDIFACT interchanges in terms of pre-generated EDI DFDL schemas derived from the http://www.unece.org/trade/untdid/down_index.htm[official UN/EDIFACT
-message definition zip directories]. This allows you to easily convert a UN/EDIFACT message interchange into a consumable XML document. Specialised _edifact:parser_ and _edifact:unparser_ resources support UN/EDIFACT interchanges as shown in the next example:
+Smooks 2 provides out-of-the-box support for UN EDIFACT interchanges in terms of pre-generated EDI DFDL schemas derived from the http://www.unece.org/trade/untdid/down_index.htm[official UN EDIFACT
+message definition zip directories]. This allows you to easily convert a UN EDIFACT message interchange into a consumable XML document. Specialised _edifact:parser_ and _edifact:unparser_ resources support UN EDIFACT interchanges as shown in the next example:
 
 .smooks-config.xml
 [source,xml]
@@ -358,9 +358,9 @@ etc...
 
 === Schema Packs
 
-In an effort to simplify the processing of UN/EDIFACT Interchanges, we have created tools to generate EDIFACT schema packs from http://www.unece.org/trade/untdid/down_index.htm[the official UN/EDIFACT message definition zip directories]. The generated schema packs are deployed to a public Maven repository from where users can easily access the EDIFACT schemas for the UN/EDIFACT message sets they need to support.
+In an effort to simplify the processing of UN EDIFACT Interchanges, we have created tools to generate EDIFACT schema packs from http://www.unece.org/trade/untdid/down_index.htm[the official UN EDIFACT message definition zip directories]. The generated schema packs are deployed to a public Maven repository from where users can easily access the EDIFACT schemas for the UN EDIFACT message sets they need to support.
 
-Schema packs are available for most of the UN/EDIFACT directories. These are available from the Maven Snapshot and Central repositories and can be added to your application using standard Maven dependency management.
+Schema packs are available for most of the UN EDIFACT directories. These are available from the Maven Snapshot and Central repositories and can be added to your application using standard Maven dependency management.
 
 As an example, to add the D93A DFDL schema pack to your application classpath, add the following dependency to your application's POM:
 
