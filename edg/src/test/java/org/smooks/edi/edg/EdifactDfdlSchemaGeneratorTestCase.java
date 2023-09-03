@@ -53,7 +53,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -80,21 +82,27 @@ public class EdifactDfdlSchemaGeneratorTestCase {
 
     @Test
     public void testDfdlSchema() throws Throwable {
-        EdifactDfdlSchemaGenerator.main(new String[]{"/d03b.zip,org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser", "target/generated-test-resources"});
-
-        File generatedSchema = new File("target/generated-test-resources/d03b/EDIFACT-Interchange.dfdl.xsd");
-        Mustache mustache = new DefaultMustacheFactory().compile("EDIFACT-Common/EDIFACT-Interchange.dfdl.xsd.mustache");
-        try (FileWriter fileWriter = new FileWriter(generatedSchema)) {
-            mustache.execute(fileWriter, new HashMap<String, Object>() {{
-                this.put("schemaLocation", "EDIFACT-Messages.dfdl.xsd");
-                this.put("messageTypes", Arrays.asList("INVOIC", "PAXLST"));
-                this.put("version", "D03B");
-            }});
-        }
+        generateSchema("D01B", Collections.singletonList("RECADV"));
+        generateSchema("D03B", Arrays.asList("INVOIC", "PAXLST"));
 
         Runner runner = Runner.apply("parse.tdml");
         runner.runOneTest("PAXLST", true);
         runner.runOneTest("INVOIC", true);
         runner.runOneTest("BAD-PAXLST", true);
+        runner.runOneTest("RECADV", true);
+    }
+
+    private void generateSchema(String version, List<String> messageTypes) throws IOException {
+        EdifactDfdlSchemaGenerator.main(new String[]{String.format("/%s.zip,org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser", version.toLowerCase()), "target/generated-test-resources"});
+
+        File generatedSchema = new File(String.format("target/generated-test-resources/%s/EDIFACT-Interchange.dfdl.xsd", version.toLowerCase()));
+        Mustache mustache = new DefaultMustacheFactory().compile("EDIFACT-Common/EDIFACT-Interchange.dfdl.xsd.mustache");
+        try (FileWriter fileWriter = new FileWriter(generatedSchema)) {
+            mustache.execute(fileWriter, new HashMap<String, Object>() {{
+                this.put("schemaLocation", "EDIFACT-Messages.dfdl.xsd");
+                this.put("messageTypes", messageTypes);
+                this.put("version", version);
+            }});
+        }
     }
 }

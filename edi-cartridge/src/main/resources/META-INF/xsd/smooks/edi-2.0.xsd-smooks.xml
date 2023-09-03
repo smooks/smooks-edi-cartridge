@@ -49,12 +49,12 @@
 
     <resource-config selector="edi:parser">
         <resource>org.smooks.engine.resource.extension.NewResourceConfig</resource>
-        <param name="resource">org.smooks.cartridges.dfdl.parser.DfdlParser</param>
+        <param name="resource">org.smooks.cartridges.edi.parser.EdiParser</param>
     </resource-config>
     <resource-config selector="edi:parser">
         <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>
         <param name="setOn">dataProcessorFactory</param>
-        <param name="value">org.smooks.cartridges.edi.EdiDataProcessorFactory</param>
+        <param name="value">org.smooks.cartridges.dfdl.DataProcessorFactory</param>
     </resource-config>
     <resource-config selector="edi:parser">
         <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>
@@ -72,12 +72,12 @@
     <resource-config selector="edi:unparser">
         <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>
         <param name="setOn">resourceType</param>
-        <param name="value">dfdl</param>
+        <param name="value">edi</param>
     </resource-config>
     <resource-config selector="edi:unparser">
         <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>
         <param name="setOn">dataProcessorFactory</param>
-        <param name="value">org.smooks.cartridges.edi.EdiDataProcessorFactory</param>
+        <param name="value">org.smooks.cartridges.dfdl.DataProcessorFactory</param>
     </resource-config>
     <resource-config selector="edi:unparser">
         <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>

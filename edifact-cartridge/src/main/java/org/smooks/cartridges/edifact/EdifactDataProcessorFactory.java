@@ -47,8 +47,8 @@ import com.github.mustachejava.Mustache;
 import org.apache.daffodil.japi.DataProcessor;
 import org.apache.daffodil.japi.ValidationMode;
 import org.apache.daffodil.lib.util.Misc;
+import org.smooks.cartridges.dfdl.DataProcessorFactory;
 import org.smooks.cartridges.dfdl.DfdlSchema;
-import org.smooks.cartridges.edi.EdiDataProcessorFactory;
 import org.smooks.api.resource.config.Parameter;
 import org.smooks.api.SmooksConfigException;
 import org.smooks.api.ApplicationContext;
@@ -69,11 +69,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
+public class EdifactDataProcessorFactory extends DataProcessorFactory {
 
     private static final Mustache MUSTACHE;
 
@@ -89,7 +88,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
     protected ApplicationContext applicationContext;
 
     @Override
-    public DataProcessor doCreateDataProcessor(final Map<String, String> variables) {
+    public DataProcessor createDataProcessor() {
         try {
             final Parameter<String> schemaUriParameter = resourceConfig.getParameter("schemaUri", String.class);
             final String version = readVersion(schemaUriParameter);
@@ -103,18 +102,20 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
                 entrySchemaUri = materialiseEntrySchema(schemaUriParameter.getValue(), messageTypes, version);
             }
 
-            final DfdlSchema dfdlSchema = new DfdlSchema(entrySchemaUri, variables, ValidationMode.valueOf(resourceConfig.getParameterValue("validationMode", String.class, "Off")),
+            final DfdlSchema dfdlSchema = new DfdlSchema(entrySchemaUri, ValidationMode.valueOf(resourceConfig.getParameterValue("validationMode", String.class, "Off")),
                                                          Boolean.parseBoolean(resourceConfig.getParameterValue("cacheOnDisk", String.class, "false")),
                                                          Boolean.parseBoolean(resourceConfig.getParameterValue("debugging", String.class, "false")), resourceConfig.getParameterValue("distinguishedRootNode", String.class),
                                                          resourceConfig.getParameterValue("schematronUrl", String.class),
                                                          Boolean.parseBoolean(resourceConfig.getParameterValue("schematronValidation", String.class))) {
                 @Override
                 public String getName() {
-                    return schemaUriParameter.getValue() + ":" + getValidationMode() + ":" + isCacheOnDisk() + ":" + isDebugging() + ":" + variables.toString();
+                    return schemaUriParameter.getValue() + ":" + getValidationMode() + ":" + isCacheOnDisk() + ":" + isDebugging();
                 }
             };
 
             return compileOrGet(dfdlSchema);
+        } catch (FileNotFoundException t) {
+            throw new SmooksConfigException(t.getMessage() + " Hint: are you sure you have added the right EDIFACT schema pack to the Java classpath?", t);
         } catch (Throwable t) {
             throw new SmooksConfigException(t);
         }
@@ -124,7 +125,7 @@ public class EdifactDataProcessorFactory extends EdiDataProcessorFactory {
         final File generatedEntrySchemaDir = Files.createTempDirectory(null).toFile();
         generatedEntrySchemaDir.deleteOnExit();
         final File generatedEntrySchema = new File(generatedEntrySchemaDir + "/EDIFACT-Interchange-" + UUID.nameUUIDFromBytes(String.join(":", messageTypes).getBytes()) + ".dfdl.xsd");
-        try (Writer fileWriter = new OutputStreamWriter(new FileOutputStream(generatedEntrySchema), StandardCharsets.UTF_8)) {
+        try (Writer fileWriter = new OutputStreamWriter(Files.newOutputStream(generatedEntrySchema.toPath()), StandardCharsets.UTF_8)) {
             MUSTACHE.execute(fileWriter, new HashMap<String, Object>() {{
                 this.put("schemaLocation", schemaUri);
                 this.put("messageTypes", messageTypes);

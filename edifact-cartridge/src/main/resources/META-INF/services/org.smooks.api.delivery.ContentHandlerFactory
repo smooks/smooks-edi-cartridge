@@ -1,1 +1,1 @@
-org.smooks.cartridges.dfdl.unparser.DfdlUnparserContentHandlerFactory
+org.smooks.cartridges.edi.unparser.EdiUnparserContentHandlerFactory

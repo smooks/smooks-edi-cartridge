@@ -92,7 +92,7 @@ public class EdifactDataProcessorFactoryTestCase {
         defaultCharsetField.set(null, null);
 
         assertEquals(StandardCharsets.ISO_8859_1, Charset.defaultCharset());
-        DataProcessor dataProcessor = edifactDataProcessorFactory.doCreateDataProcessor(new HashMap<>());
+        DataProcessor dataProcessor = edifactDataProcessorFactory.createDataProcessor();
         assertNotNull(dataProcessor);
 
         System.setProperty("file.encoding", originalFileEncoding);
@@ -109,7 +109,7 @@ public class EdifactDataProcessorFactoryTestCase {
         edifactDataProcessorFactory.getResourceConfig().setParameter("messageType", "ORDERS");
         
         assertFalse(new File(DfdlSchema.WORKING_DIRECTORY).exists());
-        edifactDataProcessorFactory.doCreateDataProcessor(new HashMap<>());
+        edifactDataProcessorFactory.createDataProcessor();
         assertEquals(1, new File(DfdlSchema.WORKING_DIRECTORY).listFiles().length);
         
         EdifactDataProcessorFactory cachedEdifactDataProcessorFactory = new EdifactDataProcessorFactory();
@@ -120,7 +120,7 @@ public class EdifactDataProcessorFactoryTestCase {
         cachedEdifactDataProcessorFactory.getResourceConfig().setParameter("messageType", "ORDERS");
 
         assertEquals(1, new File(DfdlSchema.WORKING_DIRECTORY).listFiles().length);
-        cachedEdifactDataProcessorFactory.doCreateDataProcessor(new HashMap<>());
+        cachedEdifactDataProcessorFactory.createDataProcessor();
         assertEquals(1, new File(DfdlSchema.WORKING_DIRECTORY).listFiles().length);
     }
 
@@ -134,7 +134,7 @@ public class EdifactDataProcessorFactoryTestCase {
         edifactDataProcessorFactory.getResourceConfig().setParameter("messageType", "ORDERS");
 
         assertFalse(new File(DfdlSchema.WORKING_DIRECTORY).exists());
-        edifactDataProcessorFactory.doCreateDataProcessor(new HashMap<>());
+        edifactDataProcessorFactory.createDataProcessor();
         assertEquals(1, new File(DfdlSchema.WORKING_DIRECTORY).listFiles().length);
 
         EdifactDataProcessorFactory cachedEdifactDataProcessorFactory = new EdifactDataProcessorFactory();
@@ -145,7 +145,7 @@ public class EdifactDataProcessorFactoryTestCase {
         cachedEdifactDataProcessorFactory.getResourceConfig().setParameter("messageType", "INVOIC");
 
         assertEquals(1, new File(DfdlSchema.WORKING_DIRECTORY).listFiles().length);
-        cachedEdifactDataProcessorFactory.doCreateDataProcessor(new HashMap<>());
+        cachedEdifactDataProcessorFactory.createDataProcessor();
         assertEquals(2, new File(DfdlSchema.WORKING_DIRECTORY).listFiles().length);
     }
 }
