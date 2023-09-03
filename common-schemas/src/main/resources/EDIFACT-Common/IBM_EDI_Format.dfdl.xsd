@@ -53,9 +53,10 @@
             <dfdl:defineVariable defaultValue="*" name="RepeatSep" type="xsd:string" external="true"/>
             <dfdl:defineVariable defaultValue="." name="DecimalSep" type="xsd:string" external="true"/>
             <dfdl:defineVariable defaultValue="," name="GroupingSep" type="xsd:string" external="true"/>
+            <dfdl:defineVariable defaultValue="utf-8" name="Encoding" type="xsd:string" external="true"/>
 
             <dfdl:defineFormat name="EDIFormat">
-                <dfdl:format encoding="iso-8859-1"
+                <dfdl:format encoding="{$ibmEdiFmt:Encoding}"
                              ignoreCase="yes"
                              byteOrder="bigEndian"
                              representation="text"

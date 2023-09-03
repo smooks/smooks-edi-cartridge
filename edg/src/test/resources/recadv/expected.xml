@@ -1,0 +1,291 @@
+<!--
+  ========================LICENSE_START=================================
+  smooks-edg
+  %%
+  Copyright (C) 2020 - 2023 Smooks
+  %%
+  Licensed under the terms of the Apache License Version 2.0, or
+  the GNU Lesser General Public License version 3.0 or later.
+  
+  SPDX-License-Identifier: Apache-2.0 OR LGPL-3.0-or-later
+  
+  ======================================================================
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  
+  ======================================================================
+  
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 3 of the License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+  
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, write to the Free Software Foundation,
+  Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  =========================LICENSE_END==================================
+  -->
+<D01B:Interchange xmlns:D01B="http://www.ibm.com/dfdl/edi/un/edifact/D01B"
+                  xmlns:srv="http://www.ibm.com/dfdl/edi/un/service/4.1"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <UNA>
+        <CompositeSeparator>:</CompositeSeparator>
+        <FieldSeparator>+</FieldSeparator>
+        <DecimalSeparator>.</DecimalSeparator>
+        <EscapeCharacter>?</EscapeCharacter>
+        <RepeatSeparator> </RepeatSeparator>
+        <SegmentTerminator>'</SegmentTerminator>
+    </UNA>
+    <UNB>
+        <S001>
+            <E0001>UNOA</E0001>
+            <E0002>3</E0002>
+        </S001>
+        <S002>
+            <E0004>512X20101054836182</E0004>
+            <E0007>14</E0007>
+        </S002>
+        <S003>
+            <E0010>202599214103</E0010>
+            <E0007>14</E0007>
+        </S003>
+        <S004>
+            <E0017>220808</E0017>
+            <E0019>932</E0019>
+        </S004>
+        <E0020>000002</E0020>
+    </UNB>
+    <D01B:Message>
+        <UNH>
+            <E0062>1</E0062>
+            <S009>
+                <E0065>RECADV</E0065>
+                <E0052>D</E0052>
+                <E0054>01B</E0054>
+                <E0051>UN</E0051>
+                <E0057>EAN007</E0057>
+            </S009>
+        </UNH>
+        <D01B:RECADV>
+            <BGM>
+                <C002>
+                    <E1001>632</E1001>
+                    <E1000>STO</E1000>
+                </C002>
+                <C106>
+                    <E1004>20220808112809950</E1004>
+                </C106>
+                <E1225>9</E1225>
+            </BGM>
+            <DTM>
+                <C507>
+                    <E2005>137</E2005>
+                    <E2380>20220808</E2380>
+                    <E2379>102</E2379>
+                </C507>
+            </DTM>
+            <DTM>
+                <C507>
+                    <E2005>50</E2005>
+                    <E2380>20220823</E2380>
+                    <E2379>102</E2379>
+                </C507>
+            </DTM>
+            <SegGrp-1>
+                <RFF>
+                    <C506>
+                        <E1153>ALO</E1153>
+                        <E1154>0017128652</E1154>
+                    </C506>
+                </RFF>
+                <DTM>
+                    <C507>
+                        <E2005>171</E2005>
+                        <E2380>20220804</E2380>
+                        <E2379>102</E2379>
+                    </C507>
+                </DTM>
+            </SegGrp-1>
+            <SegGrp-4>
+                <NAD>
+                    <E3035>BY</E3035>
+                    <C082>
+                        <E3039>FR11</E3039>
+                        <E3055>91</E3055>
+                    </C082>
+                    <C080>
+                        <E3036>Phaarma France</E3036>
+                    </C080>
+                    <C059>
+                        <E3042>65 Gorse</E3042>
+                    </C059>
+                    <E3164>any words</E3164>
+                    <E3251>92100</E3251>
+                    <E3207>FR</E3207>
+                </NAD>
+                <SegGrp-5>
+                    <RFF>
+                        <C506>
+                            <E1153>YC1</E1153>
+                            <E1154>FR11</E1154>
+                        </C506>
+                    </RFF>
+                </SegGrp-5>
+            </SegGrp-4>
+            <SegGrp-4>
+                <NAD>
+                    <E3035>DP</E3035>
+                    <C082>
+                        <E3039>GCCN33</E3039>
+                        <E3055>91</E3055>
+                    </C082>
+                    <C080>
+                        <E3036>报文测试天津有限公司</E3036>
+                    </C080>
+                    <C059>
+                        <E3042>天津空港经济区103号</E3042>
+                    </C059>
+                    <E3164>天津</E3164>
+                    <E3251>300305</E3251>
+                    <E3207>CN</E3207>
+                </NAD>
+                <SegGrp-5>
+                    <RFF>
+                        <C506>
+                            <E1153>YC1</E1153>
+                            <E1154>CN33</E1154>
+                        </C506>
+                    </RFF>
+                </SegGrp-5>
+                <SegGrp-5>
+                    <RFF>
+                        <C506>
+                            <E1153>ACD</E1153>
+                            <E1154>0001</E1154>
+                        </C506>
+                    </RFF>
+                </SegGrp-5>
+            </SegGrp-4>
+            <SegGrp-4>
+                <NAD>
+                    <E3035>SU</E3035>
+                    <C082>
+                        <E3039>FR21</E3039>
+                        <E3055>91</E3055>
+                    </C082>
+                    <C080>
+                        <E3036>CSP test d'This is also a test section</E3036>
+                    </C080>
+                    <C059>
+                        <E3042>Mossxy-le-Neuf</E3042>
+                    </C059>
+                    <C819>
+                        <E3229>72230</E3229>
+                    </C819>
+                    <E3251>FR</E3251>
+                </NAD>
+                <SegGrp-5>
+                    <RFF>
+                        <C506>
+                            <E1153>YC1</E1153>
+                            <E1154>FR21</E1154>
+                        </C506>
+                    </RFF>
+                </SegGrp-5>
+            </SegGrp-4>
+            <SegGrp-16>
+                <CPS>
+                    <E7164>1</E7164>
+                </CPS>
+                <SegGrp-22>
+                    <LIN>
+                        <E1082>900001</E1082>
+                    </LIN>
+                    <PIA>
+                        <E4347>1</E4347>
+                        <C212>
+                            <E7140>1000629</E7140>
+                            <E7143>IN</E7143>
+                            <E3055>92</E3055>
+                        </C212>
+                    </PIA>
+                    <QTY>
+                        <C186>
+                            <E6063>48</E6063>
+                            <E6060>200</E6060>
+                            <E6411>PCE</E6411>
+                        </C186>
+                    </QTY>
+                    <DTM>
+                        <C507>
+                            <E2005>36</E2005>
+                            <E2380>20241031</E2380>
+                            <E2379>102</E2379>
+                        </C507>
+                    </DTM>
+                    <DTM>
+                        <C507>
+                            <E2005>94</E2005>
+                            <E2380>20211115</E2380>
+                            <E2379>102</E2379>
+                        </C507>
+                    </DTM>
+                    <SegGrp-28>
+                        <RFF>
+                            <C506>
+                                <E1153>VN</E1153>
+                                <E1154>5502284066</E1154>
+                                <E1156>000010</E1156>
+                            </C506>
+                        </RFF>
+                    </SegGrp-28>
+                    <SegGrp-28>
+                        <RFF>
+                            <C506>
+                                <E1153>BT</E1153>
+                                <E1154>U23362</E1154>
+                            </C506>
+                        </RFF>
+                    </SegGrp-28>
+                    <SegGrp-28>
+                        <RFF>
+                            <C506>
+                                <E1153>AVQ</E1153>
+                                <E1154>0002</E1154>
+                            </C506>
+                        </RFF>
+                    </SegGrp-28>
+                </SegGrp-22>
+            </SegGrp-16>
+            <CNT>
+                <C270>
+                    <E6069>2</E6069>
+                    <E6066>1</E6066>
+                </C270>
+            </CNT>
+        </D01B:RECADV>
+        <UNT>
+            <E0074>24</E0074>
+            <E0062>1</E0062>
+        </UNT>
+    </D01B:Message>
+    <UNZ>
+        <E0036>1</E0036>
+        <E0020>000002</E0020>
+    </UNZ>
+</D01B:Interchange>

@@ -49,7 +49,7 @@
 
     <resource-config selector="edifact:parser">
         <resource>org.smooks.engine.resource.extension.NewResourceConfig</resource>
-        <param name="resource">org.smooks.cartridges.dfdl.parser.DfdlParser</param>
+        <param name="resource">org.smooks.cartridges.edi.parser.EdiParser</param>
     </resource-config>
     <resource-config selector="edifact:parser">
         <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>

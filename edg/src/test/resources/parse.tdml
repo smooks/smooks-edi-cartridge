@@ -39,4 +39,14 @@
             <tdml:error>RFF occurred '2' times when it was expected to be a minimum of '0' and a maximum of '1' times.</tdml:error>
         </tdml:validationErrors>
     </tdml:parserTestCase>
+
+    <tdml:parserTestCase name="RECADV" validation="off" root="Interchange" model="target/generated-test-resources/d01b/EDIFACT-Interchange.dfdl.xsd">
+        <tdml:document>
+            <tdml:documentPart encoding="UTF-8" type="file">recadv/recadv.txt</tdml:documentPart>
+        </tdml:document>
+
+        <tdml:infoset>
+            <tdml:dfdlInfoset type="file">recadv/expected.xml</tdml:dfdlInfoset>
+        </tdml:infoset>
+    </tdml:parserTestCase>
 </tdml:testSuite>

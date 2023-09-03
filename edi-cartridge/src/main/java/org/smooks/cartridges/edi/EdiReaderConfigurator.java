@@ -106,14 +106,10 @@ public class EdiReaderConfigurator extends DfdlReaderConfigurator {
     }
 
     @Override
-    protected String getDataProcessorFactory() {
-        return "org.smooks.cartridges.edi.EdiDataProcessorFactory";
-    }
-
-    @Override
     public List<ResourceConfig> toConfig() {
         final List<ResourceConfig> resourceConfigs = super.toConfig();
         final ResourceConfig resourceConfig = resourceConfigs.get(0);
+        resourceConfig.setResource("org.smooks.cartridges.edi.parser.EdiParser");
 
         resourceConfig.setParameter(new DefaultParameter<>("dataProcessorFactory", getDataProcessorFactory()));
         resourceConfig.setParameter(new DefaultParameter<>("segmentTerminator", segmentTerminator));
