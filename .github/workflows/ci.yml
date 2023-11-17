@@ -26,7 +26,7 @@ jobs:
         run: |
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /usr/local/lib/android          
-          sudo apt-get purge -y sphinxsearch ansible google-cloud-sdk php* apache2 kubectl nginx p7zip p7zip-full p7zip-rar podman buildah skopeo ruby-full postgresql* gfortran* mysql* python* subversion mercurial firefox google-chrome-stable
+          sudo apt-get purge -y sphinxsearch ansible php* apache2 kubectl nginx p7zip p7zip-full p7zip-rar podman buildah skopeo ruby-full postgresql* gfortran* mysql* python* subversion mercurial firefox google-chrome-stable
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
@@ -36,7 +36,8 @@ jobs:
           cache: 'maven'
       - name: Build
         run: |
-          mvn install -pl '!edi-cartridge,!edifact-cartridge' -T 1C -U
+          mvn install -pl '!edifact-jaxb-bindings,!edi-cartridge,!edifact-cartridge' -T 1C -U
+          mvn install -pl 'edifact-jaxb-bindings' -T 1C -U
           export JAVA_HOME=$JAVA_HOME_${{ matrix.java }}_X64
           mvn install -pl edi-cartridge,edifact-cartridge -U
       - name: Deploy
