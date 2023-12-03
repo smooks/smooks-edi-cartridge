@@ -96,7 +96,7 @@ public class EdifactDataProcessorFactory extends DataProcessorFactory {
 
             final List<Parameter<?>> messageTypeParameters = resourceConfig.getParameters("messageType");
             if (messageTypeParameters == null || messageTypeParameters.isEmpty()) {
-                entrySchemaUri = new URI(version.toLowerCase() + "/EDIFACT-Interchange.dfdl.xsd");
+                entrySchemaUri = new URI("/" + version.toLowerCase() + "/EDIFACT-Interchange.dfdl.xsd");
             } else {
                 final List<String> messageTypes = (List) messageTypeParameters.stream().map(Parameter::getValue).collect(Collectors.toList());
                 entrySchemaUri = materialiseEntrySchema(schemaUriParameter.getValue(), messageTypes, version);
