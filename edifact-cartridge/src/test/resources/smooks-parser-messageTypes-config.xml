@@ -3,7 +3,7 @@
   ========================LICENSE_START=================================
   smooks-edifact-cartridge
   %%
-  Copyright (C) 2020 - 2023 Smooks
+  Copyright (C) 2020 Smooks
   %%
   Licensed under the terms of the Apache License Version 2.0, or
   the GNU Lesser General Public License version 3.0 or later.
@@ -45,6 +45,11 @@
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
                       xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd">
 
-    <edifact:parser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd" validationMode="Full"/>
+    <edifact:parser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd" validationMode="Limited">
+        <edifact:messageTypes>
+            <edifact:messageType>ORDERS</edifact:messageType>
+            <edifact:messageType>INVOIC</edifact:messageType>
+        </edifact:messageTypes>
+    </edifact:parser>
 
 </smooks-resource-list>
