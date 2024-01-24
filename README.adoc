@@ -14,6 +14,7 @@ In the following pass-through configuration, Smooks parses an EDI document and t
 ----
 <?xml version="1.0"?>  
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"
                       xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd">    
 
     <!-- Configure the reader to parse the EDI stream into a stream of SAX events. -->  
@@ -21,11 +22,23 @@ In the following pass-through configuration, Smooks parses an EDI document and t
                 segmentTerminator="%NL;" // <2>
                 compositeDataElementSeparator="^"/> // <3>
 
-    <!-- Configure the writer to serialise the XML stream into EDI. -->  
-    <edi:unparser schemaUri="/edi-to-xml-mapping.dfdl.xsd" // <1>
-                  segmentTerminator="%NL;" // <2>
-                  compositeDataElementSeparator="^" // <3>
-                  unparseOnNode="/Order"/> // <4>
+    <!-- Apply a pipeline on the root event and replace the XML result produced from <edifact:parser .../> with the pipeline EDI result. -->
+    <core:smooks filterSourceOn="/Order">
+        <core:action>
+            <core:inline>
+                <core:replace/>
+            </core:inline>
+        </core:action>
+        <core:config>
+            <smooks-resource-list>
+                <!-- Configure the writer to serialise the event stream into EDI. -->
+                <edi:unparser schemaUri="/edi-to-xml-mapping.dfdl.xsd" // <1>
+                              segmentTerminator="%NL;" // <2>
+                              compositeDataElementSeparator="^" // <3>
+                              unparseOnNode="*"/> // <4>
+            </smooks-resource-list>
+        </core:config>
+    </core:smooks>
 
 </smooks-resource-list>
 ----
@@ -312,11 +325,26 @@ message definition zip directories]. This allows you to easily convert a UN EDIF
 ----
 <?xml version="1.0"?>
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"
                       xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd">
 
+    <!-- Configure the reader to parse the EDIFACT stream into a stream of SAX events. -->
     <edifact:parser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd"/>
 
-    <edifact:unparser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnNode="/Interchange"/>
+    <!-- Apply a pipeline on the root event and replace the XML result produced from <edifact:parser .../> with the pipeline EDIFACT result. -->
+    <core:smooks filterSourceOn="/Interchange">
+        <core:action>
+            <core:inline>
+                <core:replace/>
+            </core:inline>
+        </core:action>
+        <core:config>
+            <smooks-resource-list>
+                <!-- Configure the writer to serialise the event stream into EDIFACT. -->
+                <edifact:unparser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnNode="*"/>
+            </smooks-resource-list>
+        </core:config>
+    </core:smooks>
 
 </smooks-resource-list>
 ----
@@ -328,6 +356,7 @@ The _edifact:parser_ and _edifact:unparser_, analogous to the _edi:parser_ and _
 ----
 <?xml version="1.0"?>
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"
                       xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd">
 
     <edifact:parser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd">
@@ -337,12 +366,23 @@ The _edifact:parser_ and _edifact:unparser_, analogous to the _edi:parser_ and _
         </edifact:messageTypes>
     </edifact:parser>
 
-    <edifact:unparser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnNode="/Interchange">
-       <edifact:messageTypes>
-            <edifact:messageType>ORDERS</edifact:messageType>
-            <edifact:messageType>INVOIC</edifact:messageType>
-        </edifact:messageTypes>
-    </edifact:unparser>
+    <core:smooks filterSourceOn="/Interchange">
+        <core:action>
+            <core:inline>
+                <core:replace/>
+            </core:inline>
+        </core:action>
+        <core:config>
+            <smooks-resource-list>
+                <edifact:unparser schemaUri="/d03b/EDIFACT-Messages.dfdl.xsd" unparseOnNode="*">
+                   <edifact:messageTypes>
+                        <edifact:messageType>ORDERS</edifact:messageType>
+                        <edifact:messageType>INVOIC</edifact:messageType>
+                    </edifact:messageTypes>
+                </edifact:unparser>
+            </smooks-resource-list>
+        </core:config>
+    </core:smooks>
 </smooks-resource-list>
 ----
 
