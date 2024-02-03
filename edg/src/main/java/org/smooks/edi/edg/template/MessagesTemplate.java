@@ -43,14 +43,17 @@
 package org.smooks.edi.edg.template;
 
 import com.github.mustachejava.TemplateFunction;
-import org.apache.commons.jxpath.JXPathContext;
 import org.smooks.edi.ect.DirectoryParser;
 import org.smooks.edi.edisax.model.internal.Edimap;
 import org.smooks.edi.edisax.util.EDIUtils;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MessagesTemplate extends Template {
@@ -68,7 +71,7 @@ public class MessagesTemplate extends Template {
         for (String messageType : messageTypes) {
             final Edimap messageTypeEdimap = directoryParser.getMappingModel(messageType, edimap);
             final Map<String, Object> messageDefinition = OBJECT_MAPPER.convertValue(messageTypeEdimap, OBJECT_MAPPER.getTypeFactory().constructMapType(Map.class, String.class, Object.class));
-            final List<Map<String, Object>> segments = (List<Map<String, Object>>) JXPathContext.newContext(messageDefinition).getValue("/segments/segments", List.class);
+            final List<Map<String, Object>> segments = (List<Map<String, Object>>) ((Map<String, Object>) messageDefinition.get("segments")).get("segments");
             templatizeSegments(segments);
 
             messageDefinitions.add(messageDefinition);
