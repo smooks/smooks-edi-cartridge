@@ -1254,6 +1254,42 @@
             </xsd:enumeration>
             <xsd:enumeration value="12B">
             </xsd:enumeration>
+            <xsd:enumeration value="13A">
+            </xsd:enumeration>
+            <xsd:enumeration value="13B">
+            </xsd:enumeration>
+            <xsd:enumeration value="14A">
+            </xsd:enumeration>
+            <xsd:enumeration value="14B">
+            </xsd:enumeration>
+            <xsd:enumeration value="15A">
+            </xsd:enumeration>
+            <xsd:enumeration value="15B">
+            </xsd:enumeration>
+            <xsd:enumeration value="16A">
+            </xsd:enumeration>
+            <xsd:enumeration value="16B">
+            </xsd:enumeration>
+            <xsd:enumeration value="17A">
+            </xsd:enumeration>
+            <xsd:enumeration value="17B">
+            </xsd:enumeration>
+            <xsd:enumeration value="18A">
+            </xsd:enumeration>
+            <xsd:enumeration value="18B">
+            </xsd:enumeration>
+            <xsd:enumeration value="19A">
+            </xsd:enumeration>
+            <xsd:enumeration value="19B">
+            </xsd:enumeration>
+            <xsd:enumeration value="20A">
+            </xsd:enumeration>
+            <xsd:enumeration value="20B">
+            </xsd:enumeration>
+            <xsd:enumeration value="21A">
+            </xsd:enumeration>
+            <xsd:enumeration value="21B">
+            </xsd:enumeration>
             <xsd:enumeration value="93A">
             </xsd:enumeration>
             <xsd:enumeration value="94A">
