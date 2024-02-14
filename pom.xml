@@ -220,6 +220,11 @@
                 <artifactId>scala-library</artifactId>
                 <version>2.12.18</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.woodstox</groupId>
+                <artifactId>woodstox-core</artifactId>
+                <version>6.6.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     
@@ -227,7 +232,7 @@
         <dependency>
             <groupId>org.smooks.cartridges</groupId>
             <artifactId>smooks-dfdl-cartridge</artifactId>
-            <version>1.0.0-RC3</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
