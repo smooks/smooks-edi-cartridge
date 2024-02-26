@@ -68,7 +68,7 @@
         <mustache.version>0.9.11</mustache.version>
         <xmlunit.core.version>2.9.1</xmlunit.core.version>
         <junit.version>5.10.2</junit.version>
-        <log4j-slf4j-imp.version>2.22.1</log4j-slf4j-imp.version>
+        <log4j-slf4j-imp.version>2.23.0</log4j-slf4j-imp.version>
     </properties>
 
     <build>
