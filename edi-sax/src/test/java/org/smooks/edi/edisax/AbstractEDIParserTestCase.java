@@ -44,6 +44,7 @@ package org.smooks.edi.edisax;
 
 import org.smooks.resource.URIResourceLocator;
 import org.smooks.support.StreamUtils;
+import org.smooks.tck.TextUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -53,7 +54,8 @@ import java.io.InputStream;
 import java.io.StringReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author <a href="mailto:tom.fennelly@jboss.com">tom.fennelly@jboss.com</a>
@@ -110,11 +112,11 @@ public abstract class AbstractEDIParserTestCase {
             parser.setFeature(EDIParser.FEATURE_VALIDATE, true);
             parser.parse(new InputSource(input));
 
-            assertTrue(false, "Test case should thow an EdiParseException.");
+            fail("Test case should thow an EdiParseException.");
 
         } catch (EDIParseException e) {
             if (segmentNodeName == null) {
-                assertTrue(e.getErrorNode() == null, "EDIParseException should contain no MappingNode.");
+                assertNull(e.getErrorNode(), "EDIParseException should contain no MappingNode.");
             } else if (e.getErrorNode() == null) {
                 throw e;
             } else {
@@ -129,6 +131,6 @@ public abstract class AbstractEDIParserTestCase {
 
 
     private String removeCRLF(String string) throws IOException {
-        return StreamUtils.trimLines(new StringReader(string)).toString();
+        return TextUtils.trimLines(new StringReader(string)).toString();
     }
 }

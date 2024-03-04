@@ -75,7 +75,7 @@ public class EdifactFunctionalTestCase {
     @ParameterizedTest
     @CsvSource({"/data/INVOIC_D.03B_Interchange_with_UNA.txt, /data/INVOIC_D.03B_Interchange_with_UNA.xml, 0", "/data/ORDERS_D.03B_Interchange.txt, /data/ORDERS_D.03B_Interchange.xml, 0", "/data/BAD_ORDERS_D.03B_Interchange.txt, /data/BAD_ORDERS_D.03B_Interchange.xml, 1"})
     public void testSmooksConfigGivenParserWithMessageTypes(String fileName, String expectedResult, int diagnosticCount) throws Exception {
-        smooks.addConfigurations("/smooks-parser-messageTypes-config.xml");
+        smooks.addResourceConfigs("/smooks-parser-messageTypes-config.xml");
         ExecutionContext executionContext = smooks.createExecutionContext();
         String result = filterAndSerialize(executionContext, getClass().getResourceAsStream(fileName), smooks);
 
@@ -90,7 +90,7 @@ public class EdifactFunctionalTestCase {
 
     @Test
     public void testSmooksConfigGivenParser() throws Exception {
-        smooks.addConfigurations("/smooks-parser-config.xml");
+        smooks.addResourceConfigs("/smooks-parser-config.xml");
         ExecutionContext executionContext = smooks.createExecutionContext();
         String result = filterAndSerialize(executionContext, getClass().getResourceAsStream("/data/INVOIC_D.03B_Interchange_with_UNA.txt"), smooks);
         assertNull(executionContext.get(DfdlParser.DIAGNOSTICS_TYPED_KEY));
@@ -101,7 +101,7 @@ public class EdifactFunctionalTestCase {
     @ParameterizedTest
     @CsvSource({"/data/INVOIC_D.03B_Interchange_with_UNA.xml, /data/INVOIC_D.03B_Interchange_with_UNA.txt", "/data/ORDERS_D.03B_Interchange.xml, /data/ORDERS_D.03B_Interchange.txt"})
     public void testSmooksConfigGivenUnparser(String fileName, String expectedResult) throws Exception {
-        smooks.addConfigurations("/smooks-unparser-config.xml");
+        smooks.addResourceConfigs("/smooks-unparser-config.xml");
         String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream(fileName), smooks);
 
         assertEquals(StreamUtils.readStreamAsString(getClass().getResourceAsStream(expectedResult), "UTF-8").replaceAll("\\n", "\r\n"), result);
