@@ -52,7 +52,7 @@ import org.smooks.edi.edisax.model.internal.DelimiterType;
 import org.smooks.edi.edisax.model.internal.Delimiters;
 import org.smooks.edi.edisax.model.internal.Description;
 import org.smooks.resource.URIResourceLocator;
-import org.smooks.support.ClassUtil;
+import org.smooks.support.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smooks.support.StreamUtils;
@@ -299,7 +299,7 @@ public class EDIUtils {
     }
 
     private static InputStream getMappingModelConfigStream(String urn, String fileName) throws IOException, EDIConfigurationException {
-        List<URL> urnFiles = ClassUtil.getResources(EDI_MAPPING_MODEL_URN, EDIUtils.class);
+        List<URL> urnFiles = ClassUtils.getResources(EDI_MAPPING_MODEL_URN, EDIUtils.class);
         boolean ignoreVersion = false;
 
         if (urn.startsWith("urn:")) {
@@ -323,7 +323,7 @@ public class EDIUtils {
                     String urnFileString = urnFile.toString();
                     String modelConfigFile = urnFileString.substring(0, urnFileString.length() - EDI_MAPPING_MODEL_URN.length()) + fileName;
 
-                    List<URL> urlList = ClassUtil.getResources(fileName, EDIUtils.class);
+                    List<URL> urlList = ClassUtils.getResources(fileName, EDIUtils.class);
 
                     for (URL url : urlList) {
                         if (url.toString().equals(modelConfigFile)) {

@@ -46,11 +46,16 @@ import org.smooks.edi.ect.DirectoryParser;
 import org.smooks.edi.ect.EdiParseException;
 import org.smooks.edi.edisax.interchange.ControlBlockHandlerFactory;
 import org.smooks.edi.edisax.model.EdifactModel;
-import org.smooks.edi.edisax.model.internal.*;
+import org.smooks.edi.edisax.model.internal.Component;
+import org.smooks.edi.edisax.model.internal.Description;
+import org.smooks.edi.edisax.model.internal.Edimap;
+import org.smooks.edi.edisax.model.internal.Field;
+import org.smooks.edi.edisax.model.internal.Segment;
+import org.smooks.edi.edisax.model.internal.SegmentGroup;
 import org.smooks.edi.edisax.unedifact.UNEdifactInterchangeParser;
 import org.smooks.edi.edisax.unedifact.handlers.r41.UNEdifact41ControlBlockHandlerFactory;
 import org.smooks.edi.edisax.util.EDIUtils;
-import org.smooks.support.ClassUtil;
+import org.smooks.support.ClassUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -82,7 +87,7 @@ public class UnEdifactDefinitionReader {
             if (!directoryParser.isUseShortName()) {
                 interchangeSegmentDefinitions = INTERCHANGE_DEFINITION;
             }
-            EdifactModel interchangeEnvelope = new EdifactModel(ClassUtil.getResourceAsStream(interchangeSegmentDefinitions, UnEdifactDefinitionReader.class));
+            EdifactModel interchangeEnvelope = new EdifactModel(ClassUtils.getResourceAsStream(interchangeSegmentDefinitions, UnEdifactDefinitionReader.class));
             edimap.getSegments().getSegments().addAll(interchangeEnvelope.getEdimap().getSegments().getSegments());
         } catch (Exception e) {
             throw new EdiParseException(e.getMessage(), e);

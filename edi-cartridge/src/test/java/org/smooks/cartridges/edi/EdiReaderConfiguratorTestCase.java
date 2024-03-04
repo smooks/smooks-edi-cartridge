@@ -50,6 +50,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.smooks.support.SmooksUtil.filterAndSerialize;
+import static org.smooks.tck.Assertions.compareCharStreams;
 
 public class EdiReaderConfiguratorTestCase {
 
@@ -61,6 +62,6 @@ public class EdiReaderConfiguratorTestCase {
         smooks.setReaderConfig(ediReaderConfigurator);
 
         String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream("/data/edi-input.txt"), smooks);
-        assertTrue(StreamUtils.compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/expected.xml"), "UTF-8"), result));
+        assertTrue(compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/expected.xml"), "UTF-8"), result));
     }
 }

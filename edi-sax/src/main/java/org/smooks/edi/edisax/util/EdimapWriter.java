@@ -61,7 +61,7 @@ import org.smooks.edi.edisax.model.internal.Segment;
 import org.smooks.edi.edisax.model.internal.SegmentGroup;
 import org.smooks.edi.edisax.model.internal.SubComponent;
 import org.smooks.edi.edisax.unedifact.UNEdifactInterchangeParser;
-import org.smooks.support.ClassUtil;
+import org.smooks.support.ClassUtils;
 import org.smooks.support.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -218,12 +218,12 @@ public class EdimapWriter {
     }
 
     private Object getBeanValue(Object bean, String property) {
-        String getterMethodName = ClassUtil.toGetterName(property);
-        Method getterMethod = ClassUtil.getGetterMethod(getterMethodName, bean, null);
+        String getterMethodName = ClassUtils.toGetterName(property);
+        Method getterMethod = ClassUtils.getGetterMethod(getterMethodName, bean, null);
 
         if(getterMethod == null) {
-            getterMethodName = ClassUtil.toIsGetterName(property);
-            getterMethod = ClassUtil.getGetterMethod(getterMethodName, bean, null);
+            getterMethodName = ClassUtils.toIsGetterName(property);
+            getterMethod = ClassUtils.getGetterMethod(getterMethodName, bean, null);
         }
 
         if(getterMethod != null) {

@@ -50,6 +50,7 @@ import org.smooks.support.StreamUtils;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.smooks.support.SmooksUtil.filterAndSerialize;
+import static org.smooks.tck.Assertions.compareCharStreams;
 
 public class EdiFunctionalTestCase {
 
@@ -67,18 +68,18 @@ public class EdiFunctionalTestCase {
 
     @Test
     public void testSmooksConfigGivenParser() throws Exception {
-        smooks.addConfigurations("/smooks-parser-config.xml");
+        smooks.addResourceConfigs("/smooks-parser-config.xml");
         String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream("/data/edi-input.txt"), smooks);
 
-        assertTrue(StreamUtils.compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/expected.xml"), "UTF-8"), result));
+        assertTrue(compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/expected.xml"), "UTF-8"), result));
         smooks.close();
     }
 
     @Test
     public void testSmooksConfigGivenUnparser() throws Exception {
-        smooks.addConfigurations("/smooks-unparser-config.xml");
+        smooks.addResourceConfigs("/smooks-unparser-config.xml");
         String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream("/data/expected.xml"), smooks);
 
-        assertTrue(StreamUtils.compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/edi-input.txt"), "UTF-8"), result));
+        assertTrue(compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/edi-input.txt"), "UTF-8"), result));
     }
 }
