@@ -6,35 +6,35 @@
  * %%
  * Licensed under the terms of the Apache License Version 2.0, or
  * the GNU Lesser General Public License version 3.0 or later.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0 OR LGPL-3.0-or-later
- * 
+ *
  * ======================================================================
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * ======================================================================
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -69,7 +69,7 @@ import java.util.zip.ZipOutputStream;
  * <p/>
  * Takes the set of messages from an {@link DirectoryParser} and generates
  * a Smooks EDI Mapping Model archive that can be written to a zip file or folder.
- * 
+ *
  * @author bardl
  * @author <a href="mailto:tom.fennelly@gmail.com">tom.fennelly@gmail.com</a>
  */
@@ -81,9 +81,9 @@ public class EdiConvertionTool {
      * Write an EDI Mapping Model configuration set from a UN/EDIFACT
      * specification.
      *
-     * @param specification The UN/EDIFACT specification zip file.
+     * @param specification     The UN/EDIFACT specification zip file.
      * @param modelSetOutStream The output zip stream for the generated EDI Mapping Model configuration set.
-     * @param urn The URN for the EDI Mapping model configuration set.
+     * @param urn               The URN for the EDI Mapping model configuration set.
      * @throws IOException Error writing Mapping Model configuration set.
      */
     public static void fromUnEdifactSpec(ZipInputStream specification, ZipOutputStream modelSetOutStream, String urn, boolean useShortName) throws IOException {
@@ -99,7 +99,7 @@ public class EdiConvertionTool {
      * specification.
      *
      * @param specification The UN/EDIFACT specification zip file.
-     * @param urn The URN for the EDI Mapping model configuration set.
+     * @param urn           The URN for the EDI Mapping model configuration set.
      * @return Smooks EDI Mapping model Archive.
      * @throws IOException Error writing Mapping Model configuration set.
      */
@@ -112,14 +112,13 @@ public class EdiConvertionTool {
      * specification.
      *
      * @param specification The UN/EDIFACT specification zip file.
-     * @param urn The URN for the EDI Mapping model configuration set.
-     * @param messages The messages to be included in the generated Archive.
-     *
+     * @param urn           The URN for the EDI Mapping model configuration set.
+     * @param messages      The messages to be included in the generated Archive.
      * @return Smooks EDI Mapping model Archive.
      * @throws IOException Error writing Mapping Model configuration set.
      */
     public static Archive fromUnEdifactSpec(File specification, String urn, String... messages) throws IOException {
-         ZipInputStream definitionZipStream;
+        ZipInputStream definitionZipStream;
 
         try {
             definitionZipStream = new ZipInputStream(new FileInputStream(specification));
@@ -132,9 +131,10 @@ public class EdiConvertionTool {
 
     /**
      * Write an EDI Mapping Model configuration set from the specified EDI Specification Reader.
-     * @param directoryParser The configuration reader for the EDI interchange configuration set.
+     *
+     * @param directoryParser   The configuration reader for the EDI interchange configuration set.
      * @param modelSetOutStream The EDI Mapping Model output Stream.
-     * @param urn The URN for the EDI Mapping model configuration set.
+     * @param urn               The URN for the EDI Mapping model configuration set.
      * @throws IOException Error writing Mapping Model configuration set.
      */
     public static void fromSpec(DirectoryParser directoryParser, ZipOutputStream modelSetOutStream, String urn) throws IOException {
@@ -157,9 +157,9 @@ public class EdiConvertionTool {
      * Write an EDI Mapping Model configuration set from a UN/EDIFACT
      * specification.
      *
-     * @param specification The UN/EDIFACT specification zip file.
+     * @param specification     The UN/EDIFACT specification zip file.
      * @param modelSetOutFolder The output folder for the generated EDI Mapping Model configuration set.
-     * @param urn The URN for the EDI Mapping model configuration set.
+     * @param urn               The URN for the EDI Mapping model configuration set.
      * @throws IOException Error writing Mapping Model configuration set.
      */
     public static void fromUnEdifactSpec(ZipInputStream specification, File modelSetOutFolder, String urn, boolean useShortName) throws IOException {
@@ -172,9 +172,10 @@ public class EdiConvertionTool {
 
     /**
      * Write an EDI Mapping Model configuration set from the specified EDI Specification Reader.
-     * @param directoryParser The configuration reader for the EDI interchange configuration set.
+     *
+     * @param directoryParser   The configuration reader for the EDI interchange configuration set.
      * @param modelSetOutFolder The output folder for the generated EDI Mapping Model configuration set.
-     * @param urn The URN for the EDI Mapping model configuration set.
+     * @param urn               The URN for the EDI Mapping model configuration set.
      * @throws IOException Error writing Mapping Model configuration set.
      */
     public static void fromSpec(DirectoryParser directoryParser, File modelSetOutFolder, String urn) throws IOException {
@@ -200,7 +201,7 @@ public class EdiConvertionTool {
         addModel(ediDirectory.getCommonModel(), pathPrefix, modelListBuilder, messageEntryWriter, archive);
 
         // Add each of the messages...
-        for(Edimap messageModel : ediDirectory.getMessageModels()) {
+        for (Edimap messageModel : ediDirectory.getMessageModels()) {
             addModel(messageModel, pathPrefix, modelListBuilder, messageEntryWriter, archive);
         }
 
@@ -208,7 +209,7 @@ public class EdiConvertionTool {
         Set<EPackage> packages = new ECoreGenerator().generatePackages(ediDirectory);
         String pluginID = "org.smooks.edi.unedifact.unknown";
         if (urn.lastIndexOf(':') > 0) {
-        	pluginID = urn.substring(0, urn.lastIndexOf(':')).replace(':', '.').toLowerCase();
+            pluginID = urn.substring(0, urn.lastIndexOf(':')).replace(':', '.').toLowerCase();
         }
         Archive schemas = SchemaConverter.INSTANCE.createArchive(packages, pluginID, pathPrefix);
         archive.merge(schemas);
@@ -253,55 +254,55 @@ public class EdiConvertionTool {
     }
 
     public static void removeDuplicateSegments(SegmentGroup segmentGroup) {
-        if(segmentGroup instanceof Segment) {
-            removeDuplicateFields(((Segment)segmentGroup).getFields()); 
+        if (segmentGroup instanceof Segment) {
+            removeDuplicateFields(((Segment) segmentGroup).getFields());
         }
 
         List<SegmentGroup> segments = segmentGroup.getSegments();
-        if(segments != null) {
+        if (segments != null) {
             removeDuplicateMappingNodes(segments);
-            for(SegmentGroup childSegmentGroup : segments) {
+            for (SegmentGroup childSegmentGroup : segments) {
                 removeDuplicateSegments(childSegmentGroup);
             }
         }
     }
 
     private static void removeDuplicateFields(List<Field> fields) {
-        if(fields != null && !fields.isEmpty()) {
+        if (fields != null && !fields.isEmpty()) {
             // Remove the duplicates from the fields themselves...
             removeDuplicateMappingNodes(fields);
 
             // Drill down into the field components...
-            for(Field field : fields) {
+            for (Field field : fields) {
                 removeDuplicateComponents(field.getComponents());
             }
         }
     }
 
     private static void removeDuplicateComponents(List<Component> components) {
-        if(components != null && !components.isEmpty()) {
+        if (components != null && !components.isEmpty()) {
             // Remove the duplicates from the components themselves...
             removeDuplicateMappingNodes(components);
 
             // Remove duplicate sub components from each component...
-            for(Component component : components) {
+            for (Component component : components) {
                 removeDuplicateMappingNodes(component.getSubComponents());
             }
         }
     }
 
     private static void removeDuplicateMappingNodes(List mappingNodes) {
-        if(mappingNodes == null || mappingNodes.isEmpty()) {
+        if (mappingNodes == null || mappingNodes.isEmpty()) {
             return;
         }
-        
+
         Set<String> nodeNames = getMappingNodeNames(mappingNodes);
 
-        if(nodeNames.size() < mappingNodes.size()) {
+        if (nodeNames.size() < mappingNodes.size()) {
             // There may be duplicates... find them and number them...
-            for(String nodeName : nodeNames) {
+            for (String nodeName : nodeNames) {
                 int nodeCount = getMappingNodeCount(mappingNodes, nodeName);
-                if(nodeCount > 1) {
+                if (nodeCount > 1) {
                     removeDuplicateMappingNodes(mappingNodes, nodeName);
                 }
             }
@@ -311,11 +312,11 @@ public class EdiConvertionTool {
     private static void removeDuplicateMappingNodes(List mappingNodes, String nodeName) {
         int tagIndex = 1;
 
-        for(Object mappingNodeObj : mappingNodes) {
+        for (Object mappingNodeObj : mappingNodes) {
             MappingNode mappingNode = (MappingNode) mappingNodeObj;
             String xmlTag = mappingNode.getXmltag();
 
-            if(xmlTag != null && xmlTag.equals(nodeName)) {
+            if (xmlTag != null && xmlTag.equals(nodeName)) {
                 mappingNode.setXmltag(xmlTag + MappingNode.INDEXED_NODE_SEPARATOR + tagIndex);
                 tagIndex++;
             }
@@ -325,9 +326,9 @@ public class EdiConvertionTool {
     private static Set<String> getMappingNodeNames(List mappingNodes) {
         Set<String> nodeNames = new LinkedHashSet<String>();
 
-        for(Object mappingNode : mappingNodes) {
+        for (Object mappingNode : mappingNodes) {
             String xmlTag = ((MappingNode) mappingNode).getXmltag();
-            if(xmlTag != null) {
+            if (xmlTag != null) {
                 nodeNames.add(xmlTag);
             }
         }
@@ -338,9 +339,9 @@ public class EdiConvertionTool {
     private static int getMappingNodeCount(List mappingNodes, String nodeName) {
         int nodeCount = 0;
 
-        for(Object mappingNode : mappingNodes) {
+        for (Object mappingNode : mappingNodes) {
             String xmlTag = ((MappingNode) mappingNode).getXmltag();
-            if(xmlTag != null && xmlTag.equals(nodeName)) {
+            if (xmlTag != null && xmlTag.equals(nodeName)) {
                 nodeCount++;
             }
         }

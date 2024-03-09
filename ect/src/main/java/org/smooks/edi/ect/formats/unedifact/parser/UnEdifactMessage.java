@@ -6,35 +6,35 @@
  * %%
  * Licensed under the terms of the Apache License Version 2.0, or
  * the GNU Lesser General Public License version 3.0 or later.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0 OR LGPL-3.0-or-later
- * 
+ *
  * ======================================================================
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * ======================================================================
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -59,6 +59,7 @@ import java.util.regex.Pattern;
 
 /**
  * UnEdifactMessage
+ *
  * @author bardl
  */
 public class UnEdifactMessage {
@@ -103,7 +104,7 @@ public class UnEdifactMessage {
      * Group3 = description
      * Group4 = isMandatory
      * Group5 = max occurance
-     */                  
+     */
     private static final String SEGMENT_REGULAR = "(\\d{4,5})*[-+* XS]*(\\w{3}) *(.*) +([MCmc]) *(\\d+)[ |]*";
 
     /**
@@ -128,7 +129,7 @@ public class UnEdifactMessage {
      * Group1 = id
      * Group2 = name
      * Group4 = isMandatory
-     * Group5 = max occurance 
+     * Group5 = max occurance
      */
     private static final String SEGMENT_GROUP_START = "(\\d{4,5})*[-+* XS]*-* *([S|s]egment [G|g]roup \\d*) *-* +([CMcm]) *(\\d*)[ \\-+|]*";
 
@@ -166,7 +167,7 @@ public class UnEdifactMessage {
     private static final String DELIMITER_NOT_USED = "~";
     private static final String ESCAPE = "?";
     private static final List<String> IGNORE_SEGMENTS = Arrays.asList("UNA", "UNB", "UNG", "UNH", "UNT", "UNZ", "UNE");
-   
+
     private final String type;
     private final String version;
     private final String release;
@@ -211,7 +212,7 @@ public class UnEdifactMessage {
                 ediImport.setNamespace(agency);
                 ediImport.setResource(definitionModel.getDescription().getName() + ".xml");  // TODO: Review with B�rd
                 edimap.getImports().add(ediImport);
-            }  else {
+            } else {
                 segmentDefinitions = getSegmentDefinitions(definitionModel);
             }
 
@@ -251,7 +252,7 @@ public class UnEdifactMessage {
     private Map<String, Segment> getSegmentDefinitions(Edimap definitionModel) {
         Map<String, Segment> result = new HashMap<String, Segment>();
         for (SegmentGroup segmentGroup : definitionModel.getSegments().getSegments()) {
-            result.put(segmentGroup.getSegcode(), (Segment)segmentGroup);
+            result.put(segmentGroup.getSegcode(), (Segment) segmentGroup);
         }
         return result;
     }
@@ -268,7 +269,7 @@ public class UnEdifactMessage {
             throw new EdiParseException("Error reading first line of UN/EDIFACT message.", e);
         }
 
-        if(line == null) {
+        if (line == null) {
             throw new EdiParseException("Not a valid UN/EDIFACT message definition. First line doe not match pattern '" + LEGAL_MESSAGE + "'.");
         }
     }
@@ -376,7 +377,7 @@ public class UnEdifactMessage {
             } else if (line.matches(ANNEX)) {
                 return 0;
             }
-            
+
             line = reader.readLine();
         }
         return 0;
@@ -397,7 +398,7 @@ public class UnEdifactMessage {
         SegmentGroup group = new SegmentGroup();
         group.setXmltag(XmlTagEncoder.encode(name.trim()));
         String test = definitions.get(id);
-        
+
         group.setDocumentation(test.trim());
         group.setMinOccurs(mandatory.equals("M") ? 1 : 0);
         group.setMaxOccurs(Integer.valueOf(maxOccurance));
@@ -416,7 +417,7 @@ public class UnEdifactMessage {
         if (!isSplitIntoImport) {
             Segment importedSegment = segmentDefinitions.get(segcode);
 
-            if(importedSegment == null) {
+            if (importedSegment == null) {
                 throw new EdiParseException("Unknown segment code '" + segcode + "'.");
             }
 

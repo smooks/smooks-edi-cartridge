@@ -48,85 +48,85 @@
     <import file="dfdl-1.0.xsd-smooks.xml"/>
 
     <resource-config selector="edi:parser">
-        <resource>org.smooks.engine.resource.extension.NewResourceConfig</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.NewResourceConfig</resource>
         <param name="resource">org.smooks.cartridges.edi.parser.EdiParser</param>
     </resource-config>
     <resource-config selector="edi:parser">
-        <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.SetOnResourceConfig</resource>
         <param name="setOn">dataProcessorFactory</param>
         <param name="value">org.smooks.cartridges.dfdl.DataProcessorFactory</param>
     </resource-config>
     <resource-config selector="edi:parser">
-        <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.SetOnResourceConfig</resource>
         <param name="setOn">selector</param>
         <param name="value">org.xml.sax.driver</param>
     </resource-config>
     <resource-config selector="edi:parser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">indent</param>
     </resource-config>
 
     <resource-config selector="edi:unparser">
-        <resource>org.smooks.engine.resource.extension.NewResourceConfig</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.NewResourceConfig</resource>
     </resource-config>
     <resource-config selector="edi:unparser">
-        <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.SetOnResourceConfig</resource>
         <param name="setOn">resourceType</param>
         <param name="value">edi</param>
     </resource-config>
     <resource-config selector="edi:unparser">
-        <resource>org.smooks.engine.resource.extension.SetOnResourceConfig</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.SetOnResourceConfig</resource>
         <param name="setOn">dataProcessorFactory</param>
         <param name="value">org.smooks.cartridges.dfdl.DataProcessorFactory</param>
     </resource-config>
     <resource-config selector="edi:unparser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">unparseOnNode</param>
         <param name="mapTo">selector</param>
     </resource-config>
 
     <resource-config selector="edi:parser,edi:unparser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">schemaUri</param>
     </resource-config>
     <resource-config selector="edi:parser,edi:unparser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">cacheOnDisk</param>
     </resource-config>
     <resource-config selector="edi:parser,edi:unparser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">debugging</param>
     </resource-config>
     <resource-config selector="edi:parser,edi:unparser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">validationMode</param>
     </resource-config>
     <resource-config selector="edi:parser,edi:unparser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">segmentTerminator</param>
     </resource-config>
     <resource-config selector="edi:parser,edi:unparser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">dataElementSeparator</param>
     </resource-config>
     <resource-config selector="edi:parser,edi:unparser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">compositeDataElementSeparator</param>
     </resource-config>
     <resource-config selector="edi:parser,edi:unparser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">escapeCharacter</param>
     </resource-config>
     <resource-config selector="edi:parser,edi:unparser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">repetitionSeparator</param>
     </resource-config>
     <resource-config selector="edi:parser,edi:unparser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">decimalSign</param>
     </resource-config>
     <resource-config selector="edi:parser,edi:unparser">
-        <resource>org.smooks.engine.resource.extension.MapToResourceConfigFromAttribute</resource>
+        <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">triadSeparator</param>
     </resource-config>
 </smooks-resource-list>
