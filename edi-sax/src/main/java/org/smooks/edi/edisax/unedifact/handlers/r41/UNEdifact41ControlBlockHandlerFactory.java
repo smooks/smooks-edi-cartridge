@@ -6,35 +6,35 @@
  * %%
  * Licensed under the terms of the Apache License Version 2.0, or
  * the GNU Lesser General Public License version 3.0 or later.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0 OR LGPL-3.0-or-later
- * 
+ *
  * ======================================================================
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * ======================================================================
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -61,7 +61,7 @@ import java.util.List;
 
 /**
  * UN/EDIFACT control block handler factory (Version 4, Release 1).
- * 
+ *
  * @author <a href="mailto:tom.fennelly@gmail.com">tom.fennelly@gmail.com</a>
  */
 public class UNEdifact41ControlBlockHandlerFactory implements ControlBlockHandlerFactory {
@@ -76,7 +76,7 @@ public class UNEdifact41ControlBlockHandlerFactory implements ControlBlockHandle
     private static Segment uneSegment;
     private static Segment unhSegment;
     private static Segment untSegment;
-    private static HashMap<String,Charset> toCharsetMapping;
+    private static HashMap<String, Charset> toCharsetMapping;
 
     private HierarchyChangeListener hierarchyChangeListener;
 
@@ -90,15 +90,15 @@ public class UNEdifact41ControlBlockHandlerFactory implements ControlBlockHandle
 
     public ControlBlockHandler getControlBlockHandler(String segCode) throws SAXException {
 
-        if(segCode.equals("UNH")) {
+        if (segCode.equals("UNH")) {
             return new UNHHandler(unhSegment, untSegment, hierarchyChangeListener);
-        } else if(segCode.equals("UNG")) {
+        } else if (segCode.equals("UNG")) {
             return new UNGHandler(ungSegment, uneSegment);
-        } else if(segCode.equals("UNA")) {
+        } else if (segCode.equals("UNA")) {
             return new UNAHandler();
-        } else if(segCode.equals("UNB")) {
+        } else if (segCode.equals("UNB")) {
             return new UNBHandler(unbSegment, unzSegment, toCharsetMapping);
-        } else if(segCode.charAt(0) == 'U') {
+        } else if (segCode.charAt(0) == 'U') {
             return new GenericHandler();
         }
 
@@ -109,18 +109,18 @@ public class UNEdifact41ControlBlockHandlerFactory implements ControlBlockHandle
         try {
             Edimap controlBlockSegments = EDIConfigDigester.digestConfig(UNEdifact41ControlBlockHandlerFactory.class.getResourceAsStream("v41-segments.xml"));
             List<SegmentGroup> segments = controlBlockSegments.getSegments().getSegments();
-            for(SegmentGroup segment : segments) {
-                if(segment.getSegcode().equals("UNB")) {
+            for (SegmentGroup segment : segments) {
+                if (segment.getSegcode().equals("UNB")) {
                     unbSegment = (Segment) segment;
-                } else if(segment.getSegcode().equals("UNZ")) {
+                } else if (segment.getSegcode().equals("UNZ")) {
                     unzSegment = (Segment) segment;
-                } else if(segment.getSegcode().equals("UNG")) {
+                } else if (segment.getSegcode().equals("UNG")) {
                     ungSegment = (Segment) segment;
-                } else if(segment.getSegcode().equals("UNE")) {
+                } else if (segment.getSegcode().equals("UNE")) {
                     uneSegment = (Segment) segment;
-                } else if(segment.getSegcode().equals("UNH")) {
+                } else if (segment.getSegcode().equals("UNH")) {
                     unhSegment = (Segment) segment;
-                } else if(segment.getSegcode().equals("UNT")) {
+                } else if (segment.getSegcode().equals("UNT")) {
                     untSegment = (Segment) segment;
                 }
             }
@@ -163,7 +163,7 @@ public class UNEdifact41ControlBlockHandlerFactory implements ControlBlockHandle
     }
 
     private static void addCharsetMapping(String code, String charsetName) {
-        if(Charset.isSupported(charsetName)) {
+        if (Charset.isSupported(charsetName)) {
             toCharsetMapping.put(code, Charset.forName(charsetName));
         } else {
             LOGGER.debug("Unsupported character set '" + charsetName + "'.  Cannot support for '" + code + "' if defined on the syntaxIdentifier field on the UNB segment.  Check the JVM version etc.");

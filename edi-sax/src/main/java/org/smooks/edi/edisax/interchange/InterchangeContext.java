@@ -6,35 +6,35 @@
  * %%
  * Licensed under the terms of the Apache License Version 2.0, or
  * the GNU Lesser General Public License version 3.0 or later.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0 OR LGPL-3.0-or-later
- * 
+ *
  * ======================================================================
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * ======================================================================
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -59,16 +59,16 @@ import java.util.Map;
 
 /**
  * EDI message interchange context object.
- * 
+ *
  * @author <a href="mailto:tom.fennelly@gmail.com">tom.fennelly@gmail.com</a>
  */
 public class InterchangeContext {
 
     public static final String INTERCHANGE_MESSAGE_BLOCK_ELEMENT_NAME = "interchangeMessage";
 
-	private final BufferedSegmentReader segmentReader;
-	private final ContentHandler contentHandler;
-    private final Map<String,Boolean> features;
+    private final BufferedSegmentReader segmentReader;
+    private final ContentHandler contentHandler;
+    private final Map<String, Boolean> features;
     private final EDIParser controlSegmentParser;
     public Integer indentDepth = 0;
     private final ControlBlockHandlerFactory controlBlockHandlerFactory;
@@ -78,35 +78,35 @@ public class InterchangeContext {
     private boolean containerManagedNamespaceStack = false;
 
     /**
-	 * Public constructor.
-	 *
-     * @param segmentReader The interchange {@link BufferedSegmentReader} instance.
-     * @param registry The {@link EdifactModel Mapping Models} registry.
-     * @param contentHandler The {@link ContentHandler content handler} instance to receive the interchange events.
-     * @param parserFeatures Parser features.
+     * Public constructor.
+     *
+     * @param segmentReader              The interchange {@link BufferedSegmentReader} instance.
+     * @param registry                   The {@link EdifactModel Mapping Models} registry.
+     * @param contentHandler             The {@link ContentHandler content handler} instance to receive the interchange events.
+     * @param parserFeatures             Parser features.
      * @param controlBlockHandlerFactory Control Block Handler Factory.
-     * @param validate Validate the data types of the EDI message data as defined in the mapping model.
+     * @param validate                   Validate the data types of the EDI message data as defined in the mapping model.
      */
-	public InterchangeContext(BufferedSegmentReader segmentReader, MappingsRegistry registry, ContentHandler contentHandler, Map<String, Boolean> parserFeatures, ControlBlockHandlerFactory controlBlockHandlerFactory, NamespaceDeclarationStack namespaceDeclarationStack, boolean validate) {
-		AssertArgument.isNotNull(segmentReader, "segmentReader");
-		AssertArgument.isNotNull(registry, "registry");
-		AssertArgument.isNotNull(contentHandler, "contentHandler");
+    public InterchangeContext(BufferedSegmentReader segmentReader, MappingsRegistry registry, ContentHandler contentHandler, Map<String, Boolean> parserFeatures, ControlBlockHandlerFactory controlBlockHandlerFactory, NamespaceDeclarationStack namespaceDeclarationStack, boolean validate) {
+        AssertArgument.isNotNull(segmentReader, "segmentReader");
+        AssertArgument.isNotNull(registry, "registry");
+        AssertArgument.isNotNull(contentHandler, "contentHandler");
         AssertArgument.isNotNull(controlBlockHandlerFactory, "controlBlockHandlerFactory");
-		this.segmentReader = segmentReader;
-		this.registry = registry;
-		this.contentHandler = contentHandler;
+        this.segmentReader = segmentReader;
+        this.registry = registry;
+        this.contentHandler = contentHandler;
         this.features = parserFeatures;
         this.controlBlockHandlerFactory = controlBlockHandlerFactory;
-		this.validate = validate;
+        this.validate = validate;
         this.namespaceDeclarationStack = namespaceDeclarationStack;
 
-		controlSegmentParser = new EDIParser();
-		controlSegmentParser.setBufferedSegmentReader(segmentReader);
-		controlSegmentParser.setContentHandler(contentHandler);
-		controlSegmentParser.setIndentDepth(indentDepth);
+        controlSegmentParser = new EDIParser();
+        controlSegmentParser.setBufferedSegmentReader(segmentReader);
+        controlSegmentParser.setContentHandler(contentHandler);
+        controlSegmentParser.setIndentDepth(indentDepth);
 
         if (this.namespaceDeclarationStack == null) {
-            this.namespaceDeclarationStack= new NamespaceDeclarationStack();
+            this.namespaceDeclarationStack = new NamespaceDeclarationStack();
         } else {
             this.containerManagedNamespaceStack = true;
         }
@@ -124,16 +124,16 @@ public class InterchangeContext {
     }
 
     public BufferedSegmentReader getSegmentReader() {
-		return segmentReader;
-	}
+        return segmentReader;
+    }
 
     public ContentHandler getContentHandler() {
-		return contentHandler;
-	}
+        return contentHandler;
+    }
 
     public boolean isValidate() {
-		return validate;
-	}
+        return validate;
+    }
 
     public String getNamespace() {
         return controlBlockHandlerFactory.getNamespace();
@@ -144,33 +144,33 @@ public class InterchangeContext {
     }
 
     public EDIParser newParser(EdifactModel mappingModel) {
-		EDIParser parser = new EDIParser();
+        EDIParser parser = new EDIParser();
 
-		parser.setContentHandler(contentHandler);
-		parser.setMappingModel(mappingModel);
-		parser.setBufferedSegmentReader(segmentReader);
-		parser.setIndentDepth(indentDepth);
+        parser.setContentHandler(contentHandler);
+        parser.setMappingModel(mappingModel);
+        parser.setBufferedSegmentReader(segmentReader);
+        parser.setIndentDepth(indentDepth);
         parser.getFeatures().putAll(features);
-		parser.setFeature(EDIParser.FEATURE_VALIDATE, validate);
+        parser.setFeature(EDIParser.FEATURE_VALIDATE, validate);
         parser.setNamespaceDeclarationStack(namespaceDeclarationStack);
 
-		return parser;
-	}
+        return parser;
+    }
 
     public EDIParser getControlSegmentParser() {
-		return controlSegmentParser;
-	}
+        return controlSegmentParser;
+    }
 
     public void mapControlSegment(Segment controlSegment, boolean clearSegmentBuffer) throws SAXException {
-		controlSegmentParser.startElement(controlSegment, true);
-		controlSegmentParser.mapFields(segmentReader.getCurrentSegmentFields(), controlSegment);
-		controlSegmentParser.endElement(controlSegment, true);
+        controlSegmentParser.startElement(controlSegment, true);
+        controlSegmentParser.mapFields(segmentReader.getCurrentSegmentFields(), controlSegment);
+        controlSegmentParser.endElement(controlSegment, true);
 
-		// And clear the buffer... we're finished with this data...
-		if(clearSegmentBuffer) {
-			segmentReader.getSegmentBuffer().setLength(0);
-		}
-	}
+        // And clear the buffer... we're finished with this data...
+        if (clearSegmentBuffer) {
+            segmentReader.getSegmentBuffer().setLength(0);
+        }
+    }
 
     public void pushDelimiters(Delimiters delimiters) {
         segmentReader.pushDelimiters(delimiters);
@@ -186,8 +186,8 @@ public class InterchangeContext {
      * @return
      */
     public MappingsRegistry getRegistry() {
-		return registry;
-	}
+        return registry;
+    }
 
     public boolean isContainerManagedNamespaceStack() {
         return containerManagedNamespaceStack;

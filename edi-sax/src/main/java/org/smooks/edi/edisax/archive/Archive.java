@@ -6,35 +6,35 @@
  * %%
  * Licensed under the terms of the Apache License Version 2.0, or
  * the GNU Lesser General Public License version 3.0 or later.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0 OR LGPL-3.0-or-later
- * 
+ *
  * ======================================================================
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * ======================================================================
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -79,7 +79,7 @@ public class Archive {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Archive.class);
 
-	private final String archiveName;
+    private final String archiveName;
     private File tmpDir;
     private final LinkedHashMap<String, File> entries = new LinkedHashMap<String, File>();
 
@@ -93,6 +93,7 @@ public class Archive {
 
     /**
      * Public constructor.
+     *
      * @param archiveName The archive name of the deployment.
      */
     public Archive(String archiveName) {
@@ -103,6 +104,7 @@ public class Archive {
 
     /**
      * Public constructor.
+     *
      * @param archiveStream Archive stream containing initial archive entries.
      * @throws IOException Error reading from zip stream.
      */
@@ -114,7 +116,8 @@ public class Archive {
 
     /**
      * Public constructor.
-     * @param archiveName The archive name of the deployment.
+     *
+     * @param archiveName   The archive name of the deployment.
      * @param archiveStream Archive stream containing initial archive entries.
      * @throws IOException Error reading from zip stream.
      */
@@ -127,6 +130,7 @@ public class Archive {
 
     /**
      * Get the name of the deployment associated with this archive.
+     *
      * @return The name of the deployment.
      */
     public String getArchiveName() {
@@ -161,6 +165,7 @@ public class Archive {
 
     /**
      * Add the supplied class as an entry in the deployment.
+     *
      * @param clazz The class to be added.
      * @return This archive instance.
      * @throws IOException Failed to read class from classpath.
@@ -219,7 +224,7 @@ public class Archive {
         AssertArgument.isNotNullAndNotEmpty(path, "path");
 
         path = path.trim();
-        if(path.endsWith("/")) {
+        if (path.endsWith("/")) {
             entries.put(trimLeadingSlash(path), null);
         } else {
             entries.put(trimLeadingSlash(path) + "/", null);
@@ -231,7 +236,7 @@ public class Archive {
     /**
      * Add the specified classpath resource as an entry in the deployment.
      *
-     * @param path The target path of the entry when added to the archive.
+     * @param path     The target path of the entry when added to the archive.
      * @param resource The classpath resource.
      * @return This archive instance.
      * @throws IOException Failed to read resource from classpath.
@@ -241,7 +246,7 @@ public class Archive {
         AssertArgument.isNotNull(resource, "resource");
 
         InputStream resourceStream = getClass().getResourceAsStream(resource);
-        if(resourceStream == null) {
+        if (resourceStream == null) {
             throw new IOException("Classpath resource '" + resource + "' no found.");
         } else {
             addEntry(path, resourceStream);
@@ -268,6 +273,7 @@ public class Archive {
 
     /**
      * Add the entries from the supplied {@link ZipInputStream} to this archive instance.
+     *
      * @param zipStream The zip stream.
      * @return This archive instance.
      * @throws IOException Error reading zip stream.
@@ -281,11 +287,11 @@ public class Archive {
             byte[] byteReadBuffer = new byte[512];
             int byteReadCount;
 
-            while(zipEntry != null) {
+            while (zipEntry != null) {
                 if (zipEntry.isDirectory()) {
                     addEntry(zipEntry.getName(), (byte[]) null);
                 } else {
-                    while((byteReadCount = zipStream.read(byteReadBuffer)) != -1) {
+                    while ((byteReadCount = zipStream.read(byteReadBuffer)) != -1) {
                         outByteStream.write(byteReadBuffer, 0, byteReadCount);
                     }
                     addEntry(zipEntry.getName(), outByteStream.toByteArray());
@@ -329,6 +335,7 @@ public class Archive {
 
     /**
      * Get the name of the entry at the specified index in the archive.
+     *
      * @param index The index.
      * @return The entry name at that index.
      */
@@ -337,7 +344,7 @@ public class Archive {
         int i = 0;
 
         for (Entry<String, File> entry : entrySet) {
-            if(i == index) {
+            if (i == index) {
                 return entry.getKey();
             }
 
@@ -349,6 +356,7 @@ public class Archive {
 
     /**
      * Get the value of the entry at the specified index in the archive.
+     *
      * @param index The index.
      * @return The entry value at that index.
      */
@@ -357,7 +365,7 @@ public class Archive {
         int i = 0;
 
         for (Entry<String, File> entry : entrySet) {
-            if(i == index) {
+            if (i == index) {
                 File entryFile = entry.getValue();
 
                 if (entryFile != null) {
@@ -379,6 +387,7 @@ public class Archive {
 
     /**
      * Get an Archive entries bytes.
+     *
      * @param resName Entry resource name.
      * @return The bytes, or null if the entry is not in the Archive.
      */
@@ -398,6 +407,7 @@ public class Archive {
 
     /**
      * Get an Archive entry file.
+     *
      * @param resName Entry resource name.
      * @return The entry File, or null if the entry is not in the Archive.
      */
@@ -408,6 +418,7 @@ public class Archive {
 
     /**
      * Get an Archive entry resource URL.
+     *
      * @param resName Entry resource name.
      * @return The entry resource URL, or null if the entry is not in the Archive.
      */
@@ -430,6 +441,7 @@ public class Archive {
      * for the data contained in the streams supplied entries arg.
      * specifying the entry name and the value is a InputStream containing
      * the entry data.
+     *
      * @param archiveStream The archive output stream.
      * @throws IOException Write failure.
      */
@@ -453,16 +465,17 @@ public class Archive {
 
     /**
      * Output the entries to the specified output folder on the file system.
+     *
      * @param outputFolder The target output folder.
      * @throws IOException Write failure.
      */
     public void toFileSystem(File outputFolder) throws IOException {
         AssertArgument.isNotNull(outputFolder, "outputFolder");
 
-        if(outputFolder.isFile()) {
+        if (outputFolder.isFile()) {
             throw new IOException("Cannot write Archive entries to '" + outputFolder.getAbsolutePath() + "'.  This is a normal file i.e. not a directory.");
         }
-        if(!outputFolder.exists()) {
+        if (!outputFolder.exists()) {
             outputFolder.mkdirs();
         }
 
@@ -485,6 +498,7 @@ public class Archive {
     /**
      * Create a {@link ZipInputStream} for the entries defined in this
      * archive.
+     *
      * @return The {@link ZipInputStream} for the entries in this archive.
      * @throws IOException Failed to create stream.
      */
@@ -500,14 +514,14 @@ public class Archive {
         File manifestFile = entries.get(JarFile.MANIFEST_NAME);
 
         // Always write the jar manifest as the first entry, if it exists...
-        if(manifestFile != null) {
+        if (manifestFile != null) {
             byte[] manifest = FileUtils.readFile(manifestFile);
             writeEntry(JarFile.MANIFEST_NAME, manifest, archiveStream);
         }
 
         Set<Entry<String, File>> entrySet = entries.entrySet();
         for (Entry<String, File> entry : entrySet) {
-            if(!entry.getKey().equals(JarFile.MANIFEST_NAME)) {
+            if (!entry.getKey().equals(JarFile.MANIFEST_NAME)) {
                 File file = entry.getValue();
 
                 if (file != null && !file.isDirectory()) {
@@ -522,7 +536,7 @@ public class Archive {
     private void writeEntry(String entryName, byte[] entryValue, ZipOutputStream archiveStream) throws IOException {
         try {
             archiveStream.putNextEntry(new ZipEntry(entryName));
-            if(entryValue != null) {
+            if (entryValue != null) {
                 archiveStream.write(entryValue);
             }
             archiveStream.closeEntry();
@@ -533,8 +547,8 @@ public class Archive {
 
     private String trimLeadingSlash(String path) {
         StringBuilder builder = new StringBuilder(path);
-        while(builder.length() > 0) {
-            if(builder.charAt(0) == '/') {
+        while (builder.length() > 0) {
+            if (builder.charAt(0) == '/') {
                 builder.deleteCharAt(0);
             } else {
                 break;
@@ -561,8 +575,7 @@ public class Archive {
         return this;
     }
 
-    public boolean contains(String path)
-    {
+    public boolean contains(String path) {
         return entries.containsKey(path);
     }
 
@@ -585,11 +598,11 @@ public class Archive {
 
         static {
             Runtime.getRuntime().addShutdownHook(
-                new Thread() {
-                    public void run() {
-                        deleteDirs();
+                    new Thread() {
+                        public void run() {
+                            deleteDirs();
+                        }
                     }
-                }
             );
 
             dirsToDelete = new CopyOnWriteArrayList<String>();

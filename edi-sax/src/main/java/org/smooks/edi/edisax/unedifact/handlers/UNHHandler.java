@@ -6,35 +6,35 @@
  * %%
  * Licensed under the terms of the Apache License Version 2.0, or
  * the GNU Lesser General Public License version 3.0 or later.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0 OR LGPL-3.0-or-later
- * 
+ *
  * ======================================================================
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * ======================================================================
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -62,6 +62,7 @@ import javax.xml.XMLConstants;
 
 /**
  * UNH Segment Handler.
+ *
  * @author <a href="mailto:tom.fennelly@gmail.com">tom.fennelly@gmail.com</a>
  */
 public class UNHHandler implements ControlBlockHandler {
@@ -79,16 +80,16 @@ public class UNHHandler implements ControlBlockHandler {
     }
 
     public void process(InterchangeContext interchangeContext) throws IOException, SAXException {
-		BufferedSegmentReader segmentReader = interchangeContext.getSegmentReader();
-		MappingsRegistry registry = interchangeContext.getRegistry();
+        BufferedSegmentReader segmentReader = interchangeContext.getSegmentReader();
+        MappingsRegistry registry = interchangeContext.getRegistry();
 
-		// Move to the end of the UNH segment and map it's fields..
-		segmentReader.moveToNextSegment(false);
+        // Move to the end of the UNH segment and map it's fields..
+        segmentReader.moveToNextSegment(false);
 
-		// Select the mapping model to use for this message...
-		String[] fields = segmentReader.getCurrentSegmentFields();
-		String messageName = fields[2];
-		EdifactModel mappingModel = registry.getMappingModel(messageName, segmentReader.getDelimiters());
+        // Select the mapping model to use for this message...
+        String[] fields = segmentReader.getCurrentSegmentFields();
+        String messageName = fields[2];
+        EdifactModel mappingModel = registry.getMappingModel(messageName, segmentReader.getDelimiters());
         Edimap ediMap = mappingModel.getEdimap();
 
         Description description = ediMap.getDescription();
@@ -96,9 +97,9 @@ public class UNHHandler implements ControlBlockHandler {
         String namespace = description.getNamespace();
         String commonNS = null;
         String messageNSPrefix = null;
-        if(namespace != null && !namespace.equals(XMLConstants.NULL_NS_URI)) {
+        if (namespace != null && !namespace.equals(XMLConstants.NULL_NS_URI)) {
             int nameComponentIndex = namespace.lastIndexOf(":");
-            if(nameComponentIndex != -1) {
+            if (nameComponentIndex != -1) {
                 commonNS = namespace.substring(0, nameComponentIndex) + ":common";
                 messageNSPrefix = description.getName().toLowerCase();
                 attrs.addAttribute(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, "c", "xmlns:c", "CDATA", commonNS);
@@ -106,39 +107,39 @@ public class UNHHandler implements ControlBlockHandler {
             }
         }
 
-		interchangeContext.getControlSegmentParser().startElement(InterchangeContext.INTERCHANGE_MESSAGE_BLOCK_ELEMENT_NAME, unhSegment.getNamespace(), true, attrs);
+        interchangeContext.getControlSegmentParser().startElement(InterchangeContext.INTERCHANGE_MESSAGE_BLOCK_ELEMENT_NAME, unhSegment.getNamespace(), true, attrs);
         interchangeContext.mapControlSegment(unhSegment, false);
 
-		// Map the message... stopping at the UNT segment...
-		try {
-			EDIParser parser = interchangeContext.newParser(mappingModel);
+        // Map the message... stopping at the UNT segment...
+        try {
+            EDIParser parser = interchangeContext.newParser(mappingModel);
 
-			segmentReader.setSegmentListener(untSegmentListener);
+            segmentReader.setSegmentListener(untSegmentListener);
 
-            if(hierarchyChangeListener != null) {
+            if (hierarchyChangeListener != null) {
                 hierarchyChangeListener.attachXMLReader(parser);
             } else if (!interchangeContext.isContainerManagedNamespaceStack()) {
                 interchangeContext.getNamespaceDeclarationStack().pushReader(parser);
             }
 
             parser.parse();
-		} finally {
-			segmentReader.setSegmentListener(null);
-            if(hierarchyChangeListener != null) {
+        } finally {
+            segmentReader.setSegmentListener(null);
+            if (hierarchyChangeListener != null) {
                 hierarchyChangeListener.detachXMLReader();
             } else if (!interchangeContext.isContainerManagedNamespaceStack()) {
                 interchangeContext.getNamespaceDeclarationStack().popReader();
             }
-		}
+        }
 
-		// We're at the end of the UNT segment now.  See the UNTSegmentListener below.
+        // We're at the end of the UNT segment now.  See the UNTSegmentListener below.
 
-		// Map the UNT segment...
-		interchangeContext.mapControlSegment(untSegment, true);
-		segmentReader.getSegmentBuffer().setLength(0);
+        // Map the UNT segment...
+        interchangeContext.mapControlSegment(untSegment, true);
+        segmentReader.getSegmentBuffer().setLength(0);
 
-		interchangeContext.getControlSegmentParser().endElement(InterchangeContext.INTERCHANGE_MESSAGE_BLOCK_ELEMENT_NAME, unhSegment.getNamespace(), true);
-	}
+        interchangeContext.getControlSegmentParser().endElement(InterchangeContext.INTERCHANGE_MESSAGE_BLOCK_ELEMENT_NAME, unhSegment.getNamespace(), true);
+    }
 
     private static class UNTSegmentListener implements BufferedSegmentListener {
 
