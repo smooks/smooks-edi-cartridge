@@ -121,7 +121,7 @@ public class BufferedSegmentReader {
 
     /**
      * Change the encoding used to read the underlying EDI data stream.
-     * <p/>
+     * <br><br>
      * {@link #mark()} should have been called first.
      *
      * @param encoding The new encoding.
@@ -184,7 +184,7 @@ public class BufferedSegmentReader {
 
     /**
      * Restore the parent delimiters set.
-     * <p/>
+     * <br><br>
      * Be sure to {@link #getDelimitersStack() get the delimiters stack} and check
      * that it is not empty before popping.
      */
@@ -203,7 +203,7 @@ public class BufferedSegmentReader {
 
     /**
      * Set ignore new lines in the EDI Stream.
-     * <p/>
+     * <br><br>
      * Some EDI messages are formatted with new lines for readability and so the
      * new line characters should be ignored.
      *
@@ -233,7 +233,7 @@ public class BufferedSegmentReader {
 
     /**
      * Peek a fixed number of characters from the input source.
-     * <p/>
+     * <br><br>
      * Peek differs from {@link #read(int)} in that it leaves the
      * characters in the segment buffer.
      *
@@ -249,7 +249,7 @@ public class BufferedSegmentReader {
 
     /**
      * Peek a fixed number of characters from the input source.
-     * <p/>
+     * <br><br>
      * Peek differs from {@link #read(int)} in that it leaves the
      * characters in the segment buffer.
      *
@@ -307,7 +307,7 @@ public class BufferedSegmentReader {
 
     /**
      * Move to the next EDI segment.
-     * <p/>
+     * <br><br>
      * Simply reads and buffers the next EDI segment.  Clears the current contents of
      * the buffer before reading.
      *
@@ -320,7 +320,7 @@ public class BufferedSegmentReader {
 
     /**
      * Move to the next EDI segment.
-     * <p/>
+     * <br><br>
      * Simply reads and buffers the next EDI segment.
      *
      * @param clearBuffer Clear the segment buffer before reading.
@@ -467,7 +467,7 @@ public class BufferedSegmentReader {
 
     /**
      * Get the current segment "number".
-     * <p/>
+     * <br><br>
      * The first segment is "segment number 1".
      *
      * @return The "number" of the current segment.

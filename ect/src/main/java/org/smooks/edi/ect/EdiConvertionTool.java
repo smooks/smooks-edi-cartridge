@@ -66,7 +66,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * EDI Convertion Tool.
- * <p/>
+ * <br><br>
  * Takes the set of messages from an {@link DirectoryParser} and generates
  * a Smooks EDI Mapping Model archive that can be written to a zip file or folder.
  *
@@ -104,7 +104,7 @@ public class EdiConvertionTool {
      * @throws IOException Error writing Mapping Model configuration set.
      */
     public static Archive fromUnEdifactSpec(File specification, String urn) throws IOException {
-        return fromUnEdifactSpec(specification, urn, null);
+        return fromUnEdifactSpec(specification, urn, (String) null);
     }
 
     /**

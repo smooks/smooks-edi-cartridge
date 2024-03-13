@@ -214,7 +214,7 @@ public class Archive {
 
     /**
      * Add an "empty" entry in the deployment.
-     * <p/>
+     * <br><br>
      * Equivalent to adding an empty folder.
      *
      * @param path The target path of the entry when added to the archive.
@@ -323,7 +323,7 @@ public class Archive {
 
     /**
      * Get the archive entries.
-     * <p/>
+     * <br><br>
      * The returned map entries are ordered in line with the order in which they were added
      * to the archive.
      *
