@@ -44,7 +44,7 @@ package org.smooks.edi.edisax;
 
 import org.smooks.resource.URIResourceLocator;
 import org.smooks.support.StreamUtils;
-import org.smooks.tck.TextUtils;
+import org.smooks.testkit.TextUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 

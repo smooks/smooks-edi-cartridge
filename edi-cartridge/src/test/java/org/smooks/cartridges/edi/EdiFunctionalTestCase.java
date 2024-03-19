@@ -50,7 +50,7 @@ import org.smooks.support.StreamUtils;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.smooks.support.SmooksUtil.filterAndSerialize;
-import static org.smooks.tck.Assertions.compareCharStreams;
+import static org.smooks.testkit.Assertions.compareCharStreams;
 
 public class EdiFunctionalTestCase {
 
