@@ -197,7 +197,7 @@ public class EdifactModel {
 
     /**
      * Set a set of models that are associated with this model instance.
-     * <p/>
+     * <br><br>
      * An associate set of models could be (for example) the other models in
      * a UN/EDIFACT model set, or some other interchange type.
      *

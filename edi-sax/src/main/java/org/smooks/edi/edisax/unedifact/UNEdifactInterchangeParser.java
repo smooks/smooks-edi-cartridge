@@ -174,7 +174,7 @@ public class UNEdifactInterchangeParser implements XMLReader, NamespaceDeclarati
 
     /**
      * Set the EDI mapping model to be used in all subsequent parse operations.
-     * <p/>
+     * <br><br>
      * The model can be generated through a call to the {@link EDIParser}.
      *
      * @param registry The mapping model registry.

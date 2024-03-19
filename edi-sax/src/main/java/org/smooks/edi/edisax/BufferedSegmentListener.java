@@ -44,7 +44,7 @@ package org.smooks.edi.edisax;
 
 /**
  * Buffered Segment listener.
- * <p/>
+ * <br><br>
  * Implementations of this interface can control when and how the {@link BufferedSegmentReader#moveToNextSegment()}
  * method returns true (segment exists) or false (segment does not exist).
  *

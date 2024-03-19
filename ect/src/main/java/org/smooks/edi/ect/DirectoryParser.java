@@ -88,7 +88,7 @@ public interface DirectoryParser {
 
     /**
      * Get the EDI Mapping Model for the named message.
-     * <p/>
+     * <br><br>
      * The Mapping Model is constructed after converting/translating the
      * message definition in the specification.  This is the "normalized"
      * definition of any EDI message in Smooks.  From the EDI Mapping Model,
@@ -110,7 +110,7 @@ public interface DirectoryParser {
 
     /**
      * Get the {@link EdiDirectory} instance for specification.
-     * <p/>
+     * <br><br>
      * Implementations should cache this instance.
      *
      * @param includeMessages Messages to include.

@@ -115,7 +115,8 @@
                              nilKind="literalValue"
                              useNilForDefault="no"
                              floating="no"
-                             binaryNumberRep="binary">
+                             binaryNumberRep="binary"
+                             encodingErrorPolicy="replace">
                 </dfdl:format>
             </dfdl:defineFormat>
 
