@@ -150,7 +150,7 @@
                 <plugin>
                     <groupId>org.apache.cxf</groupId>
                     <artifactId>cxf-xjc-plugin</artifactId>
-                    <version>4.0.0</version>
+                    <version>4.0.1</version>
                     <configuration>
                         <sourceRoot>${project.build.directory}/generated-sources</sourceRoot>
                         <extensions>
