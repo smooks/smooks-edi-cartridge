@@ -69,7 +69,7 @@
                              textBooleanJustification="left"
                              sequenceKind="ordered"
                              choiceLengthKind="implicit"
-                             separator="" separatorPolicy="suppressed" separatorPosition="infix"
+                             separator="" separatorSuppressionPolicy="anyEmpty" separatorPosition="infix"
                              initiator=""
                              terminator=""
                              documentFinalTerminatorCanBeMissing="no"
@@ -131,17 +131,17 @@
 
             <dfdl:defineFormat name="EDISegmentSequenceFormat">
                 <dfdl:format separator="{$ibmEdiFmt:FieldSep}" separatorPosition="prefix"
-                             separatorPolicy="suppressedAtEndStrict" terminator=""/>
+                             separatorSuppressionPolicy="trailingEmpty" terminator=""/>
             </dfdl:defineFormat>
 
             <dfdl:defineFormat name="EDICompositeSequenceFormat">
                 <dfdl:format separator="{$ibmEdiFmt:CompositeSep}" separatorPosition="infix"
-                             separatorPolicy="suppressedAtEndLax" terminator=""/>
+                             separatorSuppressionPolicy="trailingEmptyStrict" terminator=""/>
             </dfdl:defineFormat>
 
             <dfdl:defineFormat name="EDISegmentPartRepeatSequenceFormat">
                 <dfdl:format separator="{$ibmEdiFmt:RepeatSep}" separatorPosition="infix"
-                             separatorPolicy="suppressedAtEndLax" terminator=""/>
+                             separatorSuppressionPolicy="trailingEmptyStrict" terminator=""/>
             </dfdl:defineFormat>
 
         </xsd:appinfo>
