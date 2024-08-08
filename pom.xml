@@ -65,7 +65,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gpg.skip>true</gpg.skip>
-        <mustache.version>0.9.11</mustache.version>
+        <mustache.version>0.9.14</mustache.version>
         <xmlunit.core.version>2.10.0</xmlunit.core.version>
         <junit.version>5.10.2</junit.version>
         <log4j-slf4j-imp.version>2.23.1</log4j-slf4j-imp.version>
