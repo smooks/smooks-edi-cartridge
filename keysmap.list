@@ -10,3 +10,4 @@ xerces:xercesImpl = 0x6CB87B18A453990EAC9453F87D713008CC07E9AD
 xml-resolver:xml-resolver = noSig
 org.eclipse.xsd:org.eclipse.xsd = 0x46C3B7A6025C27B71B11E8994AECD4CFA6127AE9
 org.eclipse.emf:* = 0x51D1E328F7C9B7B41F475EEF5492CB8CE546E049
+org.smooks.cartridges.edi:edi-schemas = noSig
