@@ -88,6 +88,7 @@
                 <version>1.18.2</version>
                 <configuration>
                     <scope>compile</scope>
+                    <verifyReactorDependencies>false</verifyReactorDependencies>
                     <keysMapLocations>
                         <keysMapLocation>${maven.multiModuleProjectDirectory}/keysmap.list</keysMapLocation>
                         <keysMapLocation>/pgp-keys-map.list</keysMapLocation>
