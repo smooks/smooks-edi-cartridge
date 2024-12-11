@@ -266,7 +266,7 @@
         <dependency>
             <groupId>org.smooks.cartridges</groupId>
             <artifactId>smooks-dfdl-cartridge</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
