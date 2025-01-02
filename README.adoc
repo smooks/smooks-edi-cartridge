@@ -5,7 +5,7 @@ image:https://img.shields.io/nexus/s/org.smooks.cartridges.edi/smooks-edi-cartri
 image:https://github.com/smooks/smooks-edi-cartridge/workflows/CI/badge.svg[Build Status]
 
 // tag::smooks-edi-cartridge[]
-The EDI cartridge inherits from the https://github.com/smooks/smooks-javabean-cartridge/blob/master/README.adoc[DFDL cartridge] to provide a reader for parsing EDI documents, and a visitor for serialising the event stream into EDI. Many of the options that are available from the DFDL cartridge are supported in the EDI cartridge as well (e.g., https://github.com/smooks/smooks-dfdl-cartridge#validation-mode[validation mode]).
+The EDI cartridge inherits from the https://github.com/smooks/smooks-javabean-cartridge/blob/master/README.adoc[DFDL cartridge] to provide a schema-driven reader for parsing EDI documents, and a schema-driven visitor for serialising the event stream into EDI. Many of the options that are available from the DFDL cartridge are supported in the EDI cartridge as well (e.g., https://www.smooks.org/documentation/#_parser_options_validation_mode[validation mode]). Moreover, the https://www.smooks.org/documentation/#dfdl_guidance[guidance on DFDL] is also highly relevant to the EDI schemas.
 
 In the following pass-through configuration, Smooks parses an EDI document and then serialises, or unparses in DFDL nomenclature, the generated event stream to produce an EDI document identical to the parsed document.
 
@@ -53,7 +53,7 @@ The `+unparseOnNode+` attribute is exclusive to the unparser visitor. It tells t
 
 === EDI DFDL Schema
 
-The user-defined DFDL schema supplied to the _parser_ and _unparser_ config elements  drives the event mapping, whether it is EDI to SAX or SAX to EDI. This schema must import the bundled _IBM_EDI_Format.dfdl.xsd_ DFDL schema which defines common EDI constructs like segments and data elements.
+The user-defined DFDL schema supplied to the _parser_ and _unparser_ config elements drives the event mapping, whether it is EDI to SAX or SAX to EDI. This schema must import the bundled _IBM_EDI_Format.dfdl.xsd_ DFDL schema which defines common EDI constructs like segments and data elements.
 
 The following figure illustrates the mapping process:
 
