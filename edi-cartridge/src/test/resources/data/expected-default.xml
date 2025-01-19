@@ -1,0 +1,38 @@
+<interchange>
+    <segment>
+        <segmentId>SEG</segmentId>
+        <dataElement>1</dataElement>
+        <dataElement>2</dataElement>
+        <dataElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <dataElement>4</dataElement>
+        <dataElement>5</dataElement>
+    </segment>
+    <segment>
+        <segmentId>XXX</segmentId>
+        <dataElement>6</dataElement>
+        <dataElement>7</dataElement>
+    </segment>
+    <segment>
+        <segmentId>Y</segmentId>
+        <dataElement>Some^stuff</dataElement>
+        <dataElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <dataElement>yes!</dataElement>
+    </segment>
+    <segment>
+        <segmentId>Y</segmentId>
+        <dataElement>Some^stuff</dataElement>
+        <dataElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <dataElement>yes!</dataElement>
+    </segment>
+    <segment>
+        <segmentId>Y</segmentId>
+        <dataElement>Some^stuff</dataElement>
+        <dataElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <dataElement>yes!</dataElement>
+    </segment>
+    <segment>
+        <segmentId>YYY</segmentId>
+        <dataElement>Mr~Tom^Fennelly</dataElement>
+        <dataElement>Ireland</dataElement>
+    </segment>
+</interchange>

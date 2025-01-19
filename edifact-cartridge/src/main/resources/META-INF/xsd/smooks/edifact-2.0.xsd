@@ -3,15 +3,27 @@
             xmlns:smooks="https://www.smooks.org/xsd/smooks-2.0.xsd"
             xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"
             xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
+            xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"
             targetNamespace="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"
             elementFormDefault="qualified">
 
     <xsd:import namespace="https://www.smooks.org/xsd/smooks-2.0.xsd"/>
     <xsd:import namespace="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"/>
+    <xsd:import namespace="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"/>
 
     <xsd:annotation>
         <xsd:documentation xml:lang="en">Smooks EDIFACT Resource Configuration</xsd:documentation>
     </xsd:annotation>
+
+    <xsd:attributeGroup name="schemaUri">
+        <xsd:attribute name="schemaUri" type="xsd:string" use="required">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+                    URI of the DFDL schema.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:attributeGroup>
 
     <xsd:element name="parser" type="edifact:parser" substitutionGroup="smooks:abstract-reader">
         <xsd:annotation>
@@ -36,10 +48,14 @@
             <xsd:documentation xml:lang="en">EDIFACT Parser</xsd:documentation>
         </xsd:annotation>
         <xsd:complexContent>
-            <xsd:extension base="edi:parser">
+            <xsd:extension base="smooks:abstract-reader">
                 <xsd:sequence>
+                    <xsd:group ref="dfdl:elements"/>
                     <xsd:element name="messageTypes" type="edifact:messageTypes" minOccurs="0"/>
                 </xsd:sequence>
+                <xsd:attributeGroup ref="edifact:schemaUri"/>
+                <xsd:attributeGroup ref="dfdl:parserAttributes"/>
+                <xsd:attributeGroup ref="edi:parserUnparserAttributes"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -68,11 +84,18 @@
     </xsd:complexType>
 
     <xsd:complexType name="unparserVisitor">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">EDIFACT Unparser</xsd:documentation>
+        </xsd:annotation>
         <xsd:complexContent>
-            <xsd:extension base="edi:unparserVisitor">
+            <xsd:extension base="smooks:element-visitor">
                 <xsd:sequence>
+                    <xsd:group ref="dfdl:elements"/>
                     <xsd:element name="messageTypes" type="edifact:messageTypes" minOccurs="0"/>
                 </xsd:sequence>
+                <xsd:attributeGroup ref="edifact:schemaUri"/>
+                <xsd:attributeGroup ref="dfdl:unparserAttributes"/>
+                <xsd:attributeGroup ref="edi:parserUnparserAttributes"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>

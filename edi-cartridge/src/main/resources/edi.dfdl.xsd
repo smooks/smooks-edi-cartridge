@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/" xmlns:ibmEdiFmt="http://www.ibm.com/dfdl/EDI/Format">
+
+    <xsd:import namespace="http://www.ibm.com/dfdl/EDI/Format"
+                schemaLocation="/EDIFACT-Common/IBM_EDI_Format.dfdl.xsd"/>
+
+    <xsd:annotation>
+        <xsd:appinfo source="http://www.ogf.org/dfdl/">
+            <dfdl:format ref="ibmEdiFmt:EDIFormat"/>
+        </xsd:appinfo>
+    </xsd:annotation>
+
+    <xsd:element name="interchange">
+        <xsd:complexType>
+            <xsd:sequence dfdl:initiatedContent="no">
+                <xsd:element dfdl:ref="ibmEdiFmt:EDISegmentFormat" name="segment" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence dfdl:ref="ibmEdiFmt:EDISegmentSequenceFormat" dfdl:separatorPosition="infix">
+                            <xsd:element name="segmentId" type="xsd:string"/>
+                            <xsd:element name="dataElement" type="xsd:string" nillable="true" maxOccurs="unbounded" dfdl:nilValue="%ES;"
+                                         dfdl:nilKind="literalValue"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

@@ -63,6 +63,10 @@ public class EdiReaderConfigurator extends DfdlReaderConfigurator {
         super(schemaUri);
     }
 
+    public EdiReaderConfigurator() {
+        super("edi.dfdl.xsd");
+    }
+
     public EdiReaderConfigurator setSegmentTerminator(String segmentTerminator) {
         AssertArgument.isNotNullAndNotEmpty(segmentTerminator, "segmentTerminator");
         this.segmentTerminator = segmentTerminator;

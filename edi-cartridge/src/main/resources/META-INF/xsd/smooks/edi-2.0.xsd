@@ -31,26 +31,46 @@
         </xsd:annotation>
     </xsd:element>
 
+    <xsd:attributeGroup name="schemaUri">
+        <xsd:attribute name="schemaUri" type="xsd:string" default="edi.dfdl.xsd">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+                    URI of the DFDL schema.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:attributeGroup>
+
     <xsd:complexType name="parser">
         <xsd:annotation>
             <xsd:documentation xml:lang="en">EDI Parser</xsd:documentation>
         </xsd:annotation>
         <xsd:complexContent>
-            <xsd:extension base="dfdl:parser">
+            <xsd:extension base="smooks:abstract-reader">
+                <xsd:group ref="dfdl:elements"/>
+                <xsd:attributeGroup ref="edi:schemaUri"/>
+                <xsd:attributeGroup ref="dfdl:parserAttributes"/>
                 <xsd:attributeGroup ref="edi:parserUnparserAttributes"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
 
     <xsd:complexType name="unparserVisitor">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">EDI Unparser</xsd:documentation>
+        </xsd:annotation>
         <xsd:complexContent>
-            <xsd:extension base="dfdl:unparserVisitor">
+            <xsd:extension base="smooks:element-visitor">
+                <xsd:group ref="dfdl:elements"/>
+                <xsd:attributeGroup ref="edi:schemaUri"/>
+                <xsd:attributeGroup ref="dfdl:unparserAttributes"/>
                 <xsd:attributeGroup ref="edi:parserUnparserAttributes"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
 
     <xsd:attributeGroup name="parserUnparserAttributes">
+        <xsd:attributeGroup ref="dfdl:parserUnparserAttributes"/>
         <xsd:attribute name="segmentTerminator" type="xsd:string" default="'%NL;%WSP*; '%WSP*;"/>
         <xsd:attribute name="dataElementSeparator" type="xsd:string" default="+"/>
         <xsd:attribute name="compositeDataElementSeparator" type="xsd:string" default=":"/>

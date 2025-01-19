@@ -48,15 +48,18 @@ In the following pass-through configuration, Smooks parses an EDI document and t
 
 Config attributes common to the parser and unparser resources are:
 
-. _schemaUri_: the DFDL schema describing the structure of the EDI document to be parser or unparsed.
-. _segmentTerminator_: the terminator for groups of related data elements. DFDL interprets _%NL;_ as a newline. 
-. _compositeDataElementSeparator_: the delimiter for compound data elements.
+. `schemaUri`: the DFDL schema describing the structure of the EDI document to be parser or unparsed.
++
+NOTE: the `schemaUri` attribute is optional starting from EDI Cartridge v2.1.0. Leaving `schemaUri` unset means that the resource will default to the bundled schema `edi.dfdl.xsd`. This general-purpose DFDL schema defines an unopinionated EDI structure which can be used for parsing or unparsing most flavours of EDI.
++
+. `segmentTerminator`: the terminator for groups of related data elements. DFDL interprets `%NL;` as a newline.
+. `compositeDataElementSeparator`: the delimiter for compound data elements.
 
-The `+unparseOnNode+` attribute is exclusive to the unparser visitor. It tells the unparser which event to intercept and serialise. Consult  with the EDI cartridge's link:/xsd/smooks/edi-2.0.xsd[XSD documentation] for the complete list of config attributes and elements.
+The `unparseOnNode` attribute is exclusive to the unparser visitor. It tells the unparser which event to intercept and serialise. Consult  with the EDI cartridge's link:/xsd/smooks/edi-2.0.xsd[XSD documentation] for the complete list of config attributes and elements.
 
 === EDI DFDL Schema
 
-The user-defined DFDL schema supplied to the _parser_ and _unparser_ config elements drives the event mapping, whether it is EDI to SAX or SAX to EDI. This schema must import the bundled _IBM_EDI_Format.dfdl.xsd_ DFDL schema which defines common EDI constructs like segments and data elements.
+The user-defined DFDL schema supplied to the `parser` and `unparser` config elements drives the event mapping, whether it is EDI to SAX or SAX to EDI. This schema must import the bundled `IBM_EDI_Format.dfdl.xsd` DFDL schema which defines common EDI constructs like segments and data elements.
 
 The following figure illustrates the mapping process:
 
@@ -94,22 +97,22 @@ The next snippet shows a segment declaration in DFDL:
     </xsd:element>
 </xsd:schema>
 ----
-<1> _dfdl:initiator_ identifies the segment code .
-<2> _name_ attribute specifies the segment's XML mapping. 
-<3> _ibmEdiFmt:EDISegmentFormat_ holds the segment structure definition; it is important to reference it from within the _dfdl:ref_ attribute.
+<1> `dfdl:initiator` identifies the segment code .
+<2> `name` attribute specifies the segment's XML mapping.
+<3> `ibmEdiFmt:EDISegmentFormat` holds the segment structure definition; it is important to reference it from within the `dfdl:ref` attribute.
 
 ===== Segment Cardinality
 
-What is not demonstrated in the previous section is the segment element's optional attributes _minOccurs_ and _maxOccurs_ (default value of 1 in both cases). These attributes can be used to control the optional and required characteristics of a segment. An _unbounded_ maxOccurs indicates that the segment can repeat any number of times in that location of the EDI document.
+What is not demonstrated in the previous section is the segment element's optional attributes `minOccurs` and `maxOccurs` (default value of 1 in both cases). These attributes can be used to control the optional and required characteristics of a segment. An `unbounded` maxOccurs indicates that the segment can repeat any number of times in that location of the EDI document.
 
 ===== Segment Groups
 
 You implicitly create segment groups when:
 
-. Setting the "maxOccurs" in a segment element to more than one, and
+. Setting the `maxOccurs` in a segment element to more than one, and
 . Adding within the segment element other segment elements
 
-The _HDR_ segment in the next example is a segment group because it is unbounded, and it encloses the _CUS_ and _ORD_ segments:
+The `HDR` segment in the next example is a segment group because it is unbounded, and it encloses the `CUS` and `ORD` segments:
 
 [source,xml]
 ----
@@ -151,7 +154,7 @@ The _HDR_ segment in the next example is a segment group because it is unbounded
 
 ==== Data Elements
 
-Segment data elements are children within a sequence element referencing the DFDL format _ibmEdiFmt:EDISegmentSequenceFormat_:
+Segment data elements are children within a sequence element referencing the DFDL format `ibmEdiFmt:EDISegmentSequenceFormat`:
 
 [source,xml]
 ----
@@ -183,11 +186,11 @@ Segment data elements are children within a sequence element referencing the DFD
 </xsd:schema>
 ----
 
-Each child _xsd:element_ within _xsd:sequence_ represents an EDI data element. The _name_ attribute is the name of the target XML element capturing the data element's value.
+Each child `xsd:element` within `xsd:sequence` represents an EDI data element. The `name` attribute is the name of the target XML element capturing the data element's value.
 
 ===== Composite Data Elements
 
-Data elements made up of components are yet another _xsd:sequence_ referencing the DFDL format _ibmEdiFmt:EDICompositeSequenceFormat_:
+Data elements made up of components are yet another `xsd:sequence` referencing the DFDL format `ibmEdiFmt:EDICompositeSequenceFormat`:
 
 [source,xml]
 ----
@@ -258,11 +261,11 @@ Many EDI messages use the same segment definitions. Being able to define these s
 </xsd:schema>
 ----
 
-The above schema demonstrates the use of the _import_ element, where just about anything can be moved into its own file for reuse.
+The above schema demonstrates the use of the `import` element, where just about anything can be moved into its own file for reuse.
 
 ==== Type Support
 
-The _type_ attribute on segment data elements allows datatype specification for validation. The following example shows type support in action:
+The `type` attribute on segment data elements allows datatype specification for validation. The following example shows type support in action:
 
 [source,xml]
 ----
@@ -324,7 +327,7 @@ image:https://img.shields.io/badge/chat-on%20gitter-46bc99.svg[Gitter chat,link=
 
 // tag::smooks-edifact-cartridge[]
 Smooks 2 provides out-of-the-box support for UN EDIFACT interchanges in terms of pre-generated EDI DFDL schemas derived from the http://www.unece.org/trade/untdid/down_index.htm[official UN EDIFACT
-message definition zip directories]. This allows you to easily convert a UN EDIFACT message interchange into a consumable XML document. Specialised _edifact:parser_ and _edifact:unparser_ resources support UN EDIFACT interchanges as shown in the next example:
+message definition zip directories]. This allows you to easily convert a UN EDIFACT message interchange into a consumable XML document. Specialised `edifact:parser` and `edifact:unparser` resources support UN EDIFACT interchanges as shown in the next example:
 
 .smooks-config.xml
 [source,xml]
@@ -355,7 +358,7 @@ message definition zip directories]. This allows you to easily convert a UN EDIF
 </smooks-resource-list>
 ----
 
-The _edifact:parser_ and _edifact:unparser_, analogous to the _edi:parser_ and _edi:unparser_, convert the stream according to the pre-generated DFDL schema referenced in the _schemaUri_ attribute. Given that an EDIFACT schema can be very big compared to your average EDI schema, it may take minutes for the parser to compile it. Even having the _cacheOnDisk_ attribute enabled may not be sufficient to meet your compilation time needs. For such situations, you can mitigate this problem by declaring ahead of time which message types the parser will process:
+The `edifact:parser` and `edifact:unparser`, analogous to the `edi:parser` and `edi:unparser`, convert the stream according to the pre-generated DFDL schema referenced in the `schemaUri` attribute. Given that an EDIFACT schema can be very big compared to your average EDI schema, it may take minutes for the parser to compile it. Even having the `cacheOnDisk` attribute enabled may not be sufficient to meet your compilation time needs. For such situations, you can mitigate this problem by declaring ahead of time which message types the parser will process:
 
 .smooks-config.xml
 [source,xml]
@@ -392,7 +395,7 @@ The _edifact:parser_ and _edifact:unparser_, analogous to the _edi:parser_ and _
 </smooks-resource-list>
 ----
 
-The schema compilation time is directly proportional to the number of declared message types. The EDIFACT resources will reject any message which does not have its message type declared within the _messageTypes_ child element. Apart from XML configuration, it is also possible to programmatically control the EDIFACT parser message types via a _EdifactReaderConfigurator_ instance:
+The schema compilation time is directly proportional to the number of declared message types. The EDIFACT resources will reject any message which does not have its message type declared within the `messageTypes` child element. Apart from XML configuration, it is also possible to programmatically control the EDIFACT parser message types via a `EdifactReaderConfigurator` instance:
 
 [source,java]
 ----
@@ -422,7 +425,7 @@ As an example, to add the D93A DFDL schema pack to your application classpath, a
 </dependency>
 ----
 
-Once you add an EDIFACT schema pack set to the application's classpath, you configure Smooks to use the schemas by referencing the root schema in _schemaUri_ attribute of the _edifact:parser_ or _edifact:unparser_ configuration (_<version>/EDIFACT-Messages.dfdl.xsd_):
+Once you add an EDIFACT schema pack set to the application's classpath, you configure Smooks to use the schemas by referencing the root schema in `schemaUri` attribute of the `edifact:parser` or `edifact:unparser` configuration (_<version>/EDIFACT-Messages.dfdl.xsd_):
 
 .smooks-config.xml
 [source,xml]

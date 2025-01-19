@@ -72,13 +72,28 @@ public class EdiFunctionalTestCase {
         String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream("/data/edi-input.txt"), smooks);
 
         assertTrue(compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/expected.xml"), "UTF-8"), result));
-        smooks.close();
+    }
+
+    @Test
+    public void testSmooksConfigGivenParserWithDefaultSchemaUri() throws Exception {
+        smooks.addResourceConfigs("/smooks-default-schemaUri-parser-config.xml");
+        String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream("/data/edi-input.txt"), smooks);
+
+        assertTrue(compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/expected-default.xml"), "UTF-8"), result));
     }
 
     @Test
     public void testSmooksConfigGivenUnparser() throws Exception {
         smooks.addResourceConfigs("/smooks-unparser-config.xml");
         String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream("/data/expected.xml"), smooks);
+
+        assertTrue(compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/edi-input.txt"), "UTF-8"), result));
+    }
+
+    @Test
+    public void testSmooksConfigGivenUnparserWithDefaultSchemaUri() throws Exception {
+        smooks.addResourceConfigs("/smooks-default-schemaUri-unparser-config.xml");
+        String result = filterAndSerialize(smooks.createExecutionContext(), getClass().getResourceAsStream("/data/expected-default.xml"), smooks);
 
         assertTrue(compareCharStreams(StreamUtils.readStreamAsString(getClass().getResourceAsStream("/data/edi-input.txt"), "UTF-8"), result));
     }

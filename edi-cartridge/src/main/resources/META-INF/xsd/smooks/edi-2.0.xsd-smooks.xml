@@ -88,6 +88,7 @@
     <resource-config selector="edi:parser,edi:unparser">
         <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
         <param name="attribute">schemaUri</param>
+        <param name="defaultValue">edi.dfdl.xsd</param>
     </resource-config>
     <resource-config selector="edi:parser,edi:unparser">
         <resource>org.smooks.engine.resource.config.loader.xml.extension.MapToResourceConfigFromAttribute</resource>
