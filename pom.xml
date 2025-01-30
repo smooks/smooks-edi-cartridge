@@ -7,7 +7,7 @@
     <groupId>org.smooks.cartridges.edi</groupId>
     <artifactId>smooks-edi-pom</artifactId>
     <packaging>pom</packaging>
-    <version>2.1.0-SNAPSHOT</version>
+    <version>2.1.0</version>
 
     <name>Smooks EDI &amp; EDIFACT Cartridges</name>
     <url>https://www.smooks.org</url>
@@ -255,13 +255,13 @@
         <dependency>
             <groupId>org.smooks</groupId>
             <artifactId>smooks-test-kit</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
+            <version>2.2.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.smooks.cartridges</groupId>
             <artifactId>smooks-dfdl-cartridge</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
