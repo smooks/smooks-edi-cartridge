@@ -305,7 +305,7 @@ The `type` attribute on segment data elements allows datatype specification for 
 <dependency>
     <groupId>org.smooks.cartridges.edi</groupId>
     <artifactId>smooks-edi-cartridge</artifactId>
-    <version>2.0.2</version>
+    <version>2.1.0</version>
 </dependency>    
 ----
 
@@ -421,7 +421,7 @@ As an example, to add the D93A DFDL schema pack to your application classpath, a
     <groupId>org.smooks.cartridges.edi</groupId>
     <artifactId>edifact-schemas</artifactId>
     <classifier>d93a</classifier>
-    <version>2.0.2</version>
+    <version>2.1.0</version>
 </dependency>
 ----
 
@@ -444,7 +444,7 @@ Once you add an EDIFACT schema pack set to the application's classpath, you conf
 </smooks-resource-list>
 ----
 
-See the https://github.com/smooks/smooks-examples/tree/v5[EDIFACT examples] for further reference.
+See the https://github.com/smooks/smooks-examples/tree/v6[EDIFACT examples] for further reference.
 
 === Maven Coordinates
 
@@ -454,7 +454,7 @@ See the https://github.com/smooks/smooks-examples/tree/v5[EDIFACT examples] for 
 <dependency>
     <groupId>org.smooks.cartridges.edi</groupId>
     <artifactId>smooks-edifact-cartridge</artifactId>
-    <version>2.0.2</version>
+    <version>2.1.0</version>
 </dependency>    
 ----
 
