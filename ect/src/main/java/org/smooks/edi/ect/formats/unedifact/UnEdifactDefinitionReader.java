@@ -55,7 +55,7 @@ import org.smooks.edi.edisax.model.internal.SegmentGroup;
 import org.smooks.edi.edisax.unedifact.UNEdifactInterchangeParser;
 import org.smooks.edi.edisax.unedifact.handlers.r41.UNEdifact41ControlBlockHandlerFactory;
 import org.smooks.edi.edisax.util.EDIUtils;
-import org.smooks.support.ClassUtils;
+import org.smooks.support.classpath.ClassUtils;
 
 import java.io.IOException;
 import java.util.*;

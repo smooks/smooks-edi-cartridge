@@ -115,7 +115,6 @@ public class EdiReaderConfigurator extends DfdlReaderConfigurator {
         final ResourceConfig resourceConfig = resourceConfigs.get(0);
         resourceConfig.setResource("org.smooks.cartridges.edi.parser.EdiParser");
 
-        resourceConfig.setParameter(new DefaultParameter<>("dataProcessorFactory", getDataProcessorFactory()));
         resourceConfig.setParameter(new DefaultParameter<>("segmentTerminator", segmentTerminator));
         resourceConfig.setParameter(new DefaultParameter<>("dataElementSeparator", dataElementSeparator));
         resourceConfig.setParameter(new DefaultParameter<>("compositeDataElementSeparator", compositeDataElementSeparator));
