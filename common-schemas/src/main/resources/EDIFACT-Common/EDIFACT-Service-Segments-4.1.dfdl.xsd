@@ -1290,6 +1290,14 @@
             </xsd:enumeration>
             <xsd:enumeration value="21B">
             </xsd:enumeration>
+            <xsd:enumeration value="22A">
+            </xsd:enumeration>
+            <xsd:enumeration value="22B">
+            </xsd:enumeration>
+            <xsd:enumeration value="23A">
+            </xsd:enumeration>
+            <xsd:enumeration value="24A">
+            </xsd:enumeration>
             <xsd:enumeration value="93A">
             </xsd:enumeration>
             <xsd:enumeration value="94A">

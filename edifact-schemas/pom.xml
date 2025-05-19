@@ -85,6 +85,10 @@
                                 <argument>/d20b.zip,org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser</argument>
                                 <argument>/d21a.zip,org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser</argument>
                                 <argument>/d21b.zip,org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser</argument>
+                                <argument>/d22a.zip,org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser</argument>
+                                <argument>/d22b.zip,org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser</argument>
+                                <argument>/d23a.zip,org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser</argument>
+                                <argument>/d24a.zip,org.smooks.edi.ect.formats.unedifact.parser.UnEdifactDirectoryParser</argument>
                                 <argument>/d93a.zip,org.smooks.edi.ect.formats.unedifact.parser.D93ADirectoryParser</argument>
                                 <argument>/d94a.zip,org.smooks.edi.ect.formats.unedifact.parser.D94ADirectoryParser</argument>
                                 <argument>/d94b.zip,org.smooks.edi.ect.formats.unedifact.parser.D94BDirectoryParser</argument>
@@ -760,6 +764,62 @@
                                 <include>d21b/**</include>
                             </includes>
                             <classifier>d21b</classifier>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>d22a-schemas-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
+                            <includes>
+                                <include>d22a/**</include>
+                            </includes>
+                            <classifier>d22a</classifier>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>d22b-schemas-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
+                            <includes>
+                                <include>d22b/**</include>
+                            </includes>
+                            <classifier>d22b</classifier>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>d23a-schemas-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
+                            <includes>
+                                <include>d23a/**</include>
+                            </includes>
+                            <classifier>d23a</classifier>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>d24a-schemas-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classesDirectory>${project.build.directory}/classes</classesDirectory>
+                            <includes>
+                                <include>d24a/**</include>
+                            </includes>
+                            <classifier>d24a</classifier>
                         </configuration>
                     </execution>
                     <execution>
